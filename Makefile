@@ -5,7 +5,7 @@
 # Compiler settings - Can be customized.
 CC = g++
 CXXFLAGS = -std=c++11 -Wall -g
-LDFLAGS = -lSDL2 -lGL -lGLEW
+LDFLAGS = -lSDL2
 
 # Makefile settings - Can be customized.
 APPNAME = GenericTopDown

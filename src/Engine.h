@@ -1,7 +1,7 @@
 #ifndef PROJECT2DTD_ENGINE_H
 #define PROJECT2DTD_ENGINE_H
 #include "SDL2/SDL.h"
-#include "stdio.h"
+#include <iostream>
 
 class Engine {
 public:
@@ -19,6 +19,7 @@ public:
     }
 
 private:
+    int testVar = 0;
     bool isRunning;
     SDL_Window *window;
     SDL_Renderer  *renderer;

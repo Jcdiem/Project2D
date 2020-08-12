@@ -1,20 +1,19 @@
-// std
-#include <stdio.h>
+#include "Engine.h"
 
-// opengl
-#include <GL/glew.h>
-
-// sdl
-#include <SDL2/SDL.h>
-
-#define SCREEN_SIZE_X 800
-#define SCREEN_SIZE_Y 600
+Engine *engine = nullptr;
 
 int main (int argc, char* argv[]){
-    while(!closed){
-        //Handle user input
-        //Update object properties
-        //Render changes
+    engine = new Engine();
+
+    engine->init("SomeRandomCrap",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,800,600,false);
+
+    while(engine->running()){
+        engine->handleEvents();
+        engine->update();
+        engine->render();
     }
+
+    engine->clean();
+
     return 0;
 }
