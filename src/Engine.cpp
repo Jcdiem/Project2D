@@ -1,5 +1,8 @@
 #include "Engine.h"
 
+SDL_Texture* dvdTex;
+SDL_Rect srcR, destR;
+
 Engine::Engine(){
 
 }
@@ -31,6 +34,10 @@ void Engine::init(const char *title, int xpos, int ypos, int width, int height, 
     else{
         isRunning = false;
     }
+    
+    SDL_Surface* tmpSurface = IMG_Load("assets/dvd.png");
+    dvdTex = SDL_CreateTextureFromSurface(renderer, tmpSurface);
+    SDL_FreeSurface(tmpSurface);
 }
 
 void Engine::handleEvents() {
@@ -47,12 +54,13 @@ void Engine::handleEvents() {
 }
 
 void Engine::update() {
-    testVar++;
-    //std::cout << testVar << std::endl;
+    destR.h = 200;
+    destR.w = 200;
 }
 
 void Engine::render() {
     SDL_RenderClear(renderer);
+    SDL_RenderCopy(renderer, dvdTex, NULL, &destR);
     //Rendering loop
     SDL_RenderPresent(renderer);
 }
@@ -62,4 +70,21 @@ void Engine::clean() {
     SDL_DestroyRenderer(renderer);
     SDL_Quit();
     std::cout << "Shutdown complete" << std::endl;
+}
+
+int Engine::dt() {
+    timespec ts;
+    clock_gettime(CLOCK_MONOTONIC, &ts);
+    nsec = int(ts.tv_nsec) / 1000;
+    // ^^^Set up nsec var with latest nanosecond
+    
+    if(nsec >= nsecced) {
+        delta = nsec - nsecced;
+    } else {
+        delta = nsec + (1000000 - nsecced);
+    }
+    
+    nsecced = nsec;
+    
+    return delta;
 }

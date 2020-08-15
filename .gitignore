@@ -2,3 +2,8 @@
 GenericTopDown
 
 .idea/
+.codelite/
+
+*.workspace
+
+*.project
