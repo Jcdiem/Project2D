@@ -23,10 +23,11 @@ public:
     }
 
 private:
-    int delta;
+    int dvdSpeed = 1;
+    double dvdX = 0;
+    int dvdY = 0;
     int nsec;
     int nsecced;
-    timespec dTime [2] = {NULL, NULL};
     bool isRunning;
     SDL_Window *window;
     SDL_Renderer  *renderer;

@@ -54,8 +54,14 @@ void Engine::handleEvents() {
 }
 
 void Engine::update() {
+dvdX += double(dvdSpeed * dt()) / 5000;
+    
+    std::cout << dvdX << std::endl;
+    
     destR.h = 200;
     destR.w = 200;
+    destR.x = dvdX;
+    destR.y = dvdY;
 }
 
 void Engine::render() {
@@ -74,6 +80,7 @@ void Engine::clean() {
 
 int Engine::dt() {
     timespec ts;
+    int delta;
     clock_gettime(CLOCK_MONOTONIC, &ts);
     nsec = int(ts.tv_nsec) / 1000;
     // ^^^Set up nsec var with latest nanosecond

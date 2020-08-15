@@ -20,9 +20,8 @@ int main (int argc, char* argv[]) {
     while(engine->running()) {
         engine->handleEvents();
         engine->update();
-        std::cout << engine->dt() << std::endl;
-        //engine->dt();
-        std::this_thread::sleep_for (std::chrono::milliseconds(12)); //Sleeps the thread
+
+        //std::this_thread::sleep_for (std::chrono::milliseconds(12)); //Sleeps the thread
     }
 
     render.join();
