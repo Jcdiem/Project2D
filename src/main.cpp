@@ -22,7 +22,7 @@ int main (int argc, char* argv[]) {
         engine->update();
         std::cout << engine->dt() << std::endl;
         //engine->dt();
-        //std::this_thread::sleep_for (std::chrono::milliseconds(123)); //Sleeps the thread
+        std::this_thread::sleep_for (std::chrono::milliseconds(12)); //Sleeps the thread
     }
 
     render.join();
