@@ -30,7 +30,7 @@ public:
 
 private:
     const char *filePath;
-    std::shared_ptr<SDL_Rect> spriteRect;
+    std::shared_ptr<SDL_Rect> spriteRect = std::make_shared<SDL_Rect>();
 };
 
 
