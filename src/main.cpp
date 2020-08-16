@@ -21,7 +21,7 @@ int main (int argc, char* argv[]) {
         engine->handleEvents();
         engine->update();
 
-        //std::this_thread::sleep_for (std::chrono::milliseconds(12)); //Sleeps the thread
+        std::this_thread::sleep_for (std::chrono::milliseconds(10)); //Sleeps the thread
     }
 
     render.join();
