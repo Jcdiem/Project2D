@@ -8,7 +8,7 @@ CXXFLAGS = -std=c++11 -Wall -g
 LDFLAGS = -pthread -lSDL2 -lSDL2_image
 
 # Makefile settings - Can be customized.
-APPNAME = GenericTopDown
+APPNAME = Project2DTD
 EXT = .cpp
 SRCDIR = src
 OBJDIR = obj

@@ -32,7 +32,8 @@ public:
 
 private:
     std::vector<Sprite> spriteCollection;
-    int dvdSpeed = 1;
+    int dvdSpeedX = 1;
+    int dvdSpeedY = 1;
     int nsec;
     int nsecced;
     bool isRunning;
