@@ -2,16 +2,22 @@
 #define PROJECT2DTD_ENGINE_H
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
+#include "Sprite.h"
 #include <thread>
 #include <time.h>
 #include <iostream>
+#include <vector>
 
 class Engine {
 public:
     Engine();
     ~Engine();
 
+
     void init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen);
+
+    void loadSprite(Sprite sprite);
+    Sprite getSprite(int spriteNum);
 
     void handleEvents();
     void update();
@@ -21,16 +27,18 @@ public:
     bool running() {
         return isRunning;
     }
+    int winW;
+    int winH;
 
 private:
+    std::vector<Sprite> spriteCollection;
     int dvdSpeed = 1;
-    double dvdX = 0;
-    int dvdY = 0;
     int nsec;
     int nsecced;
     bool isRunning;
     SDL_Window *window;
     SDL_Renderer  *renderer;
+
 };
 
 #endif //PROJECT2DTD_ENGINE_H

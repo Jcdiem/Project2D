@@ -1,7 +1,7 @@
 #include "Engine.h"
 
-SDL_Texture* dvdTex;
-SDL_Rect srcR, destR;
+//Temp surface replaced in renderloop
+SDL_Surface* tmpSurface;
 
 Engine::Engine(){
 
@@ -11,6 +11,8 @@ Engine::~Engine(){
 }
 
 void Engine::init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen) {
+    Engine::winH = height;
+    Engine::winW = width;
     int flags = 0;
     if(fullscreen){
         flags = SDL_WINDOW_FULLSCREEN;
@@ -34,10 +36,16 @@ void Engine::init(const char *title, int xpos, int ypos, int width, int height, 
     else{
         isRunning = false;
     }
-    
-    SDL_Surface* tmpSurface = IMG_Load("assets/dvd.png");
-    dvdTex = SDL_CreateTextureFromSurface(renderer, tmpSurface);
-    SDL_FreeSurface(tmpSurface);
+    //All the sprites bb
+    loadSprite(Sprite(200,82,"src/assets/dvd.png"));
+}
+
+void Engine::loadSprite(Sprite sprite) {
+    Engine::spriteCollection.push_back(sprite);
+}
+
+Sprite Engine::getSprite(int spriteNum) {
+    return Engine::spriteCollection[spriteNum];
 }
 
 void Engine::handleEvents() {
@@ -54,20 +62,38 @@ void Engine::handleEvents() {
 }
 
 void Engine::update() {
-dvdX += double(dvdSpeed * dt()) / 5000;
-    
-    std::cout << dvdX << std::endl;
-    
-    destR.h = 200;
-    destR.w = 200;
-    destR.x = dvdX;
-    destR.y = dvdY;
+    //Checking if Mr. DVD has moved on in life
+    int dvdX = spriteCollection[0].getX();
+    int dvdY = spriteCollection[0].getY();
+    //Has hit right side
+    if(dvdX >= (Engine::winW - dvdX)){
+
+    }
+    //Has hit lift side
+    else if(dvdX <= 0){
+
+    }
+    //has hit the bottom
+    else if(dvdY >= (Engine::winH - dvdY)){
+
+    }
+    //Has hit the top
+    else if(dvdY <= 0){
+
+    }
+    spriteCollection[0].setX(dvdX + double(dvdSpeed * dt()) / 5000);
+    //std::cout << dvdX << std::endl;
 }
 
 void Engine::render() {
     SDL_RenderClear(renderer);
-    SDL_RenderCopy(renderer, dvdTex, NULL, &destR);
-    //Rendering loop
+    //Begin rendering
+    for(Sprite currentSprite: Engine::spriteCollection){
+        tmpSurface = IMG_Load(currentSprite.getFile());
+        SDL_FreeSurface(tmpSurface);
+        SDL_RenderCopy(renderer, SDL_CreateTextureFromSurface(renderer, tmpSurface), NULL, currentSprite.getRect());
+    }
+    //End rendering
     SDL_RenderPresent(renderer);
 }
 
