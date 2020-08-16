@@ -1,8 +1,5 @@
 #include "Engine.h"
 
-//Temp surface replaced in renderloop
-SDL_Surface* tmpSurface;
-
 Engine::Engine(){
 
 }
@@ -69,7 +66,7 @@ void Engine::update() {
     if(dvdX >= (Engine::winW - dvdX)){
 
     }
-    //Has hit lift side
+    //Has hit left side
     else if(dvdX <= 0){
 
     }
@@ -89,9 +86,8 @@ void Engine::render() {
     SDL_RenderClear(renderer);
     //Begin rendering
     for(Sprite currentSprite: Engine::spriteCollection){
-        tmpSurface = IMG_Load(currentSprite.getFile());
-        SDL_FreeSurface(tmpSurface);
-        SDL_RenderCopy(renderer, SDL_CreateTextureFromSurface(renderer, tmpSurface), NULL, currentSprite.getRect());
+        SDL_FreeSurface(IMG_Load(currentSprite.getFile()));
+        SDL_RenderCopy(renderer, SDL_CreateTextureFromSurface(renderer, IMG_Load(currentSprite.getFile())), NULL, currentSprite.getRect());
     }
     //End rendering
     SDL_RenderPresent(renderer);
