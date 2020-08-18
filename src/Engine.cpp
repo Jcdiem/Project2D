@@ -131,13 +131,15 @@ int Engine::dt() {
     timespec ts;
     int delta;
     clock_gettime(CLOCK_MONOTONIC, &ts);
-    nsec = int(ts.tv_nsec) / 1000;
+    nsec = int(ts.tv_nsec);
     // ^^^Set up nsec var with latest nanosecond
+    
+    std::cout << nsec << std::endl;
     
     if(nsec >= nsecced) {
         delta = nsec - nsecced;
     } else {
-        delta = nsec + (1000000 - nsecced);
+        delta = nsec + (1000000000 - nsecced);
     }
     
     nsecced = nsec;
