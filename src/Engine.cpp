@@ -35,6 +35,11 @@ void Engine::init(const char *title, int xpos, int ypos, int width, int height, 
     }
     //All the sprites bb
     loadSprite(Sprite(200,82,"src/assets/dvd.png"));
+    loadTexture(SDL_CreateTextureFromSurface(
+                renderer,
+                IMG_Load(spriteCollection[0].getFile())
+            )
+    );
     srand(dt());
     spriteCollection[0].setY((rand() % height) - 82);
     spriteCollection[0].setX((rand() % width) -200);
@@ -47,6 +52,15 @@ void Engine::loadSprite(Sprite sprite) {
 Sprite Engine::getSprite(int spriteNum) {
     return Engine::spriteCollection[spriteNum];
 }
+
+void Engine::loadTexture(SDL_Texture* texture) {
+    texturesInUse.push_back(texture);
+}
+
+SDL_Texture* Engine::getTexture(int texNum){
+    return texturesInUse[texNum];
+}
+
 
 void Engine::handleEvents() {
     SDL_Event event;
@@ -98,9 +112,9 @@ void Engine::update() {
 void Engine::render() {
     SDL_RenderClear(renderer);
     //Begin rendering
-    for(Sprite currentSprite: Engine::spriteCollection){
-        SDL_FreeSurface(IMG_Load(currentSprite.getFile()));
-        SDL_RenderCopy(renderer, SDL_CreateTextureFromSurface(renderer, IMG_Load(currentSprite.getFile())), NULL, currentSprite.getRect());
+    for(int i = 0; i < int(Engine::texturesInUse.size()); i++){
+
+        SDL_RenderCopy(renderer, texturesInUse[i], NULL, spriteCollection[i].getRect());
     }
     //End rendering
     SDL_RenderPresent(renderer);

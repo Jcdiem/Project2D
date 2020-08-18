@@ -19,6 +19,9 @@ public:
     void loadSprite(Sprite sprite);
     Sprite getSprite(int spriteNum);
 
+    void loadTexture(SDL_Texture* texture);
+    SDL_Texture* getTexture(int texNum);
+
     void handleEvents();
     void update();
     void render();
@@ -32,6 +35,7 @@ public:
 
 private:
     std::vector<Sprite> spriteCollection;
+    std::vector<SDL_Texture*> texturesInUse;
     int dvdSpeedX = 1;
     int dvdSpeedY = 1;
     int nsec;
