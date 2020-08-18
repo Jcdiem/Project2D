@@ -41,8 +41,8 @@ void Engine::init(const char *title, int xpos, int ypos, int width, int height, 
             )
     );
     srand(dt());
-    spriteCollection[0].setY((rand() % height) - 82);
-    spriteCollection[0].setX((rand() % width) -200);
+    spriteCollection[0].setY((rand() % (height - spriteCollection[0].getH())));
+    spriteCollection[0].setX((rand() % (width - spriteCollection[0].getW())));
 }
 
 void Engine::loadSprite(Sprite sprite) {

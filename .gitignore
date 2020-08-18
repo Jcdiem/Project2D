@@ -8,3 +8,7 @@ Project2DTD
 *.workspace
 
 *.project
+
+obj/Engine.o
+
+obj/main.o
