@@ -3,6 +3,7 @@
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
 #include "Sprite.h"
+#include "Physics.h"
 #include <thread>
 #include <time.h>
 #include <iostream>
@@ -36,8 +37,6 @@ public:
 private:
     std::vector<Sprite> spriteCollection;
     std::vector<SDL_Texture*> texturesInUse;
-    int dvdSpeedX = 1;
-    int dvdSpeedY = 1;
     int nsec;
     int nsecced;
     bool isRunning;

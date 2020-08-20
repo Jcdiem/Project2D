@@ -1,42 +1,58 @@
 #include "Sprite.h"
 
 void Sprite::setX(int x) {
-    Sprite::spriteRect->x = x;
+    spriteRect->x = x;
+}
+
+void Sprite::setXSpeed(int speed) {
+    xSpeed = speed;
 }
 
 void Sprite::setY(int y) {
-    Sprite::spriteRect->y = y;
+    spriteRect->y = y;
+}
+
+void Sprite::setYSpeed(int speed) {
+    ySpeed = speed;
 }
 
 void Sprite::setH(int h) {
-    Sprite::spriteRect->h = h;
+    spriteRect->h = h;
 }
 
 void Sprite::setW(int w) {
-    Sprite::spriteRect->w = w;
+    spriteRect->w = w;
 }
 
 //Getters
 const char * Sprite::getFile() {
-    return Sprite::filePath;
+    return filePath;
 }
 
 SDL_Rect* Sprite::getRect() {
-    return Sprite::spriteRect.get();
+    return spriteRect.get();
 }
 
 int Sprite::getX() {
-    return Sprite::spriteRect->x;
+    return spriteRect->x;
+}
+
+int Sprite::getXSpeed() {
+    return xSpeed;
 }
 
 int Sprite::getY() {
-    return Sprite::spriteRect->y;
+    return spriteRect->y;
+}
+
+int Sprite::getYSpeed() {
+    return ySpeed;
 }
 
 int Sprite::getH() {
-    return Sprite::spriteRect->h;
+    return spriteRect->h;
 }
 
 int Sprite::getW() {
-    return Sprite::spriteRect->w;
+    return spriteRect->w;
 }
