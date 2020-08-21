@@ -12,3 +12,7 @@ Project2DTD
 obj/Engine.o
 
 obj/main.o
+
+*.d
+
+obj/
