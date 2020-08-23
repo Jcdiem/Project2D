@@ -16,7 +16,6 @@ void Sprite::setW(int w) {
     Sprite::spriteRect->w = w;
 }
 
-
 //Getters
 const char * Sprite::getFile() {
     return Sprite::filePath;

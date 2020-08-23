@@ -2,6 +2,7 @@
 #include <chrono> //Just for testing, I need it to sleep the thread.
 
 Engine *engine = nullptr;
+int lastDelta;
 
 void renderThread() {
     
@@ -21,7 +22,11 @@ int main (int argc, char* argv[]) {
         engine->handleEvents();
         engine->update();
 
-        //sstd::this_thread::sleep_for (std::chrono::milliseconds(2)); //Sleeps the thread
+
+        lastDelta = engine->dt();
+        if(lastDelta < 10000000) {
+            std::this_thread::sleep_for(std::chrono::nanoseconds(10000000 - lastDelta));
+        }
     }
 
     render.join();
