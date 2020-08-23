@@ -85,7 +85,6 @@ void Engine::update() {
     if(dvdX >= (Engine::winW - dvdW)){
         dvdSpeedX = -1;
         //dvdSpeedY = rand() % 5;
-
     }
     //Has hit left side
     else if(dvdX <= 0){
@@ -102,6 +101,14 @@ void Engine::update() {
         //dvdSpeedX = -1*(rand() % 5);
         dvdSpeedY = 1;
     }
+
+    //Checking for corner spasm
+    if(dvdY >= (Engine::winH - dvdH) || dvdY <= 0){
+        if(dvdX >= (Engine::winW - dvdW) || dvdX <= 0){
+            std::cout << "Yes, that was actually the corner" << std::endl;
+        }
+    }
+
 //    spriteCollection[0].setX(dvdSpeedX + double(dvdSpeedX * dt()) / 1);
 //    spriteCollection[0].setY(dvdSpeedY + double(dvdSpeedX * dt()) / 1);
     spriteCollection[0].setX(dvdSpeedX+dvdX);
