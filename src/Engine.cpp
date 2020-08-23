@@ -1,5 +1,7 @@
 #include "Engine.h"
 
+Physics *physics = nullptr;
+
 Engine::Engine(){
 
 }
@@ -43,6 +45,10 @@ void Engine::init(const char *title, int xpos, int ypos, int width, int height, 
     srand(dt());
     spriteCollection[0].setY((rand() % (height - spriteCollection[0].getH())));
     spriteCollection[0].setX((rand() % (width - spriteCollection[0].getW())));
+    
+    physics = new Physics(0, 180, spriteCollection);
+    
+    physics->applyForce(2, 45, spriteCollection[0]);
 }
 
 void Engine::loadSprite(Sprite sprite) {
@@ -81,6 +87,7 @@ void Engine::update() {
     int dvdY = spriteCollection[0].getY();
     int dvdH = spriteCollection[0].getH();
     int dvdW = spriteCollection[0].getW();
+    
     //Has hit right side
     if(dvdX >= (Engine::winW - dvdW)){
         dvdSpeedX = -1;
@@ -88,20 +95,16 @@ void Engine::update() {
     }
     //Has hit left side
     else if(dvdX <= 0){
-        dvdSpeedX = 1;
-        //dvdSpeedY = rand() % 5;
+        physics->applyForce(1, 90, spriteCollection[0]);
     }
     //has hit the bottom
     else if(dvdY >= (Engine::winH - dvdH)){
-        //dvdSpeedX = -1*(rand() % 5);
-        dvdSpeedY = -1;
+        physics->applyForce(1, 180, spriteCollection[0]);
     }
     //Has hit the top
     else if(dvdY <= 0){
-        //dvdSpeedX = -1*(rand() % 5);
-        dvdSpeedY = 1;
+        physics->applyForce(1, 0, spriteCollection[0]);
     }
-
     //Checking for corner spasm
     if(dvdY >= (Engine::winH - dvdH) || dvdY <= 0){
         if(dvdX >= (Engine::winW - dvdW) || dvdX <= 0){
@@ -140,8 +143,6 @@ int Engine::dt() {
     clock_gettime(CLOCK_MONOTONIC, &ts);
     nsec = int(ts.tv_nsec);
     // ^^^Set up nsec var with latest nanosecond
-    
-    std::cout << nsec << std::endl;
     
     if(nsec >= nsecced) {
         delta = nsec - nsecced;

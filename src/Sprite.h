@@ -3,6 +3,7 @@
 #include <list>
 #include <SDL2/SDL.h>
 #include <memory>
+#include <iostream>
 
 
 class Sprite {
@@ -15,21 +16,26 @@ public:
         Sprite::filePath = file;
     }
 
-
-    void setY(int y);
     void setX(int x);
+    void setXSpeed(int speed);
+    void setY(int y);
+    void setYSpeed(int speed);
     void setH(int h);
     void setW(int w);
 
     const char * getFile();
     SDL_Rect* getRect();
     int getX();
+    int getXSpeed();
     int getY();
+    int getYSpeed();
     int getH();
     int getW();
 
 private:
     const char *filePath;
+    int xSpeed = 0;
+    int ySpeed = 0;
     std::shared_ptr<SDL_Rect> spriteRect = std::make_shared<SDL_Rect>();
 };
 
