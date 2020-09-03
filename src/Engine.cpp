@@ -1,12 +1,11 @@
 #include "Engine.h"
-#include "TextureHandler.h"
 
-Engine::Engine(){
+Engine::Engine()=default;
+Engine::~Engine()=default;
 
-}
-Engine::~Engine(){
+//TODO: REMOVE EXAMPLE PLAYER ENTITY
+Entity* dvd;
 
-}
 
 void Engine::init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen) {
     Engine::winH = height;
@@ -34,31 +33,21 @@ void Engine::init(const char *title, int xpos, int ypos, int width, int height, 
     else{
         isRunning = false;
     }
-    //All the sprites bb
-    pushTexture(TextureHandler::loadTexture("src/assets/dvd.png", renderer));
-    loadSprite(Sprite(200, 82, textureList[0]));
-
     srand(dt());
-    spriteCollection[0].setY((rand() % (height - spriteCollection[0].getH())));
-    spriteCollection[0].setX((rand() % (width - spriteCollection[0].getW())));
+    //All the sprites bb
+    pushSpriteSheet(TextureHandler::loadTexture("src/assets/dvd.png", renderer));
+    dvd = new Entity("src/assets/dvd.png",renderer,200,82,(rand() % (height - 82)),(rand() % (width - 200)));
+    loadEntity(dvd);
+//    loadEntity(Sprite(200, 82, spritesheetList[0]));
 }
 
-void Engine::loadSprite(Sprite sprite) {
-    spriteCollection.push_back(sprite);
+void Engine::loadEntity(Entity* entity) {
+    entsInUse.push_back(entity);
 }
 
-Sprite Engine::getSprite(int spriteNum) {
-    return Engine::spriteCollection[spriteNum];
+void Engine::pushSpriteSheet(SDL_Texture* texture) {
+    spritesheetList.push_back(texture);
 }
-
-void Engine::pushTexture(SDL_Texture* texture) {
-    textureList.push_back(texture);
-}
-
-SDL_Texture* Engine::getTexture(int texNum){
-    return textureList[texNum];
-}
-
 
 void Engine::handleEvents() {
     SDL_Event event;
@@ -74,52 +63,14 @@ void Engine::handleEvents() {
 }
 
 void Engine::update() {
-    //Checking if Mr. DVD has moved on in life
-    int dvdX = spriteCollection[0].getX();
-    int dvdY = spriteCollection[0].getY();
-    int dvdH = spriteCollection[0].getH();
-    int dvdW = spriteCollection[0].getW();
-    //Has hit right side
-    if(dvdX >= (Engine::winW - dvdW)){
-        dvdSpeedX = -1;
-        //dvdSpeedY = rand() % 5;
-    }
-    //Has hit left side
-    else if(dvdX <= 0){
-        dvdSpeedX = 1;
-        //dvdSpeedY = rand() % 5;
-    }
-    //has hit the bottom
-    else if(dvdY >= (Engine::winH - dvdH)){
-        //dvdSpeedX = -1*(rand() % 5);
-        dvdSpeedY = -1;
-    }
-    //Has hit the top
-    else if(dvdY <= 0){
-        //dvdSpeedX = -1*(rand() % 5);
-        dvdSpeedY = 1;
-    }
-
-    //Checking for corner spasm
-    if(dvdY >= (Engine::winH - dvdH) || dvdY <= 0){
-        if(dvdX >= (Engine::winW - dvdW) || dvdX <= 0){
-            std::cout << "Yes, that was actually the corner" << std::endl;
-        }
-    }
-
-//    spriteCollection[0].setX(dvdSpeedX + double(dvdSpeedX * dt()) / 1);
-//    spriteCollection[0].setY(dvdSpeedY + double(dvdSpeedX * dt()) / 1);
-    spriteCollection[0].setX(dvdSpeedX+dvdX);
-    spriteCollection[0].setY(dvdSpeedY+dvdY);
-//    std::cout << dvdX << ", " << dvdY << "," << dt() << std::endl;
+    dvd->update();
 }
 
 void Engine::render() {
     SDL_RenderClear(renderer);
     //Begin rendering
-    for(int i = 0; i < int(Engine::spriteCollection.size()); i++){
-
-        SDL_RenderCopy(renderer, spriteCollection[i].getTex(), NULL, spriteCollection[i].getRect());
+    for(Entity* cEnt : Engine::entsInUse){
+        cEnt->render();
     }
     //End rendering
     SDL_RenderPresent(renderer);

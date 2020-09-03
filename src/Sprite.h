@@ -29,7 +29,7 @@ public:
     int getW();
 
 private:
-    Texture* spriteTex;
+    SDL_Texture* spriteTex;
 //    const char *filePath;
     std::shared_ptr<SDL_Rect> spriteRect = std::make_shared<SDL_Rect>();
 };
