@@ -7,7 +7,7 @@ int engineH = 600;//TODO: take in screen size somehow
 int dvdSpeedX = 1;
 int dvdSpeedY = 1;
 
-Entity::Entity(const char* spriteSheet, SDL_Renderer* renderer, int height, int width, int x, int y) {
+Entity::Entity(const char* spriteSheet, SDL_Renderer* renderer, int width, int height, int x, int y) {
     Entity::renderer = renderer;
     Entity::entTexture = TextureHandler::loadTexture(spriteSheet, renderer);
     Entity::spriteHeight = height;
@@ -32,14 +32,14 @@ void Entity::update() {
         dvdSpeedX = 1;
     }
         //has hit the bottom
-    else if(xPos >= (engineH - spriteHeight)){
+    else if(yPos >= (engineH - spriteHeight)){
         dvdSpeedY = -1;
     }
         //Has hit the top
     else if(yPos <= 0){
         dvdSpeedY = 1;
     }
-
+    std::cout << "dvdx is " << xPos << std::endl;
     //Checking for corner spasm
     if(yPos >= (engineH - spriteHeight) || yPos <= 0){
         if(xPos >= (engineW - spriteWidth) || xPos <= 0){
@@ -57,5 +57,5 @@ void Entity::update() {
     destRect.h = spriteHeight;
 }
 void Entity::render() {
-    SDL_RenderCopy(renderer, entTexture, &srcRect, &destRect);
+    SDL_RenderCopy(renderer, entTexture, nullptr, &destRect);
 }

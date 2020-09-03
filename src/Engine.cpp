@@ -91,7 +91,7 @@ int Engine::dt() {
     nsec = int(ts.tv_nsec);
     // ^^^Set up nsec var with latest nanosecond
     
-    std::cout << nsec << std::endl;
+    //std::cout << nsec << std::endl;
     
     if(nsec >= nsecced) {
         delta = nsec - nsecced;
