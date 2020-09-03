@@ -37,13 +37,13 @@ void Engine::init(const char *title, int xpos, int ypos, int width, int height, 
     //All the sprites bb
     pushSpriteSheet(TextureHandler::loadTexture("src/assets/dvd.png", renderer));
     dvd = new Entity("src/assets/dvd.png",renderer,200,82,(rand() % (height - 82)),(rand() % (width - 200)));
-    loadEntity(dvd);
+    //loadEntity(dvd);
 //    loadEntity(Sprite(200, 82, spritesheetList[0]));
 }
 
-void Engine::loadEntity(Entity* entity) {
-    entsInUse.push_back(entity);
-}
+//void Engine::loadEntity(Entity* entity) {
+//    entsInUse.push_back(entity);
+//}
 
 void Engine::pushSpriteSheet(SDL_Texture* texture) {
     spritesheetList.push_back(texture);
@@ -69,9 +69,10 @@ void Engine::update() {
 void Engine::render() {
     SDL_RenderClear(renderer);
     //Begin rendering
-    for(Entity* cEnt : Engine::entsInUse){
-        cEnt->render();
-    }
+//    for(Entity* cEnt : Engine::entsInUse){
+//        cEnt->render();
+//    }
+    dvd->render();
     //End rendering
     SDL_RenderPresent(renderer);
 }

@@ -16,7 +16,7 @@ public:
 
     void init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen);
 
-    void loadEntity(Entity* entity);
+    //void loadEntity(Entity* entity);
     void pushSpriteSheet(SDL_Texture* texture);
 
     void handleEvents();
@@ -29,7 +29,7 @@ public:
     }
 
 private:
-    std::vector<Entity*> entsInUse;
+    //std::vector<Entity*> entsInUse;
     std::vector<SDL_Texture*> spritesheetList;
     int dvdSpeedX = 1;
     int dvdSpeedY = 1;
