@@ -19,7 +19,7 @@ public:
     void loadSprite(Sprite sprite);
     Sprite getSprite(int spriteNum);
 
-    void loadTexture(SDL_Texture* texture);
+    void pushTexture(SDL_Texture* texture);
     SDL_Texture* getTexture(int texNum);
 
     void handleEvents();

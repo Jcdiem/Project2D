@@ -1,4 +1,5 @@
 #include "Engine.h"
+#include "TextureHandler.h"
 
 Engine::Engine(){
 
@@ -35,11 +36,7 @@ void Engine::init(const char *title, int xpos, int ypos, int width, int height, 
     }
     //All the sprites bb
     loadSprite(Sprite(200,82,"src/assets/dvd.png"));
-    loadTexture(SDL_CreateTextureFromSurface(
-                renderer,
-                IMG_Load(spriteCollection[0].getFile())
-            )
-    );
+    pushTexture(TextureHandler::loadTexture(spriteCollection[0].getFile(), renderer));
     srand(dt());
     spriteCollection[0].setY((rand() % (height - spriteCollection[0].getH())));
     spriteCollection[0].setX((rand() % (width - spriteCollection[0].getW())));
@@ -53,7 +50,7 @@ Sprite Engine::getSprite(int spriteNum) {
     return Engine::spriteCollection[spriteNum];
 }
 
-void Engine::loadTexture(SDL_Texture* texture) {
+void Engine::pushTexture(SDL_Texture* texture) {
     texturesInUse.push_back(texture);
 }
 
