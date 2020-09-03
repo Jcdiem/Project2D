@@ -35,7 +35,7 @@ public:
 
 private:
     std::vector<Sprite> spriteCollection;
-    std::vector<SDL_Texture*> texturesInUse;
+    std::vector<SDL_Texture*> textureList;
     int dvdSpeedX = 1;
     int dvdSpeedY = 1;
     int nsec;

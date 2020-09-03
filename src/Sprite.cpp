@@ -17,8 +17,8 @@ void Sprite::setW(int w) {
 }
 
 //Getters
-const char * Sprite::getFile() {
-    return Sprite::filePath;
+SDL_Texture* Sprite::getTex(){
+    return Sprite::spriteTex;
 }
 
 SDL_Rect* Sprite::getRect() {
