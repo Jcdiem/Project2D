@@ -5,11 +5,15 @@ Engine::~Engine()=default;
 
 //TODO: REMOVE EXAMPLE PLAYER ENTITY
 Entity* dvd;
+TextureMap* texMap;
+
+
+//TODO: Try not to use globals
+SDL_Renderer* Engine::renderer = nullptr;
+
 
 
 void Engine::init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen) {
-    Engine::winH = height;
-    Engine::winW = width;
     int flags = 0;
     if(fullscreen){
         flags = SDL_WINDOW_FULLSCREEN;
@@ -21,33 +25,35 @@ void Engine::init(const char *title, int xpos, int ypos, int width, int height, 
         if (window) {
             std::cout << "Window made properly" << std::endl;
         }
+        else{
+            printf("SDL_CreateWindow failed: %s\n", SDL_GetError());
+        }
 
         renderer = SDL_CreateRenderer(window, -1, 0);
         if (renderer) {
             SDL_SetRenderDrawColor(renderer, 0, 0 , 0, 255);
             std::cout << "Renderer completed properly" << std::endl;
         }
+        else{
+            printf("SDL_CreateRenderer failed: %s\n", SDL_GetError());
+        }
 
         isRunning = true;
     }
-    else{
+    else{ //If failed, give errors
+        printf("SDL_Init failed: %s\n", SDL_GetError());
         isRunning = false;
     }
-    srand(dt());
-    //All the sprites bb
-    pushSpriteSheet(TextureHandler::loadTexture("src/assets/dvd.png", renderer));
-    dvd = new Entity("src/assets/dvd.png",renderer,200,82,(rand() % (height - 82)),(rand() % (width - 200)));
-    //loadEntity(dvd);
-//    loadEntity(Sprite(200, 82, spritesheetList[0]));
+
+    pushSpriteSheet(TextureHandler::loadTexture("src/assets/dvd.png"));
+    dvd = new Entity("src/assets/dvd.png",200,82,(rand() % (height - 82)),(rand() % (width - 200)));
+    texMap = new TextureMap();
+
 }
 
-//void Engine::loadEntity(Entity* entity) {
-//    entsInUse.push_back(entity);
+//void Engine::pushSpriteSheet(SDL_Texture* texture) {
+//    spritesheetList.push_back(texture);
 //}
-
-void Engine::pushSpriteSheet(SDL_Texture* texture) {
-    spritesheetList.push_back(texture);
-}
 
 void Engine::handleEvents() {
     SDL_Event event;
@@ -69,10 +75,17 @@ void Engine::update() {
 void Engine::render() {
     SDL_RenderClear(renderer);
     //Begin rendering
+
 //    for(Entity* cEnt : Engine::entsInUse){
 //        cEnt->render();
 //    }
+
+
+    //WE ARE USING PAINTERS; FIRST ON LIST IS FIRST TO BE DRAWN, NEXT ON LIST IS DRAWN OVER TOP (Background first, foreground last)
+    texMap->drawMap();
     dvd->render();
+
+
     //End rendering
     SDL_RenderPresent(renderer);
 }
@@ -82,24 +95,4 @@ void Engine::clean() {
     SDL_DestroyRenderer(renderer);
     SDL_Quit();
     std::cout << "Shutdown complete" << std::endl;
-}
-
-int Engine::dt() {
-    timespec ts;
-    int delta;
-    clock_gettime(CLOCK_MONOTONIC, &ts);
-    nsec = int(ts.tv_nsec);
-    // ^^^Set up nsec var with latest nanosecond
-    
-    //std::cout << nsec << std::endl;
-    
-    if(nsec >= nsecced) {
-        delta = nsec - nsecced;
-    } else {
-        delta = nsec + (1000000000 - nsecced);
-    }
-    
-    nsecced = nsec;
-    
-    return delta;
 }

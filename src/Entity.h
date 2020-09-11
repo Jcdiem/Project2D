@@ -5,7 +5,7 @@
 
 class Entity {
 public:
-    Entity(const char* spriteSheet, SDL_Renderer* renderer, int width, int height, int x, int y);
+    Entity(const char* spriteSheet, int width, int height, int x, int y);
     ~Entity();
 
     void init();
@@ -22,8 +22,6 @@ private:
 
     SDL_Texture* entTexture;
     SDL_Rect srcRect, destRect;
-    SDL_Renderer* renderer;
-
 };
 
 

@@ -7,13 +7,12 @@ int engineH = 600;//TODO: take in screen size somehow
 int dvdSpeedX = 1;
 int dvdSpeedY = 1;
 
-Entity::Entity(const char* spriteSheet, SDL_Renderer* renderer, int width, int height, int x, int y) {
-    Entity::renderer = renderer;
-    Entity::entTexture = TextureHandler::loadTexture(spriteSheet, renderer);
-    Entity::spriteHeight = height;
-    Entity::spriteWidth = width;
-    Entity::xPos = x;
-    Entity::yPos = y;
+Entity::Entity(const char* spriteSheet, int width, int height, int x, int y) {
+    entTexture = TextureHandler::loadTexture(spriteSheet);
+    spriteHeight = height;
+    spriteWidth = width;
+    xPos = x;
+    yPos = y;
 }
 
 void Entity::init(){
@@ -39,7 +38,7 @@ void Entity::update() {
     else if(yPos <= 0){
         dvdSpeedY = 1;
     }
-    std::cout << "dvdx is " << xPos << std::endl;
+//    std::cout << "dvdx is " << xPos << std::endl;
     //Checking for corner spasm
     if(yPos >= (engineH - spriteHeight) || yPos <= 0){
         if(xPos >= (engineW - spriteWidth) || xPos <= 0){
@@ -57,5 +56,5 @@ void Entity::update() {
     destRect.h = spriteHeight;
 }
 void Entity::render() {
-    SDL_RenderCopy(renderer, entTexture, nullptr, &destRect);
+    SDL_RenderCopy(Engine::renderer, entTexture, nullptr, &destRect);
 }
