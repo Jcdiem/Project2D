@@ -45,7 +45,6 @@ void Engine::init(const char *title, int xpos, int ypos, int width, int height, 
         isRunning = false;
     }
 
-    pushSpriteSheet(TextureHandler::loadTexture("src/assets/dvd.png"));
     dvd = new Entity("src/assets/dvd.png",200,82,(rand() % (height - 82)),(rand() % (width - 200)));
     texMap = new TextureMap();
 
