@@ -2,6 +2,7 @@
 #define PROJECT2DTD_SPRITE_H
 #include "Engine.h"
 #include <memory>
+#include <iostream>
 
 
 class Sprite {
@@ -14,9 +15,10 @@ public:
         Sprite::spriteTex = texture;
     }
 
-
-    void setY(int y);
     void setX(int x);
+    void setXSpeed(int speed);
+    void setY(int y);
+    void setYSpeed(int speed);
     void setH(int h);
     void setW(int w);
 
@@ -24,7 +26,9 @@ public:
     SDL_Texture* getTex();
     SDL_Rect* getRect();
     int getX();
+    int getXSpeed();
     int getY();
+    int getYSpeed();
     int getH();
     int getW();
 
