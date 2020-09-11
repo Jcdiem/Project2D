@@ -1,19 +1,18 @@
 #ifndef PROJECT2DTD_SPRITE_H
 #define PROJECT2DTD_SPRITE_H
-#include <list>
-#include <SDL2/SDL.h>
+#include "Engine.h"
 #include <memory>
 #include <iostream>
 
 
 class Sprite {
 public:
-    Sprite(int width, int height, const char *file){
+    Sprite(int width, int height, SDL_Texture* texture){
         Sprite::spriteRect->h = height;
         Sprite::spriteRect->w = width;
         Sprite::spriteRect->x = 0;
         Sprite::spriteRect->y = 0;
-        Sprite::filePath = file;
+        Sprite::spriteTex = texture;
     }
 
     void setX(int x);
@@ -23,7 +22,8 @@ public:
     void setH(int h);
     void setW(int w);
 
-    const char * getFile();
+
+    SDL_Texture* getTex();
     SDL_Rect* getRect();
     int getX();
     int getXSpeed();
@@ -33,9 +33,8 @@ public:
     int getW();
 
 private:
-    const char *filePath;
-    int xSpeed = 0;
-    int ySpeed = 0;
+    SDL_Texture* spriteTex;
+//    const char *filePath;
     std::shared_ptr<SDL_Rect> spriteRect = std::make_shared<SDL_Rect>();
 };
 

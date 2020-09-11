@@ -2,10 +2,10 @@
 #define PROJECT2DTD_ENGINE_H
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
-#include "Sprite.h"
-#include "Physics.h"
+#include "Entity.h"
+#include "TextureMap.h"
 #include <thread>
-#include <time.h>
+#include <ctime>
 #include <iostream>
 #include <vector>
 
@@ -17,31 +17,23 @@ public:
 
     void init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen);
 
-    void loadSprite(Sprite sprite);
-    Sprite getSprite(int spriteNum);
-
-    void loadTexture(SDL_Texture* texture);
-    SDL_Texture* getTexture(int texNum);
+    //void loadEntity(Entity* entity);
+    void pushSpriteSheet(SDL_Texture* texture);
 
     void handleEvents();
-    void update();
-    void render();
+    static void update();
+    static void render();
     void clean();
-    int dt();
     bool running() {
         return isRunning;
     }
-    int winW;
-    int winH;
+    static SDL_Renderer *renderer;
 
 private:
-    std::vector<Sprite> spriteCollection;
-    std::vector<SDL_Texture*> texturesInUse;
-    int nsec;
-    int nsecced;
+    //std::vector<Entity*> entsInUse;
+//    std::vector<SDL_Texture*> spritesheetList;
     bool isRunning;
     SDL_Window *window;
-    SDL_Renderer  *renderer;
 
 };
 

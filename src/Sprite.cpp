@@ -4,16 +4,8 @@ void Sprite::setX(int x) {
     spriteRect->x = x;
 }
 
-void Sprite::setXSpeed(int speed) {
-    xSpeed = speed;
-}
-
 void Sprite::setY(int y) {
     spriteRect->y = y;
-}
-
-void Sprite::setYSpeed(int speed) {
-    ySpeed = speed;
 }
 
 void Sprite::setH(int h) {
@@ -25,8 +17,8 @@ void Sprite::setW(int w) {
 }
 
 //Getters
-const char * Sprite::getFile() {
-    return filePath;
+SDL_Texture* Sprite::getTex(){
+    return Sprite::spriteTex;
 }
 
 SDL_Rect* Sprite::getRect() {
@@ -37,16 +29,8 @@ int Sprite::getX() {
     return spriteRect->x;
 }
 
-int Sprite::getXSpeed() {
-    return xSpeed;
-}
-
 int Sprite::getY() {
     return spriteRect->y;
-}
-
-int Sprite::getYSpeed() {
-    return ySpeed;
 }
 
 int Sprite::getH() {
