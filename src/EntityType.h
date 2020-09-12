@@ -1,14 +1,13 @@
-#ifndef PROJECT2DTD_ENTITY_H
-#define PROJECT2DTD_ENTITY_H
+#ifndef PROJECT2DTD_ENTITYTYPE_H
+#define PROJECT2DTD_ENTITYTYPE_H
 #include "Engine.h"
 #include "TextureHandler.h"
 
-class Entity {
+class EntityType {
 public:
-    Entity(const char* spriteSheet, int width, int height, int x, int y, Engine engine);
-    ~Entity();
+    EntityType(const char* spriteSheet, int width, int height, int x, int y);
+    ~EntityType();
 
-    void init();
     void update();
     void render();
 
@@ -25,4 +24,4 @@ private:
 };
 
 
-#endif //PROJECT2DTD_ENTITY_H
+#endif //PROJECT2DTD_ENTITYTYPE_H

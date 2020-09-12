@@ -22,10 +22,9 @@ add_executable(Project2DTD
         src/assets/mapTex2.png
         src/Engine.cpp
         src/Engine.h
-        src/Entity.cpp
-        src/Entity.h
+        src/EntityType.cpp
+        src/EntityType.h
         src/main.cpp
-        src/Sprite.cpp
         src/Sprite.h
         src/TextureHandler.cpp
         src/TextureHandler.h

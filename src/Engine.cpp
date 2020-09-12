@@ -4,12 +4,14 @@ Engine::Engine()=default;
 Engine::~Engine()=default;
 
 //TODO: REMOVE EXAMPLE PLAYER ENTITY
-Entity* dvd;
+EntityType* dvd;
 TextureMap* texMap;
 
 
 //TODO: Try not to use globals
 SDL_Renderer* Engine::renderer = nullptr;
+int Engine::engineWidth = 800;
+int Engine::engineHeight = 600;
 
 
 
@@ -19,8 +21,8 @@ void Engine::init(const char *title, int xpos, int ypos, int width, int height, 
         flags = SDL_WINDOW_FULLSCREEN;
     }
 
-    windowWidth = width;
-    windowHeight = height;
+    engineWidth = width;
+    engineHeight = height;
 
     if(SDL_Init(SDL_INIT_EVERYTHING) == 0) {
         std::cout << "SDL Initialised" << std::endl;
@@ -47,18 +49,14 @@ void Engine::init(const char *title, int xpos, int ypos, int width, int height, 
         printf("SDL_Init failed: %s\n", SDL_GetError());
         isRunning = false;
     }
+    //Random gen setup
+    std::random_device randomDevice; //Make a new random gen
+    std::mt19937 mt(randomDevice()); //Generate using engine
+    std::uniform_int_distribution<int> dist(1, 100);
 
-    dvd = new Entity("src/assets/dvd.png",200,82,(rand() % (height - 82)),(rand() % (width - 200)));
+    dvd = new EntityType("src/assets/dvd.png", 200, 82, (dist(mt) % (height - 82)), (dist(mt) % (width - 200)));
     texMap = new TextureMap();
 
-}
-
-int Engine::getW() {
-    return windowWidth;
-}
-
-int Engine::getH() {
-    return windowHeight;
 }
 
 //void Engine::pushSpriteSheet(SDL_Texture* texture) {
@@ -86,7 +84,7 @@ void Engine::render() {
     SDL_RenderClear(renderer);
     //Begin rendering
 
-//    for(Entity* cEnt : Engine::entsInUse){
+//    for(EntityType* cEnt : Engine::entsInUse){
 //        cEnt->render();
 //    }
 

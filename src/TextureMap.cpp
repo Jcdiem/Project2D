@@ -27,7 +27,7 @@ int start[20][25]={ //TODO: load texture maps through XML or something
 };
 
 TextureMap::TextureMap() {
-    mapTextureName0 = TextureHandler::loadTexture("assets/mapTex0.png");
+    TextureMap::mapTextureName0 = TextureHandler::loadTexture("assets/mapTex0.png");
     mapTextureName1 = TextureHandler::loadTexture("assets/mapTex2.png");
     mapTextureName2 = TextureHandler::loadTexture("assets/mapTex1.png");
 
@@ -62,9 +62,11 @@ void TextureMap::drawMap() {
                     break;
                 case 1: //Draw texture map 0
                     TextureHandler::Draw(mapTextureName1, src, dest);
+//                    printf("Drew a %d on tilemap \n",type);
                     break;
                 case 2: //Draw texture map 0
                     TextureHandler::Draw(mapTextureName2, src, dest);
+//                    printf("Drew a %d on tilemap \n",type);
                     break;
                 default:
                     printf("WARNING: Got %d for map type when only possible cases are 0, 1, 2 \n"

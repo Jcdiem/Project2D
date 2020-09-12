@@ -1,24 +1,24 @@
-#include "Entity.h"
+#include "EntityType.h"
+#include "Engine.h"
 
-int engineW = 800;
-int engineH = 640;//TODO: take in screen size somehow
+int engineW;
+int engineH;
 
 //TODO: Separate out different entities with interface
 int dvdSpeedX = 1;
 int dvdSpeedY = 1;
 
-Entity::Entity(const char* spriteSheet, int width, int height, int x, int y, Engine engine) {
+EntityType::EntityType(const char* spriteSheet, int width, int height, int x, int y) {
     entTexture = TextureHandler::loadTexture(spriteSheet);
     spriteHeight = height;
     spriteWidth = width;
     xPos = x;
     yPos = y;
+    engineW = Engine::engineWidth;
+    engineH = Engine::engineHeight;
 }
 
-void Entity::init(){
-}
-
-void Entity::update() {
+void EntityType::update() {
     srcRect.h = spriteHeight;
     srcRect.w = spriteWidth;
 
@@ -55,6 +55,7 @@ void Entity::update() {
     destRect.w = spriteWidth;
     destRect.h = spriteHeight;
 }
-void Entity::render() {
+
+void EntityType::render() {
     SDL_RenderCopy(Engine::renderer, entTexture, nullptr, &destRect);
 }

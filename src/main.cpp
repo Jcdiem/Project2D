@@ -2,7 +2,6 @@
 
 Engine *engine = nullptr;
 
-//TODO: Fix problem with thread not being properly run on some machines
 static int renderThread(void *ptr) {
 
 //    while(engine->running()) {
@@ -35,7 +34,7 @@ int main (int argc, char* argv[]) {
 
     while(engine->running()) {
 
-        frameStart = SDL_GetTicks(); //Ms since init
+        frameStart = SDL_GetTicks(); //Ms since init TODO: find a way to get in nano-seconds instead, ms isn't exact enough
 
 
         engine->handleEvents();
