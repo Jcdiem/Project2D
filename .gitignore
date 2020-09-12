@@ -17,4 +17,12 @@ obj/main.o
 
 obj/
 
-cmake-build-debug/
+cmake-build-debug/CMakeFiles/
+
+cmake-build-debug/cmake_install.cmake
+
+cmake-build-debug/CMakeCache.txt
+
+cmake-build-debug/Makefile
+
+cmake-build-debug/Project2DTD.cbp
