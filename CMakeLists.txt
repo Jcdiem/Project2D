@@ -25,7 +25,7 @@ add_executable(Project2DTD
         src/TextureHandler.cpp
         src/TextureHandler.h
         src/TextureMap.cpp
-        src/TextureMap.h)
+        src/TextureMap.h src/EntityComponentSystem.h)
 
 #Add the libraries
 target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES})
