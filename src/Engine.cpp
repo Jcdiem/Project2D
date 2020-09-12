@@ -3,12 +3,12 @@
 Engine::Engine()=default;
 Engine::~Engine()=default;
 
-//TODO: REMOVE EXAMPLE PLAYER ENTITY
+//TODO: REMOVE EXAMPLE PLAYER ENTITY & texMap
 EntityType* dvd;
 TextureMap* texMap;
 
 
-//TODO: Try not to use globals
+//TODO: Refactor to be setter/getter instead of public global (public static name getName/setName)
 SDL_Renderer* Engine::renderer = nullptr;
 int Engine::engineWidth = 800;
 int Engine::engineHeight = 600;

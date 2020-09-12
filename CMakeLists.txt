@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.17)
 project(Project2DTD)
 
 set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
+
 
 INCLUDE(FindPkgConfig)
 include_directories(.)
@@ -9,10 +11,10 @@ include_directories(assets)
 
 #Add the SDL2 and SDL_Image libraries
 find_package(SDL2 REQUIRED)
-PKG_SEARCH_MODULE(SDL2IMAGE REQUIRED SDL2_image>=2.0.0)
+find_package(SDL2_image REQUIRED)
 
 #Include the dependecy directories
-INCLUDE_DIRECTORIES(${SDL2_INCLUDE_DIRS} ${SDL2IMAGE_INCLUDE_DIRS})
+include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS})
 
 add_executable(Project2DTD
         src/assets/dvd.png
@@ -32,4 +34,4 @@ add_executable(Project2DTD
         src/TextureMap.h)
 
 #Add the libraries
-TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${SDL2_LIBRARIES} ${SDL2IMAGE_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES})
