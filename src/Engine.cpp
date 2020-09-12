@@ -55,7 +55,7 @@ void Engine::init(const char *title, int xpos, int ypos, int width, int height, 
     std::uniform_int_distribution<int> dist(1, 100);
 
     //TODO: Get sprite size from file
-    dvd = new EntityType("src/assets/dvd.png", 200, 82, (dist(mt) % (height - 82)), (dist(mt) % (width - 200)));
+    dvd = new EntityType("assets/dvd.png", 200, 82, (dist(mt) % (height - 82)), (dist(mt) % (width - 200)));
     texMap = new TextureMap();
 
 }

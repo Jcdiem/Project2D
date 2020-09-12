@@ -17,11 +17,6 @@ find_package(SDL2_image REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS})
 
 add_executable(Project2DTD
-        src/assets/dvd.png
-        src/assets/dvdbe.png
-        src/assets/mapTex0.png
-        src/assets/mapTex1.png
-        src/assets/mapTex2.png
         src/Engine.cpp
         src/Engine.h
         src/EntityType.cpp
