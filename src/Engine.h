@@ -28,13 +28,18 @@ public:
     bool running() {
         return isRunning;
     }
-    static SDL_Renderer *renderer;
-    static int engineWidth;
-    static int engineHeight;
+
+    static int getEngineWidth();
+    static int getEngineHeight();
+
+    static SDL_Renderer *getRenderer();
 
 private:
     bool isRunning;
     SDL_Window *window;
+    static SDL_Renderer *renderer;
+    static int engineWidth;
+    static int engineHeight;
 
 };
 

@@ -7,11 +7,9 @@ Engine::~Engine()=default;
 EntityType* dvd;
 TextureMap* texMap;
 
-
-//TODO: Refactor to be setter/getter instead of public global (public static name getName/setName)
+int Engine::engineWidth;
+int Engine::engineHeight;
 SDL_Renderer* Engine::renderer = nullptr;
-int Engine::engineWidth = 800;
-int Engine::engineHeight = 600;
 
 
 
@@ -90,7 +88,8 @@ void Engine::render() {
 //    }
 
 
-    //WE ARE USING PAINTERS; FIRST ON LIST IS FIRST TO BE DRAWN, NEXT ON LIST IS DRAWN OVER TOP (Background first, foreground last)
+    //WE ARE USING PAINTERS; FIRST ON LIST IS FIRST TO BE DRAWN, NEXT ON LIST IS DRAWN OVER TOP
+    // (Background first, foreground last)
     texMap->drawMap();
     dvd->render();
 
@@ -104,4 +103,16 @@ void Engine::clean() {
     SDL_DestroyRenderer(renderer);
     SDL_Quit();
     std::cout << "Shutdown complete" << std::endl;
+}
+
+int Engine::getEngineWidth() {
+    return engineWidth;
+}
+
+int Engine::getEngineHeight() {
+    return engineHeight;
+}
+
+SDL_Renderer *Engine::getRenderer() {
+    return renderer;
 }

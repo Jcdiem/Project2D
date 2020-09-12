@@ -13,8 +13,8 @@ EntityType::EntityType(const char* spriteSheet, int width, int height, int x, in
     spriteWidth = width;
     xPos = x;
     yPos = y;
-    engineW = Engine::engineWidth;
-    engineH = Engine::engineHeight;
+    engineW = Engine::getEngineWidth();
+    engineH = Engine::getEngineHeight();
 }
 
 void EntityType::update() {
@@ -56,5 +56,5 @@ void EntityType::update() {
 }
 
 void EntityType::render() {
-    SDL_RenderCopy(Engine::renderer, entTexture, nullptr, &destRect);
+    SDL_RenderCopy(Engine::getRenderer(), entTexture, nullptr, &destRect);
 }
