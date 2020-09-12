@@ -1,13 +1,13 @@
 #include "Entity.h"
 
 int engineW = 800;
-int engineH = 600;//TODO: take in screen size somehow
+int engineH = 640;//TODO: take in screen size somehow
 
 //TODO: Separate out different entities with interface
 int dvdSpeedX = 1;
 int dvdSpeedY = 1;
 
-Entity::Entity(const char* spriteSheet, int width, int height, int x, int y) {
+Entity::Entity(const char* spriteSheet, int width, int height, int x, int y, Engine engine) {
     entTexture = TextureHandler::loadTexture(spriteSheet);
     spriteHeight = height;
     spriteWidth = width;

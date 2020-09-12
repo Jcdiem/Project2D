@@ -25,6 +25,7 @@ int main (int argc, char* argv[]) {
 
     engine->init("SomeRandomCrap",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,800,640,false);
 
+
     renderingThread = SDL_CreateThread(renderThread, "RenderThread", nullptr);
     //Check to make sure thread isn't rart
     if (nullptr == renderingThread) {

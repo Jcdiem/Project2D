@@ -19,6 +19,9 @@ void Engine::init(const char *title, int xpos, int ypos, int width, int height, 
         flags = SDL_WINDOW_FULLSCREEN;
     }
 
+    windowWidth = width;
+    windowHeight = height;
+
     if(SDL_Init(SDL_INIT_EVERYTHING) == 0) {
         std::cout << "SDL Initialised" << std::endl;
         window = SDL_CreateWindow(title, xpos, ypos, width, height, flags);
@@ -48,6 +51,14 @@ void Engine::init(const char *title, int xpos, int ypos, int width, int height, 
     dvd = new Entity("src/assets/dvd.png",200,82,(rand() % (height - 82)),(rand() % (width - 200)));
     texMap = new TextureMap();
 
+}
+
+int Engine::getW() {
+    return windowWidth;
+}
+
+int Engine::getH() {
+    return windowHeight;
 }
 
 //void Engine::pushSpriteSheet(SDL_Texture* texture) {
