@@ -1,5 +1,4 @@
 #include "EntityType.h"
-#include "Engine.h"
 
 int engineW;
 int engineH;
@@ -38,7 +37,7 @@ void EntityType::update() {
     else if(yPos <= 0){
         dvdSpeedY = 1;
     }
-//    std::cout << "dvdx is " << xPos << std::endl;
+
     //Checking for corner spasm
     if(yPos >= (engineH - spriteHeight) || yPos <= 0){
         if(xPos >= (engineW - spriteWidth) || xPos <= 0){
