@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.17)
 project(Project2DTD)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
 
@@ -27,7 +27,6 @@ add_executable(Project2DTD
         src/EntityType.cpp
         src/EntityType.h
         src/main.cpp
-        src/Sprite.h
         src/TextureHandler.cpp
         src/TextureHandler.h
         src/TextureMap.cpp

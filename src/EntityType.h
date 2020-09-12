@@ -6,7 +6,7 @@
 class EntityType {
 public:
     EntityType(const char* spriteSheet, int width, int height, int x, int y);
-    ~EntityType();
+    ~EntityType(); //Fix missing implementation of destructor
 
     void update();
     void render();
