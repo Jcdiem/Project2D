@@ -18,6 +18,9 @@ public:
     void init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen);
 
     //void loadEntity(Entity* entity);
+    int getW();
+    int getH();
+
     void pushSpriteSheet(SDL_Texture* texture);
 
     void handleEvents();
@@ -30,8 +33,10 @@ public:
     static SDL_Renderer *renderer;
 
 private:
-    //std::vector<Entity*> entsInUse;
+//    std::vector<Entity*> entsInUse;
 //    std::vector<SDL_Texture*> spritesheetList;
+    int windowWidth;
+    int windowHeight;
     bool isRunning;
     SDL_Window *window;
 

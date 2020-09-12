@@ -5,7 +5,7 @@
 
 class Entity {
 public:
-    Entity(const char* spriteSheet, int width, int height, int x, int y);
+    Entity(const char* spriteSheet, int width, int height, int x, int y, Engine engine);
     ~Entity();
 
     void init();
