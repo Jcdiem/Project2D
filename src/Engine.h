@@ -2,12 +2,14 @@
 #define PROJECT2DTD_ENGINE_H
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
-#include "EntityType.h"
+#include "TextureHandler.h"
 #include "TextureMap.h"
+#include "src/ECS/Components.h"
 #include <random>
 #include <ctime>
 #include <iostream>
-#include <vector>
+
+class TextureHandler;
 
 class Engine {
 public:

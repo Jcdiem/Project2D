@@ -4,13 +4,16 @@ Engine::Engine()=default;
 Engine::~Engine()=default;
 
 //TODO: REMOVE EXAMPLE PLAYER ENTITY & texMap
-EntityType* dvd;
 TextureMap* texMap;
 
+
+//Globals (SHOULD ALL BE PRIVATE)
 SDL_Renderer* Engine::renderer = nullptr;
 int* Engine::engineHeight = nullptr;
 int* Engine::engineWidth = nullptr;
 
+Manager manager;
+auto& newDVD(manager.addEntity());
 
 void Engine::init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen, bool resizable) {
     int flags = 0;
@@ -36,6 +39,7 @@ void Engine::init(const char *title, int xpos, int ypos, int width, int height, 
         renderer = SDL_CreateRenderer(window, -1, 0);
         if (renderer) {
             SDL_SetRenderDrawColor(renderer, 0, 0 , 0, 255);
+            TextureHandler::setRenderer(renderer);
             std::cout << "Renderer completed properly" << std::endl;
         }
         else{
@@ -48,20 +52,13 @@ void Engine::init(const char *title, int xpos, int ypos, int width, int height, 
         printf("SDL_Init failed: %s\n", SDL_GetError());
         isRunning = false;
     }
-    //Random gen setup
-    std::random_device randomDevice; //Make a new random gen
-    std::mt19937 mt(randomDevice()); //Generate using engine
-    std::uniform_int_distribution<int> dist(0, height+width);
 
     //TODO: Get entities from file
-    dvd = new EntityType("assets/dvd.png", 200, 82, (dist(mt) % (height - 82)), (dist(mt) % (width - 200)));
     texMap = new TextureMap();
-
+    newDVD.addComponent<PositionComponent>();
+    newDVD.addComponent<SpriteComponent>("assets/dvd.png",200,82);
 }
 
-//void Engine::pushSpriteSheet(SDL_Texture* texture) {
-//    spritesheetList.push_back(texture);
-//}
 
 void Engine::handleEvents() {
     SDL_Event event;
@@ -77,7 +74,8 @@ void Engine::handleEvents() {
 }
 
 void Engine::update() {
-    dvd->update();
+    manager.refresh();
+    manager.update();
 }
 
 void Engine::render() {
@@ -92,7 +90,7 @@ void Engine::render() {
     //WE ARE USING PAINTERS; FIRST ON LIST IS FIRST TO BE DRAWN, NEXT ON LIST IS DRAWN OVER TOP
     // (Background first, foreground last)
     texMap->drawMap();
-    dvd->render();
+    manager.draw();
 
 
     //End rendering
