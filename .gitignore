@@ -26,3 +26,5 @@ cmake-build-debug/CMakeCache.txt
 cmake-build-debug/Makefile
 
 cmake-build-debug/Project2DTD.cbp
+
+src/assets

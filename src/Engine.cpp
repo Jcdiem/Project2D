@@ -11,20 +11,22 @@ TextureMap* texMap;
 int Engine::engineWidth;
 int Engine::engineHeight;
 SDL_Renderer* Engine::renderer = nullptr;
+int* Engine::engineHeight = nullptr;
+int* Engine::engineWidth = nullptr;
 
 Manager manager;
 auto& newDVD(manager.addEntity());
 
-
-
-void Engine::init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen) {
+void Engine::init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen, bool resizable) {
     int flags = 0;
-    if(fullscreen){
-        flags = SDL_WINDOW_FULLSCREEN;
+    if(fullscreen) {
+        flags += SDL_WINDOW_FULLSCREEN;
+    }
+    if(resizable) {
+        flags += SDL_WINDOW_RESIZABLE;
     }
 
-    engineWidth = width;
-    engineHeight = height;
+    SDL_GetWindowSize(window, engineWidth, engineHeight);
 
     if(SDL_Init(SDL_INIT_EVERYTHING) == 0) {
         std::cout << "SDL Initialised" << std::endl;
@@ -108,11 +110,11 @@ void Engine::clean() {
     std::cout << "Shutdown complete" << std::endl;
 }
 
-int Engine::getEngineWidth() {
+int* Engine::getEngineWidth() {
     return engineWidth;
 }
 
-int Engine::getEngineHeight() {
+int* Engine::getEngineHeight() {
     return engineHeight;
 }
 

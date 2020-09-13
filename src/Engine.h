@@ -17,7 +17,7 @@ public:
     ~Engine();
 
 
-    void init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen);
+    void init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen, bool resizable);
 
     //void loadEntity(EntityType* entity);
 
@@ -30,9 +30,8 @@ public:
     bool running() {
         return isRunning;
     }
-
-    static int getEngineWidth();
-    static int getEngineHeight();
+    static int* getEngineWidth();
+    static int* getEngineHeight();
 
     static SDL_Renderer *getRenderer();
 
@@ -40,9 +39,8 @@ private:
     bool isRunning;
     SDL_Window *window;
     static SDL_Renderer *renderer;
-    static int engineWidth;
-    static int engineHeight;
-
+    static int* engineWidth;
+    static int* engineHeight;
 };
 
 #endif //PROJECT2DTD_ENGINE_H
