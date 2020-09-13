@@ -1,7 +1,7 @@
 #include "EntityType.h"
 
-int engineW;
-int engineH;
+int* engineW;
+int* engineH;
 
 //TODO: Separate out different entities with interface
 int dvdSpeedX = 1;
@@ -22,7 +22,7 @@ void EntityType::update() {
     srcRect.w = spriteWidth;
 
     //Has hit right side
-    if(xPos >= (engineW - spriteWidth)){
+    if(xPos >= (*engineW - spriteWidth)){
         dvdSpeedX = -1;
     }
         //Has hit left side
@@ -30,7 +30,7 @@ void EntityType::update() {
         dvdSpeedX = 1;
     }
         //has hit the bottom
-    else if(yPos >= (engineH - spriteHeight)){
+    else if(yPos >= (*engineH - spriteHeight)){
         dvdSpeedY = -1;
     }
         //Has hit the top
@@ -39,8 +39,8 @@ void EntityType::update() {
     }
 
     //Checking for corner spasm
-    if(yPos >= (engineH - spriteHeight) || yPos <= 0){
-        if(xPos >= (engineW - spriteWidth) || xPos <= 0){
+    if(yPos >= (*engineH - spriteHeight) || yPos <= 0){
+        if(xPos >= (*engineW - spriteWidth) || xPos <= 0){
             std::cout << "Yes, that was actually the corner" << std::endl;
         }
     }
