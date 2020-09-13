@@ -39,6 +39,7 @@ void Engine::init(const char *title, int xpos, int ypos, int width, int height, 
         renderer = SDL_CreateRenderer(window, -1, 0);
         if (renderer) {
             SDL_SetRenderDrawColor(renderer, 0, 0 , 0, 255);
+            TextureHandler::setRenderer(renderer);
             std::cout << "Renderer completed properly" << std::endl;
         }
         else{

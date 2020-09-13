@@ -3,7 +3,6 @@
 
 #include "SDL.h"
 #include "src/ECS/EntityComponentSystem.h"
-#include "src/TextureHandler.h"
 
 
 class SpriteComponent : public Component{
