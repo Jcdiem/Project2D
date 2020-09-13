@@ -8,8 +8,6 @@ TextureMap* texMap;
 
 
 //Globals (SHOULD ALL BE PRIVATE)
-int Engine::engineWidth;
-int Engine::engineHeight;
 SDL_Renderer* Engine::renderer = nullptr;
 int* Engine::engineHeight = nullptr;
 int* Engine::engineWidth = nullptr;
@@ -54,10 +52,6 @@ void Engine::init(const char *title, int xpos, int ypos, int width, int height, 
         printf("SDL_Init failed: %s\n", SDL_GetError());
         isRunning = false;
     }
-    //Random gen setup
-    std::random_device randomDevice; //Make a new random gen
-    std::mt19937 mt(randomDevice()); //Generate using engine
-    std::uniform_int_distribution<int> dist(0, height+width);
 
     //TODO: Get entities from file
     texMap = new TextureMap();
