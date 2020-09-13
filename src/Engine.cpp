@@ -8,7 +8,8 @@ EntityType* dvd;
 TextureMap* texMap;
 
 SDL_Renderer* Engine::renderer = nullptr;
-
+int* Engine::engineHeight = nullptr;
+int* Engine::engineWidth = nullptr;
 
 
 void Engine::init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen, bool resizable) {

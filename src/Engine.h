@@ -37,8 +37,8 @@ private:
     bool isRunning;
     SDL_Window *window;
     static SDL_Renderer *renderer;
-    int* engineWidth;
-    int* engineHeight;
+    static int* engineWidth;
+    static int* engineHeight;
 };
 
 #endif //PROJECT2DTD_ENGINE_H
