@@ -6,6 +6,8 @@
 #include <bitset>
 #include <array>
 
+#include <iostream>
+
 // Design pattern by Vittorio Romeo
 // https://vittorioromeo.info/
 
@@ -94,7 +96,7 @@ public:
     }
 
 private:
-    bool active;
+    bool active = true;
     std::vector<std::unique_ptr<Component>> componentList;
 
     componentArray compArray;
@@ -116,13 +118,18 @@ public:
                                         [](const std::unique_ptr<Entity> &mEntity){
             return !mEntity->isActive();
         }),
-               std::end(entityList));
     }
 
     Entity& addEntity(){
+        int lastSize = entityList.size();
         Entity* entityPtr = new Entity();
         std::unique_ptr<Entity> uniquePtr(entityPtr);
         entityList.emplace_back(std::move(uniquePtr));
+
+        if(lastSize == entityList.size()) {
+            std::cout << "Error creating entity\n"; //TODO: Return a null entity to be detected after the function, instead of within.
+        }
+
         return *entityPtr;
     }
 
