@@ -4,12 +4,16 @@ Engine::Engine()=default;
 Engine::~Engine()=default;
 
 //TODO: REMOVE EXAMPLE PLAYER ENTITY & texMap
-EntityType* dvd;
 TextureMap* texMap;
 
+
+//Globals (SHOULD ALL BE PRIVATE)
 int Engine::engineWidth;
 int Engine::engineHeight;
 SDL_Renderer* Engine::renderer = nullptr;
+
+Manager manager;
+auto& newDVD(manager.addEntity());
 
 
 
@@ -53,14 +57,11 @@ void Engine::init(const char *title, int xpos, int ypos, int width, int height, 
     std::uniform_int_distribution<int> dist(0, height+width);
 
     //TODO: Get entities from file
-    dvd = new EntityType("assets/dvd.png", 200, 82, (dist(mt) % (height - 82)), (dist(mt) % (width - 200)));
     texMap = new TextureMap();
-
+    newDVD.addComponent<PositionComponent>();
+    newDVD.addComponent<SpriteComponent>("assets/dvd.png",200,82);
 }
 
-//void Engine::pushSpriteSheet(SDL_Texture* texture) {
-//    spritesheetList.push_back(texture);
-//}
 
 void Engine::handleEvents() {
     SDL_Event event;
@@ -76,7 +77,8 @@ void Engine::handleEvents() {
 }
 
 void Engine::update() {
-    dvd->update();
+    manager.refresh();
+    manager.update();
 }
 
 void Engine::render() {
@@ -91,7 +93,7 @@ void Engine::render() {
     //WE ARE USING PAINTERS; FIRST ON LIST IS FIRST TO BE DRAWN, NEXT ON LIST IS DRAWN OVER TOP
     // (Background first, foreground last)
     texMap->drawMap();
-    dvd->render();
+    manager.draw();
 
 
     //End rendering

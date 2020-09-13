@@ -27,8 +27,8 @@ template <typename type> inline ComponentID getComponentTypeId() noexcept{
 
 constexpr std::size_t maxComponents = 32; //Max classes an entity can have
 
-using componentBitSet = std::bitset<maxComponents>; //Sets the bitmask for components
-using componentArray = std::array<Component*,maxComponents>; //Array of pointers for components
+using componentBitSet = std::bitset<maxComponents>; //Sets the bitmask for Components
+using componentArray = std::array<Component*,maxComponents>; //Array of pointers for Components
 
 
 
@@ -44,8 +44,6 @@ public:
     virtual void draw(){}
 
     virtual ~Component(){}
-
-private:
 };
 
 
@@ -57,11 +55,12 @@ private:
 class Entity{
 public:
     void update(){
-        //iterate through all the components and tell them to draw/update
+        //iterate through all the Components and tell them to draw/update
         for (auto& component : componentList) component->update();
+    }
+    void draw(){
         for (auto& component : componentList) component->draw();
     }
-    void draw(){}
     bool isActive() const {
         return active;
     }
@@ -78,11 +77,11 @@ public:
         type* component( //Make a component type
                 new type(std::forward<TypeArgs>(mArgs)...) //Give it arguments
         );
-        component->entity = this; //Set the components entity to this instance of an entity
+        component->entity = this; //Set the Components entity to this instance of an entity
         std::unique_ptr<Component> uniquePtr{component}; //Make a pointer for component
-        componentList.emplace_back(std::move(uniquePtr));//Push the component to the back of the list of components
+        componentList.emplace_back(std::move(uniquePtr));//Push the component to the back of the list of Components
 
-        compArray[getComponentTypeId<type>()] = component; //Add component to array of related components
+        compArray[getComponentTypeId<type>()] = component; //Add component to array of related Components
         compBitSet[getComponentTypeId<type>()] = true; //Set the bit for this component being used with the entity (For masking)
 
         component->init();
