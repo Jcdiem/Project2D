@@ -45,7 +45,7 @@ public:
     virtual void update(){}
     virtual void draw(){}
 
-    virtual ~Component(){}
+    virtual ~Component()= default;
 };
 
 
@@ -63,14 +63,14 @@ public:
     void draw(){
         for (auto& component : componentList) component->draw();
     }
-    bool isActive() const {
+    [[nodiscard]] bool isActive() const {
         return active;
     }
     void destroy(){
         active = false;
     }
 
-    template<typename type> bool hasComponent() const{
+    template<typename type> [[nodiscard]] bool hasComponent() const{
         return compBitSet[getComponentTypeId < type >]; //Return : Does entity have type component?
     }
 
@@ -123,7 +123,7 @@ public:
 
     Entity& addEntity(){
         int lastSize = entityList.size();
-        Entity* entityPtr = new Entity();
+        auto* entityPtr = new Entity();
         std::unique_ptr<Entity> uniquePtr(entityPtr);
         entityList.emplace_back(std::move(uniquePtr));
 

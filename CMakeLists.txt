@@ -3,13 +3,15 @@ project(Project2DTD)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
-
+set(JSON_BuildTests OFF CACHE INTERNAL "")
 
 INCLUDE(FindPkgConfig)
+include(FetchContent)
 include_directories(.)
-include_directories(assets)
 
-#Add the SDL2 and SDL_Image libraries
+add_subdirectory(nlohmann_json)
+
+#Add the required libraries
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
 
@@ -26,7 +28,9 @@ add_executable(Project2DTD
         src/ECS/Components.h
         src/ECS/PositionComponent.h
         src/ECS/SpriteComponent.h
-        src/TextureMap.cpp src/OF/objectFactory.cpp src/OF/objectFactory.h)
+        src/TextureMap.cpp
+        src/OF/objectFactory.cpp
+        src/OF/objectFactory.h)
 
-#Add the libraries
-target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES})
+#Add the library
+target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} nlohmann_json::nlohmann_json)

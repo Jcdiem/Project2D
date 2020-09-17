@@ -28,3 +28,7 @@ cmake-build-debug/Makefile
 cmake-build-debug/Project2DTD.cbp
 
 src/assets
+
+cmake-build-debug/_deps/
+
+cmake-build-debug/nlohmann_json/
