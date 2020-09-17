@@ -1,69 +1,69 @@
 #include "Engine.h"
 
-Engine::Engine()=default;
-Engine::~Engine()=default;
+Engine::Engine() = default;
+
+Engine::~Engine() = default;
 
 //TODO: REMOVE EXAMPLE PLAYER ENTITY & texMap
-TextureMap* texMap;
+TextureMap *texMap;
 
 
 //Globals (SHOULD ALL BE PRIVATE)
-SDL_Renderer* Engine::renderer = nullptr;
-int* Engine::engineHeight = nullptr;
-int* Engine::engineWidth = nullptr;
+SDL_Renderer *Engine::renderer = nullptr;
+int *Engine::engineHeight = nullptr;
+int *Engine::engineWidth = nullptr;
 
 Manager manager;
-auto& newDVD(manager.addEntity());
+auto &newDVD(manager.addEntity());
 
 void Engine::init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen, bool resizable) {
     int flags = 0;
-    if(fullscreen) {
+    if (fullscreen) {
         flags += SDL_WINDOW_FULLSCREEN;
     }
-    if(resizable) {
+    if (resizable) {
         flags += SDL_WINDOW_RESIZABLE;
     }
 
     SDL_GetWindowSize(window, engineWidth, engineHeight);
 
-    if(SDL_Init(SDL_INIT_EVERYTHING) == 0) {
+    if (SDL_Init(SDL_INIT_EVERYTHING) == 0) {
         std::cout << "SDL Initialised" << std::endl;
         window = SDL_CreateWindow(title, xpos, ypos, width, height, flags);
         if (window) {
             std::cout << "Window made properly" << std::endl;
-        }
-        else{
+        } else {
             printf("SDL_CreateWindow failed: %s\n", SDL_GetError());
         }
 
         renderer = SDL_CreateRenderer(window, -1, 0);
         if (renderer) {
-            SDL_SetRenderDrawColor(renderer, 0, 0 , 0, 255);
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
             TextureHandler::setRenderer(renderer);
             std::cout << "Renderer completed properly" << std::endl;
-        }
-        else{
+        } else {
             printf("SDL_CreateRenderer failed: %s\n", SDL_GetError());
         }
 
         isRunning = true;
-    }
-    else{ //If failed, give errors
+    } else { //If failed, give errors
         printf("SDL_Init failed: %s\n", SDL_GetError());
         isRunning = false;
     }
 
+    objectFactory::genObjList();
+
     //TODO: Get entities from file
     texMap = new TextureMap();
     newDVD.addComponent<PositionComponent>();
-    newDVD.addComponent<SpriteComponent>("assets/dvd.png",200,82);
+    newDVD.addComponent<SpriteComponent>("assets/textures/dvdAnim.png", 200, 82, 2);
 }
 
 
 void Engine::handleEvents() {
     SDL_Event event;
     SDL_PollEvent(&event);
-    switch (event.type){
+    switch (event.type) {
         case SDL_QUIT:
             isRunning = false;
             break;
@@ -101,14 +101,14 @@ void Engine::clean() {
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);
     SDL_Quit();
-    std::cout << "Shutdown complete" << std::endl;
+    printf("Shutdown complete");
 }
 
-int* Engine::getEngineWidth() {
+int *Engine::getEngineWidth() {
     return engineWidth;
 }
 
-int* Engine::getEngineHeight() {
+int *Engine::getEngineHeight() {
     return engineHeight;
 }
 

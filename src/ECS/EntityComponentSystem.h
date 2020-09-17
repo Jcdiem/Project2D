@@ -118,6 +118,7 @@ public:
                                         [](const std::unique_ptr<Entity> &mEntity){
             return !mEntity->isActive();
         }),
+               std::end(entityList));
     }
 
     Entity& addEntity(){
@@ -127,7 +128,7 @@ public:
         entityList.emplace_back(std::move(uniquePtr));
 
         if(lastSize == entityList.size()) {
-            std::cout << "Error creating entity\n"; //TODO: Return a null entity to be detected after the function, instead of within.
+            printf("Error creating entity\n");
         }
 
         return *entityPtr;

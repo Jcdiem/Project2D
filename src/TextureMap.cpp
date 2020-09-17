@@ -26,9 +26,9 @@ int start[20][25]={ //TODO: load texture maps through XML or something
 };
 
 TextureMap::TextureMap() {
-    mapTextureName0 = TextureHandler::loadTexture("assets/mapTex0.png");
-    mapTextureName1 = TextureHandler::loadTexture("assets/mapTex1.png");
-    mapTextureName2 = TextureHandler::loadTexture("assets/mapTex2.png");
+    mapTextureName0 = TextureHandler::loadTexture("assets/textures/mapTex0.png");
+    mapTextureName1 = TextureHandler::loadTexture("assets/textures/mapTex1.png");
+    mapTextureName2 = TextureHandler::loadTexture("assets/textures/mapTex2.png");
 
     loadMap(start);
 

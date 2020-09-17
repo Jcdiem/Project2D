@@ -1,0 +1,25 @@
+{
+  "dvd": [
+    {
+      "components": [
+        {
+          "PositionComponent": [
+            {
+              "script": "assets/scripts/dvd.lua"
+            }
+          ]
+        },
+        {
+          "SpriteComponent": [
+            {
+              "path": "assets/textures/dvdAnim.png",
+              "width": 200,
+              "height": 82,
+              "frames": 1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

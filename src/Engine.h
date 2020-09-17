@@ -4,7 +4,8 @@
 #include "SDL2/SDL_image.h"
 #include "TextureHandler.h"
 #include "TextureMap.h"
-#include "src/ECS/Components.h"
+#include "ECS/Components.h"
+#include "OF/objectFactory.h"
 #include <random>
 #include <ctime>
 #include <iostream>
