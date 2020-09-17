@@ -9,7 +9,7 @@ class objectFactory {
 public:
     static void genObjList();
 private:
-    static std::vector<std::string> > objList;
+    static std::vector<std::string> objList;
 };
 
 #endif //PROJECT2DTD_OBJECTFACTORY_H

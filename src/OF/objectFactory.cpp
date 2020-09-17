@@ -1,3 +1,4 @@
+#include <iostream>
 #include "objectFactory.h"
 using json = nlohmann::json;
 
