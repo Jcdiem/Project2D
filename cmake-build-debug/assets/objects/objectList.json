@@ -1,7 +1,8 @@
 {
   "objects": [
     {
-      "path": "assets/objects/dvd.json"
+      "path": "assets/objects/dvd.json",
+      "path": "assets/objects/null.json"
     }
   ]
 }

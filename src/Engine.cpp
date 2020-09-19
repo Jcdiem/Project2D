@@ -17,6 +17,7 @@ Manager manager;
 auto &newDVD(manager.addEntity());
 
 void Engine::init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen, bool resizable) {
+    objectFactory of;
     int flags = 0;
     if (fullscreen) {
         flags += SDL_WINDOW_FULLSCREEN;
