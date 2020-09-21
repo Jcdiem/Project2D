@@ -14,10 +14,10 @@ int *Engine::engineHeight = nullptr;
 int *Engine::engineWidth = nullptr;
 
 Manager manager;
+
 auto &newDVD(manager.addEntity());
 
 void Engine::init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen, bool resizable) {
-    objectFactory of;
     int flags = 0;
     if (fullscreen) {
         flags += SDL_WINDOW_FULLSCREEN;
@@ -34,7 +34,7 @@ void Engine::init(const char *title, int xpos, int ypos, int width, int height, 
         if (window) {
             std::cout << "Window made properly" << std::endl;
         } else {
-            printf("SDL_CreateWindow failed: %s\n", SDL_GetError());
+            std::throw_with_nested(std::runtime_error(std::string("SDL_CreateWindow failed: %s\n").append(SDL_GetError())));
         }
 
         renderer = SDL_CreateRenderer(window, -1, 0);
@@ -43,16 +43,21 @@ void Engine::init(const char *title, int xpos, int ypos, int width, int height, 
             TextureHandler::setRenderer(renderer);
             std::cout << "Renderer completed properly" << std::endl;
         } else {
-            printf("SDL_CreateRenderer failed: %s\n", SDL_GetError());
+            std::throw_with_nested(std::runtime_error(std::string("SDL_CreateRenderer failed: %s\n").append(SDL_GetError())));
         }
 
         isRunning = true;
-    } else { //If failed, give errors
-        printf("SDL_Init failed: %s\n", SDL_GetError());
-        isRunning = false;
+    } else {
+        std::throw_with_nested(std::runtime_error(std::string("SDL_Init failed: %s\n").append(SDL_GetError())));
     }
 
-    objectFactory::genObjList();
+    try {
+        objectFactory::genObjList();
+    }
+    catch(...) {
+        std::throw_with_nested(std::runtime_error("Object list generation failed."));
+        isRunning = false;
+    }
 
     //TODO: Get entities from file
     texMap = new TextureMap();
