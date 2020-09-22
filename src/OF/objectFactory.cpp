@@ -9,18 +9,19 @@ const char *nullObj = "src/assets/objects/null.json";
 void objectFactory::genObjList() {
     json file;
     try {
-        file = json::parse(std::fstream("assets/objects/objectList.json"), nullptr, true, true)["objects"];
+        file = json::parse(std::fstream("assets/objects/objectList.json"), nullptr, true, true)["objects"][0];
     }
     catch(json::exception &e) {
         std::throw_with_nested(std::runtime_error("Object list could not be found or it was improperly formatted."));
     }
 
-    for(int i = 0; i != file.size(); ++i) {
+    for (auto obj = file.begin(); obj != file.end(); ++obj)
+    {
         try{
-            auto path = file[i]["path"].get<std::string>();
-            objList.emplace_back(&path[0]);
+            objList.emplace_back(&std::string(obj.value())[0]);
         }
         catch(...) {
+            std::cout << "Failed to get object path, does it exist?" << std::endl;
             objList.emplace_back(nullObj);
         }
     }
