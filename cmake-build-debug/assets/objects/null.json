@@ -1,18 +1,12 @@
 {
-  "null": [
-    {
-      "components": [
-        {
-          "SpriteComponent": [
-            {
-              "path": "src/assets/textures/null.png",
-              "width": 100,
-              "height": 100,
-              "frames": 1
-            }
-          ]
-        }
-      ]
+  "null": {
+    "components": {
+      "SpriteComponent": {
+        "path": "assets/textures/null.png",
+        "width": 100,
+        "height": 100,
+        "frames": 1
+      }
     }
-  ]
+  }
 }

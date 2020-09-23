@@ -23,8 +23,8 @@ public:
         return yPos;
     }
     void init() override{
-        xPos = 0;
-        yPos = 0;
+        xPos = rand() % 800; //just for multi cd demo
+        yPos = rand() % 640;
         dvdSpeedX = 1;
         dvdSpeedY = 1;
         engineH = 640;

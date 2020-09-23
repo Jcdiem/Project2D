@@ -5,7 +5,7 @@
 #include "TextureHandler.h"
 #include "TextureMap.h"
 #include "ECS/Components.h"
-#include "OF/objectFactory.h"
+#include "LevelLoader.h"
 #include <random>
 #include <ctime>
 #include <iostream>
@@ -25,8 +25,8 @@ public:
     void pushSpriteSheet(SDL_Texture* texture);
 
     void handleEvents();
-    static void update();
-    static void render();
+    void update();
+    void render();
     void clean();
     bool running() {
         return isRunning;
@@ -42,6 +42,9 @@ private:
     static SDL_Renderer *renderer;
     static int* engineWidth;
     static int* engineHeight;
+
+    Manager manager;
+    LevelLoader* levelloader = new LevelLoader(&manager);
 };
 
 #endif //PROJECT2DTD_ENGINE_H

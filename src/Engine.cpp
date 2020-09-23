@@ -13,10 +13,6 @@ SDL_Renderer *Engine::renderer = nullptr;
 int *Engine::engineHeight = nullptr;
 int *Engine::engineWidth = nullptr;
 
-Manager manager;
-
-auto &newDVD(manager.addEntity());
-
 void Engine::init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen, bool resizable) {
     int flags = 0;
     if (fullscreen) {
@@ -52,17 +48,23 @@ void Engine::init(const char *title, int xpos, int ypos, int width, int height, 
     }
 
     try {
-        objectFactory::genObjList();
+        LevelLoader::genLevelList();
     }
     catch(...) {
-        std::throw_with_nested(std::runtime_error("Object list generation failed."));
+        std::throw_with_nested(std::runtime_error("Level list generation failed."));
         isRunning = false;
     }
 
     //TODO: Get entities from file
     texMap = new TextureMap();
-    newDVD.addComponent<PositionComponent>();
-    newDVD.addComponent<SpriteComponent>("assets/textures/dvdAnim.png", 200, 82, 2);
+
+//    std::cout << levelloader->getLevel(0) << std::endl;
+
+    levelloader->genObjs(levelloader->getLevel(0));
+
+//    auto &newDVD(manager.addEntity());
+//    newDVD.addComponent<PositionComponent>();
+//    newDVD.addComponent<SpriteComponent>("assets/textures/dvdAnim.png", 200, 82, 2);
 }
 
 
@@ -80,11 +82,13 @@ void Engine::handleEvents() {
 }
 
 void Engine::update() {
-    manager.refresh();
-    manager.update();
+    Manager *man = levelloader->getManager();
+    man->refresh();
+    man->update();
 }
 
 void Engine::render() {
+    Manager *man = levelloader->getManager();
     SDL_RenderClear(renderer);
     //Begin rendering
 
@@ -96,7 +100,7 @@ void Engine::render() {
     //WE ARE USING PAINTERS; FIRST ON LIST IS FIRST TO BE DRAWN, NEXT ON LIST IS DRAWN OVER TOP
     // (Background first, foreground last)
     texMap->drawMap();
-    manager.draw();
+    man->draw();
 
 
     //End rendering

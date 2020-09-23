@@ -1,8 +1,0 @@
-{
-  "objects": [
-    {
-      "null": "assets/objects/null.json", //Fallback if path can't be found.
-      "dvd":  "assets/objects/dvd.json"
-    }
-  ]
-}

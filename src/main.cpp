@@ -21,6 +21,7 @@ void print_exception(const std::exception& e, int level =  0)
 }
 
 int main (int argc, char* argv[]) {
+    srand((int)time(0));//Just for multi cd demo
     try {
         SDL_Thread *renderingThread;
         int threadReturn;
