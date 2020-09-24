@@ -128,7 +128,7 @@ public:
         entityList.emplace_back(std::move(uniquePtr));
 
         if(lastSize == entityList.size()) {
-            printf("Error creating entity\n");
+            std::throw_with_nested(std::runtime_error("Error creating entity"));
         }
 
         return *entityPtr;

@@ -2,7 +2,7 @@
 #define PROJECT2DTD_SPRITECOMPONENT_H
 
 #include "SDL.h"
-#include "src/ECS/EntityComponentSystem.h"
+#include "EntityComponentSystem.h"
 
 
 class SpriteComponent : public Component{

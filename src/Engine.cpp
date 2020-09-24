@@ -13,9 +13,6 @@ SDL_Renderer *Engine::renderer = nullptr;
 int *Engine::engineHeight = nullptr;
 int *Engine::engineWidth = nullptr;
 
-Manager manager;
-auto &newDVD(manager.addEntity());
-
 void Engine::init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen, bool resizable) {
     int flags = 0;
     if (fullscreen) {
@@ -33,7 +30,7 @@ void Engine::init(const char *title, int xpos, int ypos, int width, int height, 
         if (window) {
             std::cout << "Window made properly" << std::endl;
         } else {
-            printf("SDL_CreateWindow failed: %s\n", SDL_GetError());
+            std::throw_with_nested(std::runtime_error(std::string("SDL_CreateWindow failed: %s\n").append(SDL_GetError())));
         }
 
         renderer = SDL_CreateRenderer(window, -1, 0);
@@ -42,21 +39,26 @@ void Engine::init(const char *title, int xpos, int ypos, int width, int height, 
             TextureHandler::setRenderer(renderer);
             std::cout << "Renderer completed properly" << std::endl;
         } else {
-            printf("SDL_CreateRenderer failed: %s\n", SDL_GetError());
+            std::throw_with_nested(std::runtime_error(std::string("SDL_CreateRenderer failed: %s\n").append(SDL_GetError())));
         }
 
         isRunning = true;
-    } else { //If failed, give errors
-        printf("SDL_Init failed: %s\n", SDL_GetError());
+    } else {
+        std::throw_with_nested(std::runtime_error(std::string("SDL_Init failed: %s\n").append(SDL_GetError())));
+    }
+
+    try {
+        LevelLoader::genLevelList();
+    }
+    catch(...) {
+        std::throw_with_nested(std::runtime_error("Level list generation failed."));
         isRunning = false;
     }
 
-    objectFactory::genObjList();
-
     //TODO: Get entities from file
     texMap = new TextureMap();
-    newDVD.addComponent<PositionComponent>();
-    newDVD.addComponent<SpriteComponent>("assets/textures/dvdAnim.png", 200, 82, 2);
+
+    levelloader->genObjs(levelloader->getLevel(0));
 }
 
 
@@ -74,6 +76,7 @@ void Engine::handleEvents() {
 }
 
 void Engine::update() {
+//    Manager *man = levelloader->getManager();
     manager.refresh();
     manager.update();
 }
