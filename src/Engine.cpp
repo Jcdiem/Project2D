@@ -58,13 +58,7 @@ void Engine::init(const char *title, int xpos, int ypos, int width, int height, 
     //TODO: Get entities from file
     texMap = new TextureMap();
 
-//    std::cout << levelloader->getLevel(0) << std::endl;
-
     levelloader->genObjs(levelloader->getLevel(0));
-
-//    auto &newDVD(manager.addEntity());
-//    newDVD.addComponent<PositionComponent>();
-//    newDVD.addComponent<SpriteComponent>("assets/textures/dvdAnim.png", 200, 82, 2);
 }
 
 
@@ -82,13 +76,12 @@ void Engine::handleEvents() {
 }
 
 void Engine::update() {
-    Manager *man = levelloader->getManager();
-    man->refresh();
-    man->update();
+//    Manager *man = levelloader->getManager();
+    manager.refresh();
+    manager.update();
 }
 
 void Engine::render() {
-    Manager *man = levelloader->getManager();
     SDL_RenderClear(renderer);
     //Begin rendering
 
@@ -100,7 +93,7 @@ void Engine::render() {
     //WE ARE USING PAINTERS; FIRST ON LIST IS FIRST TO BE DRAWN, NEXT ON LIST IS DRAWN OVER TOP
     // (Background first, foreground last)
     texMap->drawMap();
-    man->draw();
+    manager.draw();
 
 
     //End rendering

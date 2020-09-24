@@ -84,7 +84,3 @@ void LevelLoader::objFromJson(const char* path) {
 const char* LevelLoader::getLevel(int levelNum) {
     return &levelList[levelNum][0];
 }
-
-Manager *LevelLoader::getManager() {
-    return eManager;
-}

@@ -13,13 +13,9 @@ public:
     static void genLevelList();
     void genObjs(const char* levelPath);
     static const char* getLevel(int levelNum);
-
-    Manager *getManager();
 private:
     void objFromJson(const char* path);
-
     Manager *eManager;
-
     static std::vector<std::string> levelList;
 };
 
