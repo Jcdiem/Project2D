@@ -4,7 +4,7 @@ Engine::Engine() = default;
 
 Engine::~Engine() = default;
 
-//TODO: REMOVE EXAMPLE PLAYER ENTITY & texMap
+//TODO: REMOVE EXAMPLE texMap
 TextureMap *texMap;
 
 
@@ -52,13 +52,12 @@ void Engine::init(const char *title, int xpos, int ypos, int width, int height, 
     }
     catch(...) {
         std::throw_with_nested(std::runtime_error("Level list generation failed."));
-        isRunning = false;
     }
 
     //TODO: Get entities from file
     texMap = new TextureMap();
 
-    levelloader->genObjs(levelloader->getLevel(0));
+    levelloader->genObjs(LevelLoader::getLevel(0));
 }
 
 

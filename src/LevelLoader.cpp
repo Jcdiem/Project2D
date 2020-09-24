@@ -44,12 +44,11 @@ void LevelLoader::genObjs(const char* levelPath) {
 
     for (auto obj = file.begin(); obj != file.end(); ++obj)
     {
-
-        objFromJson(&std::string(obj.value())[0]);
         try{
+            objFromJson(&std::string(obj.value())[0]);
         }
         catch(...) {
-            std::cout << "Failed to get object path, does it exist?" << std::endl;
+            std::cout << "Failed to create object from " << obj.value() << ", either object is malformed or does not exist." << std::endl;
             objFromJson(nullObj);
         }
     }

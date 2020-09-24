@@ -9,7 +9,7 @@
 
 class LevelLoader {
 public:
-    LevelLoader(Manager *manager);
+    explicit LevelLoader(Manager *manager);
     static void genLevelList();
     void genObjs(const char* levelPath);
     static const char* getLevel(int levelNum);
