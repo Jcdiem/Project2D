@@ -10,6 +10,8 @@
 #include <ctime>
 #include <iostream>
 
+#include "lua.h"
+
 class TextureHandler;
 
 class Engine {
