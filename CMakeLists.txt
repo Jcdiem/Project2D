@@ -1,33 +1,33 @@
-cmake_minimum_required(VERSION 3.17)
+cmake_minimum_required(VERSION 3.17 FATAL_ERROR)
 project(Project2DTD)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 set(JSON_BuildTests OFF CACHE INTERNAL "")
 
-include(FindPkgConfig)
 include(FetchContent)
 include_directories(src)
 
 add_subdirectory(nlohmann_json)
 
-#SDL2
 FetchContent_Declare(
         SDL2
         GIT_REPOSITORY "https://github.com/SDL-mirror/SDL.git"
         GIT_TAG        "release-2.0.12"
 )
 FetchContent_Declare(
-        SDL_IMAGE
-        GIT_REPOSITORY "https://github.com/SDL-mirror/SDL_image.git"
-        GIT_TAG        "release-2.0.5"
+        SDL_image
+        GIT_REPOSITORY "https://github.com/SDL-mirror/SDL_image"
+        GIT_TAG        "b4f28c1fc9ab2f91ae594fc3e86622c5c13ffbbb"
 )
 FetchContent_Declare(
         LUA
         GIT_REPOSITORY "https://github.com/LuaDist/lua.git"
         GIT_TAG        "5.3.2"
 )
-FetchContent_MakeAvailable(SDL2 SDL_IMAGE LUA)
+FetchContent_MakeAvailable(SDL2 SDL_image LUA)
+
+include_directories(${SDL2_IMAGE_INCLUDE_DIRS})
 
 add_executable(Project2DTD
         src/main.cpp
@@ -45,4 +45,4 @@ add_executable(Project2DTD
         src/lua.h)
 
 #Add the library
-target_link_libraries(${PROJECT_NAME} SDL2 SDL_IMAGE LUA nlohmann_json::nlohmann_json)
+target_link_libraries(${PROJECT_NAME} SDL2 SDL_image LUA nlohmann_json::nlohmann_json)
