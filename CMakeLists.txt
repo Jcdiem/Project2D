@@ -11,13 +11,23 @@ include_directories(src)
 
 add_subdirectory(nlohmann_json)
 
-#Add the required libraries
-find_package(SDL2 REQUIRED)
-find_package(SDL2_image REQUIRED)
-find_package(Lua51 REQUIRED)
-
-#Include the dependency directories
-include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS})
+#SDL2
+FetchContent_Declare(
+        SDL2
+        GIT_REPOSITORY "https://github.com/SDL-mirror/SDL.git"
+        GIT_TAG        "release-2.0.12"
+)
+FetchContent_Declare(
+        SDL_IMAGE
+        GIT_REPOSITORY "https://github.com/SDL-mirror/SDL_image.git"
+        GIT_TAG        "release-2.0.5"
+)
+FetchContent_Declare(
+        LUA
+        GIT_REPOSITORY "https://github.com/LuaDist/lua.git"
+        GIT_TAG        "5.3.2"
+)
+FetchContent_MakeAvailable(SDL2 SDL_IMAGE LUA)
 
 add_executable(Project2DTD
         src/main.cpp
@@ -35,4 +45,4 @@ add_executable(Project2DTD
         src/lua.h)
 
 #Add the library
-target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${LUA_LIBRARIES} nlohmann_json::nlohmann_json)
+target_link_libraries(${PROJECT_NAME} SDL2 SDL_IMAGE LUA nlohmann_json::nlohmann_json)
