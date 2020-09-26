@@ -8,12 +8,10 @@ set(JSON_BuildTests OFF CACHE INTERNAL "")
 include(FetchContent)
 include_directories(src)
 
-add_subdirectory(nlohmann_json)
-
 FetchContent_Declare(
         SDL2
         GIT_REPOSITORY "https://github.com/SDL-mirror/SDL.git"
-        GIT_TAG        "release-2.0.12"
+        GIT_TAG        "76468465a94b59f0dde4791846bc2476be4f245f"
 )
 FetchContent_Declare(
         SDL_image
@@ -23,9 +21,15 @@ FetchContent_Declare(
 FetchContent_Declare(
         LUA
         GIT_REPOSITORY "https://github.com/LuaDist/lua.git"
-        GIT_TAG        "5.3.2"
+        GIT_TAG        "fcdc5efb13f0d6c03d2868b7476b73e63a291ed3"
 )
-FetchContent_MakeAvailable(SDL2 SDL_image LUA)
+FetchContent_Declare(
+        JSON
+        GIT_REPOSITORY "https://github.com/nlohmann/json.git"
+        GIT_TAG        "db78ac1d7716f56fc9f1b030b715f872f93964e4"
+)
+
+FetchContent_MakeAvailable(SDL2 SDL_image LUA JSON)
 
 include_directories(${SDL2_IMAGE_INCLUDE_DIRS})
 
