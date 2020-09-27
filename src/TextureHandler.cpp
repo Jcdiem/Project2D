@@ -1,5 +1,5 @@
 #include "TextureHandler.h"
-#include "stdio.h"
+#include <cstdio>
 
 SDL_Renderer* TextureHandler::renderer = nullptr;
 

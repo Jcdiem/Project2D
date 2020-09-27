@@ -14,14 +14,14 @@ FetchContent_Declare(
         GIT_TAG        "76468465a94b59f0dde4791846bc2476be4f245f"
 )
 FetchContent_Declare(
-        SDL_image
+        SDL2_image
         GIT_REPOSITORY "https://github.com/SDL-mirror/SDL_image"
         GIT_TAG        "b4f28c1fc9ab2f91ae594fc3e86622c5c13ffbbb"
 )
 FetchContent_Declare(
         LUA
         GIT_REPOSITORY "https://github.com/LuaDist/lua.git"
-        GIT_TAG        "fcdc5efb13f0d6c03d2868b7476b73e63a291ed3"
+        GIT_TAG        "d2e7e7d4d43ff9068b279a617c5b2ca2c2771676"
 )
 FetchContent_Declare(
         JSON
@@ -29,9 +29,7 @@ FetchContent_Declare(
         GIT_TAG        "db78ac1d7716f56fc9f1b030b715f872f93964e4"
 )
 
-FetchContent_MakeAvailable(SDL2 SDL_image LUA JSON)
-
-include_directories(${SDL2_IMAGE_INCLUDE_DIRS})
+FetchContent_MakeAvailable(SDL2 SDL2_image LUA JSON)
 
 add_executable(Project2DTD
         src/main.cpp
@@ -49,4 +47,4 @@ add_executable(Project2DTD
         src/lua.h)
 
 #Add the library
-target_link_libraries(${PROJECT_NAME} SDL2 SDL_image LUA nlohmann_json::nlohmann_json)
+target_link_libraries(${PROJECT_NAME} SDL2 SDL2_image ${LUA_LIBRARIES} nlohmann_json::nlohmann_json)
