@@ -32,3 +32,11 @@ src/assets
 cmake-build-debug/_deps/
 
 cmake-build-debug/nlohmann_json/
+
+cmake-build-debug/cmake-build-debug/
+
+cmake-build-debug/CPackConfig.cmake
+
+cmake-build-debug/CPackSourceConfig.cmake
+
+cmake-build-debug/SDL2ConfigVersion.cmake

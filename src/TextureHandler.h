@@ -2,7 +2,7 @@
 #define PROJECT2DTD_TEXTUREHANDLER_H
 //#include "Engine.h"
 #include "SDL.h"
-#include "SDL_image.h"
+#include "SDL2/SDL_image.h"
 
 class TextureHandler {
 public:
