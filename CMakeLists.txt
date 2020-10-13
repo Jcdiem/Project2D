@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.17 FATAL_ERROR)
-project(Project2DTD)
+project(P2D)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
@@ -25,13 +25,13 @@ FetchContent_Declare(
 )
 FetchContent_Declare(
         JSON
-        GIT_REPOSITORY "https://github.com/nlohmann/json.git"
-        GIT_TAG        "db78ac1d7716f56fc9f1b030b715f872f93964e4"
+        GIT_REPOSITORY "https://github.com/ArthurSonzogni/nlohmann_json_cmake_fetchcontent.git"
+        GIT_TAG        "391786c6c3abdd3eeb993a3154f1f2a4cfe137a0"
 )
 
 FetchContent_MakeAvailable(SDL2 SDL2_image LUA JSON)
 
-add_executable(Project2DTD
+add_executable(P2D
         src/main.cpp
         src/Engine.cpp
         src/Engine.h
