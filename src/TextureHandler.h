@@ -1,7 +1,7 @@
 #ifndef PROJECT2DTD_TEXTUREHANDLER_H
 #define PROJECT2DTD_TEXTUREHANDLER_H
 //#include "Engine.h"
-#include "SDL.h"
+#include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
 
 class TextureHandler {
