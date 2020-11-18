@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.17 FATAL_ERROR)
 project(P2D VERSION 0.1)
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -28,16 +29,16 @@ set(SOURCE_FILES
         src/ECS/SpriteComponent.h
         src/Engine.h
         src/LevelLoader.h
-        src/LuaScripter.h
         src/TextureHandler.h
         src/TextureMap.h
+        src/TEngine.h
         src/Engine.cpp
         src/LevelLoader.cpp
         src/TextureHandler.cpp
         src/TextureMap.cpp
-)
+        src/TEngine.cpp)
 
 add_executable(P2D ${SOURCE_FILES} src/main.cpp)
 
 #Add the libraries
-target_link_libraries(P2D PRIVATE ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} nlohmann_json::nlohmann_json)
+target_link_libraries(P2D PRIVATE ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${CMAKE_DL_LIBS} nlohmann_json::nlohmann_json)

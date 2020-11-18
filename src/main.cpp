@@ -1,6 +1,8 @@
 #include "Engine.h"
 
 Engine *engine = nullptr;
+//Move to engine later... \/\/\/\/
+TEngine *tEngine = nullptr;
 
 static int renderThread(void *ptr) {
 
@@ -42,9 +44,9 @@ int main (int argc, char* argv[]) {
             printf("SDL_CreateThread failed: %s\n", SDL_GetError());
         }
 
-
+        tEngine = new TEngine();
         while(engine->running()) {
-
+            tEngine->run("assets/scripts/test.chai");
             frameStart = SDL_GetTicks(); //Ms since init TODO: find a way to get in nano-seconds instead, ms isn't exact enough
 
 
@@ -59,6 +61,8 @@ int main (int argc, char* argv[]) {
             if(frameDelay > frameTime && frameTime != 0){
                 SDL_Delay(frameDelay/frameTime);
             }
+
+            std::cout << frameTime << std::endl;
 
         }
 
