@@ -9,8 +9,7 @@
 #include <random>
 #include <ctime>
 #include <iostream>
-
-#include "LuaScripter.h"
+#include "TEngine.h"
 
 class TextureHandler;
 
