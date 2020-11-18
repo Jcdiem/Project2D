@@ -1,50 +1,43 @@
 cmake_minimum_required(VERSION 3.17 FATAL_ERROR)
-project(P2D)
+project(P2D VERSION 0.1)
 
 set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED YES)
+set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
-set(JSON_BuildTests OFF CACHE INTERNAL "")
 
 include(FetchContent)
-include_directories(src)
 
-FetchContent_Declare(
-        SDL2
-        GIT_REPOSITORY "https://github.com/SDL-mirror/SDL.git"
-        GIT_TAG        "76468465a94b59f0dde4791846bc2476be4f245f"
-)
-FetchContent_Declare(
-        SDL2_image
-        GIT_REPOSITORY "https://github.com/SDL-mirror/SDL_image"
-        GIT_TAG        "b4f28c1fc9ab2f91ae594fc3e86622c5c13ffbbb"
-)
-FetchContent_Declare(
-        LUA
-        GIT_REPOSITORY "https://github.com/LuaDist/lua.git"
-        GIT_TAG        "d2e7e7d4d43ff9068b279a617c5b2ca2c2771676"
-)
-FetchContent_Declare(
-        JSON
+find_package(SDL2 REQUIRED)
+find_package(SDL2_image REQUIRED)
+
+FetchContent_Declare(JSON
         GIT_REPOSITORY "https://github.com/ArthurSonzogni/nlohmann_json_cmake_fetchcontent.git"
-        GIT_TAG        "391786c6c3abdd3eeb993a3154f1f2a4cfe137a0"
-)
+        GIT_TAG        "391786c6c3abdd3eeb993a3154f1f2a4cfe137a0")
 
-FetchContent_MakeAvailable(SDL2 SDL2_image LUA JSON)
+FetchContent_GetProperties(JSON)
+if(NOT JSON_POPULATED)
+    FetchContent_Populate(JSON)
+    add_subdirectory(${json_SOURCE_DIR} ${json_BINARY_DIR} EXCLUDE_FROM_ALL)
+endif()
 
-add_executable(P2D
-        src/main.cpp
-        src/Engine.cpp
-        src/Engine.h
-        src/TextureHandler.cpp
-        src/TextureHandler.h
-        src/ECS/EntityComponentSystem.h
+set(SOURCE_FILES
         src/ECS/Components.h
+        src/ECS/EntityComponentSystem.h
         src/ECS/PositionComponent.h
         src/ECS/SpriteComponent.h
-        src/TextureMap.cpp
-        src/LevelLoader.cpp
+        src/Engine.h
         src/LevelLoader.h
-        src/lua.h)
+        src/LuaScripter.h
+        src/TextureHandler.h
+        src/TextureMap.h
+        src/Engine.cpp
+        src/LevelLoader.cpp
+        src/TextureHandler.cpp
+        src/TextureMap.cpp
+)
 
-#Add the library
-target_link_libraries(${PROJECT_NAME} SDL2 SDL2_image ${LUA_LIBRARIES} nlohmann_json::nlohmann_json)
+add_executable(P2D ${SOURCE_FILES} src/main.cpp)
+
+#Add the libraries
+target_link_libraries(P2D PRIVATE ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} nlohmann_json::nlohmann_json)

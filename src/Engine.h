@@ -10,7 +10,7 @@
 #include <ctime>
 #include <iostream>
 
-#include "lua.h"
+#include "LuaScripter.h"
 
 class TextureHandler;
 
