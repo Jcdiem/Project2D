@@ -28,7 +28,6 @@ set(SOURCE_FILES
         src/ECS/PositionComponent.h
         src/ECS/SpriteComponent.h
         src/ECS/ChaiEngine.h
-        src/ECS/ChaiFunctions.h
         src/Engine.h
         src/LevelLoader.h
         src/TextureHandler.h
@@ -36,7 +35,7 @@ set(SOURCE_FILES
         src/Engine.cpp
         src/LevelLoader.cpp
         src/TextureHandler.cpp
-        src/TextureMap.cpp src/ECS/ChaiFunctions.h)
+        src/TextureMap.cpp)
 
 add_executable(P2D ${SOURCE_FILES} src/main.cpp)
 
