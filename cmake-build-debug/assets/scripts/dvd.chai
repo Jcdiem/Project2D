@@ -1,0 +1,36 @@
+global x_pos = get_x();
+global y_pos = get_y();
+global e_hig = get_eh();
+global e_wid = get_ew();
+
+global x_spd;
+if (x_spd.is_var_undef()) { x_spd = 1; }
+global y_spd;
+if (y_spd.is_var_undef()) { y_spd = 1; }
+
+//Has hit right side
+if(x_pos >= (e_wid - 200)){
+    x_spd = -1;
+}
+    //Has hit left side
+else if(x_pos <= 0){
+    x_spd = 1;
+}
+    //has hit the bottom
+else if(y_pos >= (e_hig - 80)){
+    y_spd = -1;
+}
+    //Has hit the top
+else if(y_pos <= 0){
+    y_spd = 1;
+}
+
+//Checking for corner spasm
+if(y_pos >= (e_hig - 80) || y_pos <= 0){
+    if(x_pos >= (e_wid - 200) || x_pos <= 0){
+        print("That's the corner doc ;)");
+    }
+}
+
+set_x(x_spd + x_pos);
+set_y(y_spd + y_pos);

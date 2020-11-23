@@ -33,7 +33,6 @@ public:
     //CHAI SYSTEM FUNCTIONS /\/\/\/\/\/\/\/\/\
 
 private:
-    std::vector<std::string> knownVars;
     chaiscript::ChaiScript chai;
     Manager* manager;
 };
