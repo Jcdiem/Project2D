@@ -2,19 +2,29 @@
 #define P2D_CHAIENGINE_H
 
 #include <chaiscript/chaiscript.hpp>
+#include <fstream>
+#include <string>
 
 #include "EntityComponentSystem.h"
 
 class ChaiEngine {
 public:
-    ChaiEngine(Manager* manager) {
+    ChaiEngine(Manager* manager, char* path) {
         this->manager = manager;
+
+        std::ifstream file(path);
+        if(file) {
+            std::ostringstream fileContent;
+            fileContent << file.rdbuf(); // reading data
+            script = fileContent.str();
+        }
+
         chai.add(chaiscript::fun(&ChaiEngine::hello_world, this), "hello_world");
     }
 
-    void run(const char* path) {
+    void run() {
         try {
-            chai.eval_file(path);
+            chai.eval(script);
         } catch (std::exception& e) {
             std::cout << e.what() << std::endl;
         }
@@ -35,6 +45,7 @@ public:
 private:
     chaiscript::ChaiScript chai;
     Manager* manager;
+    std::string script;
 };
 
 

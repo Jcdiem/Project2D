@@ -12,15 +12,15 @@ public:
         xPos = 0;
         yPos = 0;
         this->manager = manager;
-        chai  = new ChaiEngine(manager);
         this->path = path;
+        chai  = new ChaiEngine(manager, path);
     }
     PositionComponent(Manager* manager, char* path, int x, int y){
         xPos = x;
         yPos = y;
         this->manager = manager;
-        chai = new ChaiEngine(manager);
         this->path = path;
+        chai  = new ChaiEngine(manager, path);
     }
 
 
@@ -70,7 +70,7 @@ public:
     }
 
     void update() override{
-        chai->run(path.c_str());
+        chai->run();
     }
 
 private:

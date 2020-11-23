@@ -53,7 +53,7 @@ int main (int argc, char* argv[]) {
 
             frameTime = SDL_GetTicks() - frameStart;
 //          Frame debugging
-//            printf("Time for frame was %d, (%d - %d) \n",frameTime,SDL_GetTicks(),frameStart);
+            printf("Time for frame was %d, (%d - %d) \n",frameTime,SDL_GetTicks(),frameStart);
 
             if(frameDelay > frameTime && frameTime != 0){
                 SDL_Delay(frameDelay/frameTime);
