@@ -5,7 +5,6 @@
 #include <algorithm>
 #include <bitset>
 #include <array>
-
 #include <iostream>
 
 // Design pattern by Vittorio Romeo
@@ -13,6 +12,7 @@
 
 class Component;
 class Entity;
+class Manager;
 
 using ComponentID = std::size_t;
 
@@ -31,6 +31,7 @@ constexpr std::size_t maxComponents = 32; //Max classes an entity can have
 
 using componentBitSet = std::bitset<maxComponents>; //Sets the bitmask for Components
 using componentArray = std::array<Component*,maxComponents>; //Array of pointers for Components
+
 
 
 
@@ -56,6 +57,7 @@ public:
 //Entity interface
 class Entity{
 public:
+
     void update(){
         //iterate through all the Components and tell them to draw/update
         for (auto& component : componentList) component->update();
@@ -87,6 +89,7 @@ public:
         compBitSet[getComponentTypeId<type>()] = true; //Set the bit for this component being used with the entity (For masking)
 
         component->init();
+
         return *component;
     }
 
@@ -101,7 +104,6 @@ private:
 
     componentArray compArray;
     componentBitSet compBitSet;
-
 };
 
 class Manager{
@@ -121,6 +123,10 @@ public:
                std::end(entityList));
     }
 
+    std::vector<std::unique_ptr<Entity>>* getEntityList() {
+        return &entityList;
+    }
+
     Entity& addEntity(){
         int lastSize = entityList.size();
         auto* entityPtr = new Entity();
@@ -136,7 +142,6 @@ public:
 
 private:
     std::vector<std::unique_ptr<Entity>> entityList; //List of entity pointers
-
 };
 
 #endif //PROJECT2DTD_ENTITYCOMPONENTSYSTEM_H

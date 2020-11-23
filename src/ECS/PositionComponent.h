@@ -2,33 +2,58 @@
 #define PROJECT2DTD_POSITIONCOMPONENT_H
 
 #include <iostream>
+
 #include "EntityComponentSystem.h"
+#include "ChaiEngine.h"
 
 class PositionComponent : public Component{
 public:
-    PositionComponent(){
+    PositionComponent(Manager* manager, char* path){
         xPos = 0;
         yPos = 0;
+        this->manager = manager;
+        chai  = new ChaiEngine(manager);
+        this->path = path;
     }
-    PositionComponent(int x, int y){
+    PositionComponent(Manager* manager, char* path, int x, int y){
         xPos = x;
         yPos = y;
+        this->manager = manager;
+        chai = new ChaiEngine(manager);
+        this->path = path;
     }
 
 
     int x() {
         return xPos;
     }
+
     int y(){
         return yPos;
     }
+
+    int getEW(){
+        return engineW;
+    }
+
+    int getEH(){
+        return engineH;
+    }
+
+
     void init() override{
         xPos = rand() % 800; //just for multi cd demo
         yPos = rand() % 640;
-        dvdSpeedX = 1;
-        dvdSpeedY = 1;
         engineH = 640;
         engineW = 800;
+        chaiscript::ChaiScript* tea = chai->brew();
+        tea->add(chaiscript::fun(&PositionComponent::setPos, this), "set_pos");
+        tea->add(chaiscript::fun(&PositionComponent::setX, this), "set_x");
+        tea->add(chaiscript::fun(&PositionComponent::setY, this), "set_y");
+        tea->add(chaiscript::fun(&PositionComponent::x, this), "get_x");
+        tea->add(chaiscript::fun(&PositionComponent::y, this), "get_y");
+        tea->add(chaiscript::fun(&PositionComponent::getEH, this), "get_eh");
+        tea->add(chaiscript::fun(&PositionComponent::getEW, this), "get_ew");
     }
 
     void setPos(int x, int y){
@@ -36,42 +61,27 @@ public:
         yPos = y;
     }
 
-    //TODO: Remove reference to just DVD Logic
-    void update() override{
-        //Has hit right side
-        if(xPos >= (engineW - 200)){
-            dvdSpeedX = -1;
-        }
-            //Has hit left side
-        else if(xPos <= 0){
-            dvdSpeedX = 1;
-        }
-            //has hit the bottom
-        else if(yPos >= (engineH - 80)){
-            dvdSpeedY = -1;
-        }
-            //Has hit the top
-        else if(yPos <= 0){
-            dvdSpeedY = 1;
-        }
+    void setX(int x){
+        xPos = x;
+    }
 
-        //Checking for corner spasm
-        if(yPos >= (engineH - 80) || yPos <= 0){
-            if(xPos >= (engineW - 200) || xPos <= 0){
-                std::cout << "Yes, that was actually the corner" << std::endl;
-            }
-        }
-        xPos = (dvdSpeedX + xPos);
-        yPos = (dvdSpeedY + yPos);
+    void setY(int y){
+        yPos = y;
+    }
+
+    void update() override{
+        chai->run(path.c_str());
     }
 
 private:
     int xPos;
     int yPos;
-    int dvdSpeedX;
-    int dvdSpeedY;
     int engineW;
     int engineH;
+
+    Manager* manager;
+    ChaiEngine* chai;
+    std::string path;
 };
 
 

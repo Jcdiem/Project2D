@@ -1,8 +1,6 @@
 #include <iostream>
 #include "LevelLoader.h"
 
-using json = nlohmann::json;
-
 std::vector<std::string> LevelLoader::levelList;
 
 const char *nullLevel = "assets/levels/null.json";
@@ -13,11 +11,11 @@ LevelLoader::LevelLoader(Manager *manager) {
 }
 
 void LevelLoader::genLevelList() {
-    json file;
+    nlohmann::json file;
     try {
-        file = json::parse(std::fstream("assets/levels/levelList.json"), nullptr, true, true)["levels"];
+        file = nlohmann::json::parse(std::fstream("assets/levels/levelList.json"), nullptr, true, true)["levels"];
     }
-    catch(json::exception &e) {
+    catch(nlohmann::json::exception &e) {
         std::throw_with_nested(std::runtime_error("Level list could not be found or it was improperly formatted."));
     }
 
@@ -34,11 +32,11 @@ void LevelLoader::genLevelList() {
 }
 
 void LevelLoader::genObjs(const char* levelPath) {
-    json file;
+    nlohmann::json file;
     try {
-        file = json::parse(std::fstream(levelPath), nullptr, true, true)["objects"];
+        file = nlohmann::json::parse(std::fstream(levelPath), nullptr, true, true)["objects"];
     }
-    catch(json::exception &e) {
+    catch(nlohmann::json::exception &e) {
         std::throw_with_nested(std::runtime_error("Level file could not be found or it was improperly formatted."));
     }
 
@@ -56,19 +54,20 @@ void LevelLoader::genObjs(const char* levelPath) {
 
 void LevelLoader::objFromJson(const char* path) {
     auto &curObjPtr(eManager->addEntity());
-    json file;
+    nlohmann::json file;
 
     try {
-        file = json::parse(std::fstream(path), nullptr, true, true).front()["components"];
+        file = nlohmann::json::parse(std::fstream(path), nullptr, true, true).front()["components"];
     }
-    catch(json::exception &e) {
+    catch(nlohmann::json::exception &e) {
         std::throw_with_nested(std::runtime_error(std::string(path).append(" could not be found...")));
     }
 
     for (auto component = file.begin(); component != file.end(); ++component)
     {
         if(component.key() == "PositionComponent") {
-            curObjPtr.addComponent<PositionComponent>();
+            auto chaiP = component.value()["path"].get<std::string>();
+            curObjPtr.addComponent<PositionComponent>(eManager, &chaiP[0]);
         }
         if(component.key() == "SpriteComponent") {
             auto sprP = component.value()["path"].get<std::string>();

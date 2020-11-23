@@ -27,16 +27,16 @@ set(SOURCE_FILES
         src/ECS/EntityComponentSystem.h
         src/ECS/PositionComponent.h
         src/ECS/SpriteComponent.h
+        src/ECS/ChaiEngine.h
+        src/ECS/ChaiFunctions.h
         src/Engine.h
         src/LevelLoader.h
         src/TextureHandler.h
         src/TextureMap.h
-        src/TEngine.h
         src/Engine.cpp
         src/LevelLoader.cpp
         src/TextureHandler.cpp
-        src/TextureMap.cpp
-        src/TEngine.cpp)
+        src/TextureMap.cpp src/ECS/ChaiFunctions.h)
 
 add_executable(P2D ${SOURCE_FILES} src/main.cpp)
 

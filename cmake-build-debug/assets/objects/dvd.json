@@ -2,7 +2,7 @@
   "dvd": {
     "components": {
       "PositionComponent": {
-        "path": "assets/scripts/dvd.lua"
+        "path": "assets/scripts/dvd.chai"
       },
       "SpriteComponent": {
         "path": "assets/textures/dvdAnim.png",

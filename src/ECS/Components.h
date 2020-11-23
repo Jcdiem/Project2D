@@ -4,6 +4,7 @@
 #include "EntityComponentSystem.h"
 #include "PositionComponent.h"
 #include "SpriteComponent.h"
+#include "ChaiEngine.h"
 
 class Components{
 
