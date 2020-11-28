@@ -48,7 +48,7 @@ void Engine::init(const char *title, int xpos, int ypos, int width, int height, 
     }
 
     try {
-        LevelLoader::genLevelList();
+        JParser::genLevelList();
     }
     catch(...) {
         std::throw_with_nested(std::runtime_error("Level list generation failed."));
@@ -57,7 +57,7 @@ void Engine::init(const char *title, int xpos, int ypos, int width, int height, 
     //TODO: Get entities from file
     texMap = new TextureMap();
 
-    levelloader->genObjs(LevelLoader::getLevel(0));
+    jParser->genObjs(JParser::getLevel(0));
 }
 
 

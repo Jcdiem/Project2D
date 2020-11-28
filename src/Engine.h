@@ -5,10 +5,10 @@
 #include "TextureHandler.h"
 #include "TextureMap.h"
 #include "ECS/Components.h"
-#include "LevelLoader.h"
+#include "JParser.h"
 
+#include <chrono>
 #include <random>
-#include <ctime>
 #include <iostream>
 
 class TextureHandler;
@@ -45,7 +45,7 @@ private:
     static int* engineHeight;
 
     Manager manager;
-    LevelLoader* levelloader = new LevelLoader(&manager);
+    JParser* jParser = new JParser(&manager);
 };
 
 #endif //PROJECT2DTD_ENGINE_H

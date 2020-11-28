@@ -26,10 +26,9 @@ int main (int argc, char* argv[]) {
         SDL_Thread *renderingThread;
         int threadReturn;
 
-        const int FPS = 60; //target FPS
-        const int frameDelay = 1000 / FPS; //expected frame delay
+        const int FPS = 120; //target FPS
+        const int frameDelay = 1000000000 / FPS; //expected frame delay
 
-        Uint32 frameStart;
         int frameTime;
 
         engine = new Engine();
@@ -43,21 +42,23 @@ int main (int argc, char* argv[]) {
         }
 
         while(engine->running()) {
-            frameStart = SDL_GetTicks(); //Ms since init TODO: find a way to get in nano-seconds instead, ms isn't exact enough
+            auto frameStart = std::chrono::high_resolution_clock::now();
 
 
             engine->handleEvents();
             engine->update();
             engine->render();
 
-
-            frameTime = SDL_GetTicks() - frameStart;
+            auto frameEnd = std::chrono::high_resolution_clock::now();
+            frameTime = std::chrono::duration_cast<std::chrono::nanoseconds>(frameEnd-frameStart).count();
 //          Frame debugging
-            printf("Time for frame was %d, (%d - %d) \n",frameTime,SDL_GetTicks(),frameStart);
+            std::cout << "Time for frame was: " << frameTime / 1000000.0 << "ms" << std::endl;
 
             if(frameDelay > frameTime && frameTime != 0){
-                SDL_Delay(frameDelay/frameTime);
-            }\
+                using namespace std::chrono_literals;
+//                SDL_Delay(frameDelay/frameTime);
+                std::this_thread::sleep_for(1ns * frameDelay/frameTime);
+            }
 
         }
 

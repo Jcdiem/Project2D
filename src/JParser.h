@@ -7,9 +7,9 @@
 #include "TextureHandler.h"
 #include "ECS/Components.h"
 
-class LevelLoader {
+class JParser {
 public:
-    explicit LevelLoader(Manager *manager);
+    explicit JParser(Manager *manager);
     static void genLevelList();
     void genObjs(const char* levelPath);
     static const char* getLevel(int levelNum);

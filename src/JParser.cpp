@@ -1,16 +1,16 @@
 #include <iostream>
-#include "LevelLoader.h"
+#include "JParser.h"
 
-std::vector<std::string> LevelLoader::levelList;
+std::vector<std::string> JParser::levelList;
 
 const char *nullLevel = "assets/levels/null.json";
 const char *nullObj = "assets/objects/null.json";
 
-LevelLoader::LevelLoader(Manager *manager) {
+JParser::JParser(Manager *manager) {
     eManager = manager;
 }
 
-void LevelLoader::genLevelList() {
+void JParser::genLevelList() {
     nlohmann::json file;
     try {
         file = nlohmann::json::parse(std::fstream("assets/levels/levelList.json"), nullptr, true, true)["levels"];
@@ -31,7 +31,7 @@ void LevelLoader::genLevelList() {
     }
 }
 
-void LevelLoader::genObjs(const char* levelPath) {
+void JParser::genObjs(const char* levelPath) {
     nlohmann::json file;
     try {
         file = nlohmann::json::parse(std::fstream(levelPath), nullptr, true, true)["objects"];
@@ -52,7 +52,7 @@ void LevelLoader::genObjs(const char* levelPath) {
     }
 }
 
-void LevelLoader::objFromJson(const char* path) {
+void JParser::objFromJson(const char* path) {
     auto &curObjPtr(eManager->addEntity());
     nlohmann::json file;
 
@@ -79,6 +79,6 @@ void LevelLoader::objFromJson(const char* path) {
     }
 }
 
-const char* LevelLoader::getLevel(int levelNum) {
+const char* JParser::getLevel(int levelNum) {
     return &levelList[levelNum][0];
 }

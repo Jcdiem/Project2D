@@ -29,11 +29,11 @@ set(SOURCE_FILES
         src/ECS/SpriteComponent.h
         src/ECS/ChaiEngine.h
         src/Engine.h
-        src/LevelLoader.h
+        src/JParser.h
         src/TextureHandler.h
         src/TextureMap.h
         src/Engine.cpp
-        src/LevelLoader.cpp
+        src/JParser.cpp
         src/TextureHandler.cpp
         src/TextureMap.cpp)
 
