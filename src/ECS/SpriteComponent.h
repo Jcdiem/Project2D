@@ -17,7 +17,7 @@ public:
     }
 
     void init() override{
-        position = &entity->getComponent<PositionComponent>();
+        position = &entity->getComponent<ScriptComponent>();
 
         srcRect.x = srcRect.y = 0;
         srcRect.w = destRect.w = spriteWidth;
@@ -42,10 +42,9 @@ private:
     int spriteWidth;
     int frameCount;
     int curFrame = 0;
-    PositionComponent *position;
+    ScriptComponent *position;
     SDL_Texture *texture;
     SDL_Rect srcRect, destRect;
-
 };
 
 

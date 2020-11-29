@@ -1,14 +1,14 @@
 {
   "dvd": {
     "components": {
-      "PositionComponent": {
+      "ScriptComponent": {
         "path": "assets/scripts/dvd.chai"
       },
       "SpriteComponent": {
-        "path": "assets/textures/dvdAnim.png",
+        "path": "assets/textures/dvd24frame.png",
         "width": 200,
         "height": 82,
-        "frames": 2
+        "frames": 24
       }
     }
   }

@@ -6,16 +6,16 @@
 #include "EntityComponentSystem.h"
 #include "ChaiEngine.h"
 
-class PositionComponent : public Component{
+class ScriptComponent : public Component{
 public:
-    PositionComponent(Manager* manager, char* path){
+    ScriptComponent(Manager* manager, char* path){
         xPos = 0;
         yPos = 0;
         this->manager = manager;
         this->path = path;
         chai  = new ChaiEngine(manager, path);
     }
-    PositionComponent(Manager* manager, char* path, int x, int y){
+    ScriptComponent(Manager* manager, char* path, int x, int y){
         xPos = x;
         yPos = y;
         this->manager = manager;
@@ -47,13 +47,13 @@ public:
         engineH = 640;
         engineW = 800;
         chaiscript::ChaiScript* tea = chai->brew();
-        tea->add(chaiscript::fun(&PositionComponent::setPos, this), "set_pos");
-        tea->add(chaiscript::fun(&PositionComponent::setX, this), "set_x");
-        tea->add(chaiscript::fun(&PositionComponent::setY, this), "set_y");
-        tea->add(chaiscript::fun(&PositionComponent::x, this), "get_x");
-        tea->add(chaiscript::fun(&PositionComponent::y, this), "get_y");
-        tea->add(chaiscript::fun(&PositionComponent::getEH, this), "get_eh");
-        tea->add(chaiscript::fun(&PositionComponent::getEW, this), "get_ew");
+        tea->add(chaiscript::fun(&ScriptComponent::setPos, this), "set_pos");
+        tea->add(chaiscript::fun(&ScriptComponent::setX, this), "set_x");
+        tea->add(chaiscript::fun(&ScriptComponent::setY, this), "set_y");
+        tea->add(chaiscript::fun(&ScriptComponent::x, this), "get_x");
+        tea->add(chaiscript::fun(&ScriptComponent::y, this), "get_y");
+        tea->add(chaiscript::fun(&ScriptComponent::getEH, this), "get_eh");
+        tea->add(chaiscript::fun(&ScriptComponent::getEW, this), "get_ew");
     }
 
     void setPos(int x, int y){

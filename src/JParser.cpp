@@ -65,9 +65,9 @@ void JParser::objFromJson(const char* path) {
 
     for (auto component = file.begin(); component != file.end(); ++component)
     {
-        if(component.key() == "PositionComponent") {
+        if(component.key() == "ScriptComponent") {
             auto chaiP = component.value()["path"].get<std::string>();
-            curObjPtr.addComponent<PositionComponent>(eManager, &chaiP[0]);
+            curObjPtr.addComponent<ScriptComponent>(eManager, &chaiP[0]);
         }
         if(component.key() == "SpriteComponent") {
             auto sprP = component.value()["path"].get<std::string>();

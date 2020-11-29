@@ -25,7 +25,7 @@ endif()
 set(SOURCE_FILES
         src/ECS/Components.h
         src/ECS/EntityComponentSystem.h
-        src/ECS/PositionComponent.h
+        src/ECS/ScriptComponent.h
         src/ECS/SpriteComponent.h
         src/ECS/ChaiEngine.h
         src/Engine.h
