@@ -28,6 +28,7 @@ set(SOURCE_FILES
         src/ECS/ScriptComponent.h
         src/ECS/SpriteComponent.h
         src/ECS/ChaiEngine.h
+        src/ECS/AnimStruct.h
         src/Engine.h
         src/JParser.h
         src/TextureHandler.h

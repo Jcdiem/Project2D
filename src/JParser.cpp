@@ -70,15 +70,36 @@ void JParser::objFromJson(const char* path) {
             curObjPtr.addComponent<ScriptComponent>(eManager, &chaiP[0]);
         }
         if(component.key() == "SpriteComponent") {
-            auto sprP = component.value()["path"].get<std::string>();
-            int sprW = component.value()["width"];
-            int sprH = component.value()["height"].get<int>();
-            int sprF = component.value()["frames"].get<int>();
-            curObjPtr.addComponent<SpriteComponent>(&sprP[0], sprW, sprH, sprF);
+            std::vector<animToolkit::animation*> animArray;
+            for(auto anim = component->begin(); anim != component->end(); anim++) {
+                animToolkit::animation* curAnim = new animToolkit::animation;
+                animToolkit::addByPath(curAnim, &anim.value()["path"].get<std::string>()[0]);
+                curAnim->width = anim.value()["width"].get<int>();
+                curAnim->height = anim.value()["height"].get<int>();
+                curAnim->frames = anim.value()["frames"].get<int>();
+                curAnim->framerate = anim.value()["framerate"].get<int>();
+                animArray.emplace_back(curAnim);
+            }
+            curObjPtr.addComponent<SpriteComponent>(animArray);
         }
     }
 }
 
 const char* JParser::getLevel(int levelNum) {
     return &levelList[levelNum][0];
+}
+
+std::string JParser::getTitle() {
+    nlohmann::json file = nlohmann::json::parse(std::fstream("assets/engineSettings.json"), nullptr, true, true);
+    return file["Title"].get<std::string>();
+}
+
+int JParser::getXSize() {
+    nlohmann::json file = nlohmann::json::parse(std::fstream("assets/engineSettings.json"), nullptr, true, true);
+    return file["WindowXRes"].get<int>();
+}
+
+int JParser::getYSize() {
+    nlohmann::json file = nlohmann::json::parse(std::fstream("assets/engineSettings.json"), nullptr, true, true);
+    return file["WindowYRes"].get<int>();
 }

@@ -1,7 +1,6 @@
 #ifndef PROJECT2DTD_ENGINE_H
 #define PROJECT2DTD_ENGINE_H
 #include "SDL2/SDL.h"
-#include "SDL2/SDL_image.h"
 #include "TextureHandler.h"
 #include "TextureMap.h"
 #include "ECS/Components.h"
@@ -32,6 +31,9 @@ public:
     bool running() {
         return isRunning;
     }
+
+    JParser* getJson();
+
     static int* getEngineWidth();
     static int* getEngineHeight();
 

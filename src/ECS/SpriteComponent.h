@@ -3,45 +3,62 @@
 
 #include "SDL2/SDL.h"
 #include "EntityComponentSystem.h"
+#include "AnimStruct.h"
 
 
 class SpriteComponent : public Component{
 public:
 
     SpriteComponent() = default;
-    SpriteComponent(const char* path,int sizeW,int sizeH, int frames = 1){
-        texture = TextureHandler::loadTexture(path);
-        spriteHeight = sizeH;
-        spriteWidth = sizeW;
-        frameCount = frames;
+    SpriteComponent(std::vector<animToolkit::animation*> anims){
+        this->anims = anims;
+        srcRect.y = 0;
     }
 
     void init() override{
         position = &entity->getComponent<ScriptComponent>();
+        restartTimer();
+    }
 
-        srcRect.x = srcRect.y = 0;
-        srcRect.w = destRect.w = spriteWidth;
-        srcRect.h = destRect.h = spriteHeight;
+    void playAnim(int animId) {
+        curAnim = animId;
+        restartTimer();
     }
 
     void update() override{
         destRect.x = position->x();
         destRect.y = position->y();
+        flipPoint = 1;
+        flipPoint = (flipPoint / anims[curAnim]->framerate) * 1000;
+
+        srcRect.w = destRect.w = anims[curAnim]->width;
+        srcRect.h = destRect.h = anims[curAnim]->height;
     }
 
     void draw() override{
-        srcRect.x = curFrame * spriteWidth;
-        srcRect.x += curFrame;
-        TextureHandler::Draw(texture,srcRect,destRect);
-        curFrame += 1;
-        curFrame = curFrame % frameCount;
+        std::chrono::time_point<std::chrono::steady_clock> curTime = std::chrono::steady_clock::now();
+        int timeSince = std::chrono::duration_cast<std::chrono::milliseconds>(curTime-timer).count();
+        timeSince = timeSince % 1000;
+
+        int curFrame = timeSince / flipPoint;
+
+        srcRect.x = curFrame * anims[curAnim]->width;
+
+        TextureHandler::Draw(anims[curAnim]->texture, srcRect, destRect);
+    }
+
+    void restartTimer() {
+        timer = std::chrono::steady_clock::now();
     }
 
 private:
-    int spriteHeight;
-    int spriteWidth;
-    int frameCount;
-    int curFrame = 0;
+    std::vector<animToolkit::animation*> anims;
+
+    int curAnim = 0;
+    float flipPoint;
+
+    std::chrono::time_point<std::chrono::steady_clock> timer;
+
     ScriptComponent *position;
     SDL_Texture *texture;
     SDL_Rect srcRect, destRect;

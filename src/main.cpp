@@ -26,14 +26,16 @@ int main (int argc, char* argv[]) {
         SDL_Thread *renderingThread;
         int threadReturn;
 
-        const int FPS = 120; //target FPS
+        const int FPS = 1; //! Target TPS
+                            //! Different from FPS, this is the cycle speed of main loop, 30 cap is good,
+                            //! adjusting this number affects game speed
         const int frameDelay = 1000000000 / FPS; //expected frame delay
+        std::cout << "Goal frametime: " << frameDelay << std::endl;
 
         int frameTime;
-
         engine = new Engine();
 
-        engine->init("SomeRandomCrap",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,800,640,false, true);
+        engine->init(&engine->getJson()->getTitle()[0],SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,engine->getJson()->getXSize(),engine->getJson()->getYSize(),false, false);
 
         renderingThread = SDL_CreateThread(renderThread, "RenderThread", nullptr);
         //Check to make sure thread isn't rart
@@ -42,14 +44,14 @@ int main (int argc, char* argv[]) {
         }
 
         while(engine->running()) {
-            auto frameStart = std::chrono::high_resolution_clock::now();
+            auto frameStart = std::chrono::steady_clock::now();
 
 
             engine->handleEvents();
             engine->update();
             engine->render();
 
-            auto frameEnd = std::chrono::high_resolution_clock::now();
+            auto frameEnd = std::chrono::steady_clock::now();
             frameTime = std::chrono::duration_cast<std::chrono::nanoseconds>(frameEnd-frameStart).count();
 //          Frame debugging
             std::cout << "Time for frame was: " << frameTime / 1000000.0 << "ms" << std::endl;
@@ -57,9 +59,10 @@ int main (int argc, char* argv[]) {
             if(frameDelay > frameTime && frameTime != 0){
                 using namespace std::chrono_literals;
 //                SDL_Delay(frameDelay/frameTime);
-                std::this_thread::sleep_for(1ns * frameDelay/frameTime);
+                std::this_thread::sleep_for(1ns * (frameDelay/frameTime));
+            } else {
+                printf("Uh oh, engine thread can't keep up!\n");
             }
-
         }
 
 //    render.join();

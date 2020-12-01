@@ -117,3 +117,7 @@ int *Engine::getEngineHeight() {
 SDL_Renderer *Engine::getRenderer() {
     return renderer;
 }
+
+JParser *Engine::getJson() {
+    return jParser;
+}
