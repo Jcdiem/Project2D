@@ -26,10 +26,10 @@ int main (int argc, char* argv[]) {
         SDL_Thread *renderingThread;
         int threadReturn;
 
-        const int FPS = 1; //! Target TPS
+        const int TPS = 30; //! Target TPS
                             //! Different from FPS, this is the cycle speed of main loop, 30 cap is good,
                             //! adjusting this number affects game speed
-        const int frameDelay = 1000000000 / FPS; //expected frame delay
+        const int frameDelay = 1000000000 / TPS; //expected frame delay in ns
         std::cout << "Goal frametime: " << frameDelay << std::endl;
 
         int frameTime;
@@ -46,7 +46,6 @@ int main (int argc, char* argv[]) {
         while(engine->running()) {
             auto frameStart = std::chrono::steady_clock::now();
 
-
             engine->handleEvents();
             engine->update();
             engine->render();
@@ -61,7 +60,8 @@ int main (int argc, char* argv[]) {
 //                SDL_Delay(frameDelay/frameTime);
                 std::this_thread::sleep_for(1ns * (frameDelay/frameTime));
             } else {
-                printf("Uh oh, engine thread can't keep up!\n");
+                float lostFrames = frameTime / frameDelay;
+                std::cout << "Uh oh, engine thread can't keep up! About " << lostFrames << " frames behind..." << std::endl;
             }
         }
 

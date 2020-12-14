@@ -9,7 +9,7 @@
           "path": "assets/textures/dvd24frame.png",
           "width": 200,
           "height": 82,
-          "frames": 48,
+          "frames": 24,
           "framerate": 24
         },
         "1": {
