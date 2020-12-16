@@ -2,12 +2,8 @@
 
 Engine *engine = nullptr;
 
-static int renderThread(void *ptr) {
-
-//    while(engine->running()) {
-//        engine->render();
-//    }
-    return 1; //TODO: Fix having to return a 1 uselessly (possibly turn into error helping?)
+static int renderThread([[maybe_unused]] void *ptr) {
+    return 0;
 }
 
 void print_exception(const std::exception& e, int level =  0)
@@ -23,10 +19,9 @@ void print_exception(const std::exception& e, int level =  0)
 int main (int argc, char* argv[]) {
     //FLAGS
     bool debug = false;
+    int width = 0;
+    int height = 0;
     //FLAGS
-
-
-    srand((int)time(0));//Just for multi cd demo
 
     for(int i = 1; i < argc; i++) {
         printf("%s: ", argv[i]);
@@ -34,14 +29,32 @@ int main (int argc, char* argv[]) {
         if(strcmp(argv[i], "--debug") == 0 || strcmp(argv[i], "-d") == 0 ) {
             printf("Debug enabled!\n");
             debug = true;
-        } else if(strcmp(argv[i], "--help") == 0 || strcmp(argv[i], "-h") == 0 ) {
+        } else if(strcmp(argv[i], "--width") == 0 || strcmp(argv[i], "-w") == 0 ) {
+            printf("Forcing Height!\n");
+            i += 1;
+            try {
+                height = std::stoi(argv[i]);
+            } catch(...) {
+                printf("Unable to parse height, ignoring!");
+            }
+        } else if(strcmp(argv[i], "--height") == 0 || strcmp(argv[i], "-h") == 0 ) {
+            printf("Forcing Width!\n");
+            i += 1;
+            try {
+                width = std::stoi(argv[i]);
+            } catch(...) {
+                printf("Unable to parse width, ignoring!");
+            }
+        } else if(strcmp(argv[i], "--help") == 0) {
             printf("Showing Help!\n");
             printf("The Following flags are available:\n");
-            printf("--debug \\ -d | Enable debug mode\n");
-            printf("--help  \\ -h | Show this help message\n");
+            printf("--debug  \\ -d | Enable debug mode\n");
+            printf("--width  \\ -w | Ignore width in config file\n");
+            printf("--height \\ -h | Ignore height in config file\n");
+            printf("--help         | Show this help message\n");
             std::exit(0);
         } else {
-            printf("Unknown flag.\n");
+            printf("Unknown flag.\n '--help' to get all flags");
         }
 
     }
@@ -59,14 +72,20 @@ int main (int argc, char* argv[]) {
         }
 
         int frameTime;
-
         int timeLost = 0;
 
         engine = new Engine();
 
-        engine->init(&engine->getJson()->getTitle()[0],SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,engine->getJson()->getXSize(),engine->getJson()->getYSize(),false, false);
+        if(width == 0) {
+            width = JParser::getXSize();
+        }
+        if(height == 0) {
+            height = JParser::getYSize();
+        }
 
-        renderingThread = SDL_CreateThread(renderThread, "RenderThread", nullptr);
+        engine->init(&JParser::getTitle()[0],SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED, width, height, false, false);
+
+        renderingThread = SDL_CreateThread(renderThread, "renderer", nullptr);
 
         if (nullptr == renderingThread) {
             std::throw_with_nested(SDL_GetError());
@@ -103,7 +122,7 @@ int main (int argc, char* argv[]) {
                         std::cout << "Currently making up lost time! " << timeLost / 1000000.0 << "ms to make up!" << std::endl;
                     }
                     if(timeLost < 0) {
-                        std::this_thread::sleep_for(1ns * abs(timeLost));
+                        std::this_thread::sleep_for(-1ns * timeLost);
                         timeLost = 0;
                         if(debug) {
                             std::cout << "No more time to make up!" << std::endl;
@@ -120,7 +139,7 @@ int main (int argc, char* argv[]) {
 //    render.join();
         //Kill the rendering thread
         SDL_WaitThread(renderingThread, &threadReturn);
-        printf("Rendering thread finished; value: %d (expected value is 1) \n", threadReturn);
+        printf("Rendering thread finished; value: %d (expected value is 0) \n", threadReturn);
 
         engine->clean();
 

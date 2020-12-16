@@ -2,6 +2,8 @@
   "dvd": {
     "components": {
       "ScriptComponent": {
+        "X": 0,
+        "Y": 0,
         "path": "assets/scripts/dvd.chai"
       },
       "SpriteComponent": {

@@ -14,6 +14,8 @@ public:
         this->manager = manager;
         this->path = path;
         chai  = new ChaiEngine(manager, path);
+        engineW = manager->getWW();
+        engineH = manager->getWH();
     }
     ScriptComponent(Manager* manager, char* path, int x, int y){
         xPos = x;
@@ -21,14 +23,11 @@ public:
         this->manager = manager;
         this->path = path;
         chai  = new ChaiEngine(manager, path);
+        engineW = manager->getWW();
+        engineH = manager->getWH();
     }
 
     void init() override{
-        xPos = rand() % 800; //just for multi cd demo
-        yPos = rand() % 640;
-        engineH = 640;
-        engineW = 800;
-
         chaiscript::ChaiScript* tea = chai->brew();
         tea->add(chaiscript::fun(&ScriptComponent::setPos, this), "set_pos");
         tea->add(chaiscript::fun(&ScriptComponent::setX, this), "set_x");
@@ -37,13 +36,14 @@ public:
         tea->add(chaiscript::fun(&ScriptComponent::y, this), "get_y");
         tea->add(chaiscript::fun(&ScriptComponent::getEH, this), "get_eh");
         tea->add(chaiscript::fun(&ScriptComponent::getEW, this), "get_ew");
+        tea->add(chaiscript::fun(&Manager::getEntityList, this->manager), "get_elist");
     }
 
-    int x() {
+    [[nodiscard]] int x() const {
         return xPos;
     }
 
-    int y(){
+    [[nodiscard]] int y() const{
         return yPos;
     }
 

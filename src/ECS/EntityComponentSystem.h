@@ -40,7 +40,7 @@ using componentArray = std::array<Component*,maxComponents>; //Array of pointers
 //interface for Component
 class Component{
 public:
-    Entity* entity;
+    Entity* entity{};
 
     virtual void init(){}
     virtual void update(){}
@@ -102,7 +102,7 @@ private:
     bool active = true;
     std::vector<std::unique_ptr<Component>> componentList;
 
-    componentArray compArray;
+    componentArray compArray{};
     componentBitSet compBitSet;
 };
 
@@ -140,8 +140,27 @@ public:
         return *entityPtr;
     }
 
+    void setWW(int width) {
+        windowW = width;
+    }
+
+    void setWH(int height) {
+        windowH = height;
+    }
+
+    [[nodiscard]] int getWW() const {
+        return windowW;
+    }
+
+    [[nodiscard]] int getWH() const {
+        return windowH;
+    }
+
 private:
     std::vector<std::unique_ptr<Entity>> entityList; //List of entity pointers
+
+    int windowW;
+    int windowH;
 };
 
 #endif //PROJECT2DTD_ENTITYCOMPONENTSYSTEM_H

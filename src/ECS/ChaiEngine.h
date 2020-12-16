@@ -18,8 +18,6 @@ public:
             fileContent << file.rdbuf(); // reading data
             script = fileContent.str();
         }
-
-        chai.add(chaiscript::fun(&ChaiEngine::hello_world, this), "hello_world");
     }
 
     void run() {
@@ -33,14 +31,6 @@ public:
     chaiscript::ChaiScript* brew() {
         return &chai;
     }
-
-    //CHAI SYSTEM FUNCTIONS \/\/\/\/\/\/\/\/\/
-    std::string hello_world() {
-        return "Hello World!";
-    }
-
-    //TODO: Use the manager pointer to access other entities
-    //CHAI SYSTEM FUNCTIONS /\/\/\/\/\/\/\/\/\
 
 private:
     chaiscript::ChaiScript chai;

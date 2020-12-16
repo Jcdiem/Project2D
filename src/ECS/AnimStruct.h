@@ -5,9 +5,9 @@
 
 namespace animToolkit {
     struct animation {
-        SDL_Texture* texture;
-        int width;
-        int height;
+        SDL_Texture* texture{};
+        int width{};
+        int height{};
         int frames = 1;
         int framerate = 1;
     };

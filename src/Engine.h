@@ -22,8 +22,6 @@ public:
 
     //void loadEntity(EntityType* entity);
 
-    void pushSpriteSheet(SDL_Texture* texture);
-
     void handleEvents();
     void update();
     void render();
@@ -32,16 +30,11 @@ public:
         return isRunning;
     }
 
-    JParser* getJson();
-
-    static int* getEngineWidth();
-    static int* getEngineHeight();
-
     static SDL_Renderer *getRenderer();
 
 private:
-    bool isRunning;
-    SDL_Window *window;
+    bool isRunning{};
+    SDL_Window *window{};
     static SDL_Renderer *renderer;
     static int* engineWidth;
     static int* engineHeight;

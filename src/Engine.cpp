@@ -22,8 +22,6 @@ void Engine::init(const char *title, int xpos, int ypos, int width, int height, 
         flags += SDL_WINDOW_RESIZABLE;
     }
 
-    SDL_GetWindowSize(window, engineWidth, engineHeight);
-
     if (SDL_Init(SDL_INIT_EVERYTHING) == 0) {
         std::cout << "SDL Initialised" << std::endl;
         window = SDL_CreateWindow(title, xpos, ypos, width, height, flags);
@@ -46,6 +44,11 @@ void Engine::init(const char *title, int xpos, int ypos, int width, int height, 
     } else {
         std::throw_with_nested(std::runtime_error(std::string("SDL_Init failed: %s\n").append(SDL_GetError())));
     }
+
+    SDL_GetWindowSize(window, engineWidth, engineHeight);
+
+    manager.setWW(width);
+    manager.setWH(height);
 
     try {
         JParser::genLevelList();
@@ -106,18 +109,6 @@ void Engine::clean() {
     printf("Shutdown complete");
 }
 
-int *Engine::getEngineWidth() {
-    return engineWidth;
-}
-
-int *Engine::getEngineHeight() {
-    return engineHeight;
-}
-
 SDL_Renderer *Engine::getRenderer() {
     return renderer;
-}
-
-JParser *Engine::getJson() {
-    return jParser;
 }

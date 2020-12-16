@@ -67,12 +67,14 @@ void JParser::objFromJson(const char* path) {
     {
         if(component.key() == "ScriptComponent") {
             auto chaiP = component.value()["path"].get<std::string>();
-            curObjPtr.addComponent<ScriptComponent>(eManager, &chaiP[0]);
+            int x = component.value()["X"].get<int>();
+            int y = component.value()["Y"].get<int>();
+            curObjPtr.addComponent<ScriptComponent>(eManager, &chaiP[0], x, y);
         }
         if(component.key() == "SpriteComponent") {
             std::vector<animToolkit::animation*> animArray;
             for(auto anim = component->begin(); anim != component->end(); anim++) {
-                animToolkit::animation* curAnim = new animToolkit::animation;
+                auto* curAnim = new animToolkit::animation;
                 animToolkit::addByPath(curAnim, &anim.value()["path"].get<std::string>()[0]);
                 curAnim->width = anim.value()["width"].get<int>();
                 curAnim->height = anim.value()["height"].get<int>();
