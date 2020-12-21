@@ -1,13 +1,6 @@
 .idea/
-.codelite/
 
-*.workspace
-*.project
-*.d
+libs/*
 
-obj/
-
-cmake-build-debug/
-!cmake-build-debug/assets/
-
-src/assets
+build/*
+!build/assets/

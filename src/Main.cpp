@@ -1,4 +1,4 @@
-#include "Engine.h"
+#include "../include/Engine.h"
 
 Engine *engine = nullptr;
 
@@ -63,9 +63,9 @@ int main (int argc, char* argv[]) {
         SDL_Thread *renderingThread;
         int threadReturn;
 
-        const int TPS = 120; //! Target TPS
-        //! Different from FPS, this is the cycle speed of main loop, 30 cap is good,
-        //! adjusting this number affects game speed
+        const int TPS = 120;//! Target TPS
+                            //! Different from FPS, this is the cycle speed of main loop, 30 cap is good,
+                            //! adjusting this number affects game speed
         const int frameDelay = 1000000000 / TPS; //expected frame time in ns
         if (debug) {
             std::cout << "Goal frametime: " << frameDelay / 1000000.0 << "ms"<< std::endl;

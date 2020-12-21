@@ -1,4 +1,4 @@
-#include "TextureMap.h"
+#include "../include/TextureMap.h"
 
 //Explanation of terribleness:
 //0 = Tex0 | 1 = Tex1 | 2 = Tex2
