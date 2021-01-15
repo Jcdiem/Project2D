@@ -32,10 +32,9 @@ TextureMap::TextureMap() {
 
     loadMap(start);
 
-    src.x = src.y = 0;
+    src.x = src.y = dest.x = dest.y =  0;
     src.w = src.h = dest.h = dest.w = 32; //NOTE: all texture maps should be 32x32 pixels
 
-    dest.x = dest.y = 0;
 }
 
 void TextureMap::loadMap(int array[textureMapRows][textureMapCols]) {

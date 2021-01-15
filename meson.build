@@ -11,6 +11,7 @@ executable(
 	sources:[
 		'src/JParser.cpp',
 		'src/TextureHandler.cpp',
+		'src/Canvas.cpp'
 		'src/TextureMap.cpp',
 		'src/Engine.cpp',
 		'src/Main.cpp'
