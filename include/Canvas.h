@@ -2,6 +2,7 @@
 #define P2D_CANVAS_H
 #include "../include/TextureHandler.h"
 #include "../include/Canvas_LayerData.h"
+#include "../include/TextureMap.h"
 
 
 class Canvas {
@@ -15,8 +16,8 @@ private:
 
     enum layers{FRONT=0, MIDDLE_FRONT=1, MIDDLE_BACK=2, BACKGROUND=3};
     const maxTexturesPerLayer = 100;
-    Canvas_LayerData layerArray[3][maxTexturesPerLayer];
-
+    Canvas_LayerData* layerArray[3][maxTexturesPerLayer];
+    int findFirstEmptySpace(int layer);
 
 
 };

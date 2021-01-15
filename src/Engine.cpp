@@ -9,6 +9,7 @@ TextureMap *texMap;
 
 
 //Globals (SHOULD ALL BE PRIVATE)
+Canvas *Engine::gameCanvas = nullptr;
 SDL_Renderer *Engine::renderer = nullptr;
 int *Engine::engineHeight = nullptr;
 int *Engine::engineWidth = nullptr;
@@ -60,6 +61,9 @@ void Engine::init(const char *title, int xpos, int ypos, int width, int height, 
     //TODO: Get entities from file
     texMap = new TextureMap();
 
+    gameCanvas = new Canvas();
+    gameCanvas.importTexMap(texMap);
+
     jParser->genObjs(JParser::getLevel(0));
 }
 
@@ -94,7 +98,7 @@ void Engine::render() {
 
     //WE ARE USING PAINTERS; FIRST ON LIST IS FIRST TO BE DRAWN, NEXT ON LIST IS DRAWN OVER TOP
     // (Background first, foreground last)
-    texMap->drawMap();
+    gameCanvas.draw();
     manager.draw();
 
 

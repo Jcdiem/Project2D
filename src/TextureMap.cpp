@@ -26,9 +26,9 @@ int start[20][25]={ //TODO: load texture maps through XML or something
 };
 
 TextureMap::TextureMap() {
-    mapTextureName0 = TextureHandler::loadTexture("assets/textures/mapTex0.png");
-    mapTextureName1 = TextureHandler::loadTexture("assets/textures/mapTex1.png");
-    mapTextureName2 = TextureHandler::loadTexture("assets/textures/mapTex2.png");
+    TextureMap::populateTexturePath("assets/textures/mapTex0.png");
+    TextureMap::populateTexturePath("assets/textures/mapTex1.png");
+    TextureMap::populateTexturePath("assets/textures/mapTex2.png");
 
     loadMap(start);
 
@@ -45,32 +45,14 @@ void TextureMap::loadMap(int array[textureMapRows][textureMapCols]) {
     }
 }
 
-void TextureMap::drawMap() {
-    int type = 0;
+int[20][25] TextureMap::getMap(){
+    return textureMap;
+}
 
-    for(int row = 0; row < textureMapRows; row++){
-        for(int col = 0; col < textureMapCols; col++){
-            type = textureMap[row][col];
-            dest.x = col * 32;
-            dest.y = row * 32;
+const char* TextureMap::getTexturePath(int textureID){
+    return texturePaths[textureID];
+}
 
-            switch (type) {
-                case 0: //Draw texture map 0
-                    TextureHandler::Draw(mapTextureName0, src, dest);
-                    break;
-                case 1: //Draw texture map 0
-                    TextureHandler::Draw(mapTextureName1, src, dest);
-//                    printf("Drew a %d on tilemap \n",type);
-                    break;
-                case 2: //Draw texture map 0
-                    TextureHandler::Draw(mapTextureName2, src, dest);
-//                    printf("Drew a %d on tilemap \n",type);
-                    break;
-                default:
-                    printf("WARNING: Got %d for map type when only possible cases are 0, 1, 2 \n"
-                           "    Location %d, %d (row,col)\n",type,row,col);
-                    break;
-            }
-        }
-    }
+void TextureMap::populateTexturePath(const char* filePath){
+    texturePaths.push_back(filePath);
 }

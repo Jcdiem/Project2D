@@ -3,6 +3,7 @@
 #include "SDL2/SDL.h"
 #include "TextureHandler.h"
 #include "TextureMap.h"
+#include "Canvas.h"
 #include "ECS/Components.h"
 #include "JParser.h"
 
@@ -33,6 +34,7 @@ public:
     static SDL_Renderer *getRenderer();
 
 private:
+    Canvas *gameCanvas;
     bool isRunning{};
     SDL_Window *window{};
     static SDL_Renderer *renderer;
