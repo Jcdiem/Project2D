@@ -37,7 +37,7 @@ TextureMap::TextureMap() {
 
 }
 
-void TextureMap::loadMap(int array[textureMapRows][textureMapCols]) {
+void TextureMap::loadMap(int inArray[textureMapRows][textureMapCols]) {
     for(int row = 0; row < textureMapRows; row++){
         for(int col = 0; col < textureMapCols; col++){
             textureMap[row][col] = array[row][col];

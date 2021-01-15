@@ -1,13 +1,15 @@
 #ifndef PROJECT2DTD_TEXTUREMAP_H
 #define PROJECT2DTD_TEXTUREMAP_H
 
+using std::vector;
+
 class TextureMap {
 public:
     TextureMap();
     ~TextureMap();
 
-    void loadMap(int array[20][25]);
-    int[20][25] getMap();
+    void loadMap(int inArray[20][25]);
+    int getMap()[20][25];
     const char* getTexturePath(int textureID);
     void populateTexturePath(vector<const char*> fileNames);
 

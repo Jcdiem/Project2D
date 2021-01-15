@@ -62,7 +62,7 @@ void Engine::init(const char *title, int xpos, int ypos, int width, int height, 
     texMap = new TextureMap();
 
     gameCanvas = new Canvas();
-    gameCanvas.importTexMap(texMap);
+    gameCanvas -> importTexMap(texMap);
 
     jParser->genObjs(JParser::getLevel(0));
 }
