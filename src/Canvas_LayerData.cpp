@@ -28,3 +28,4 @@ SDL_Texture* Canvas_LayerData::getTexturePtr() {
     return savedTexture;
 }
 
+

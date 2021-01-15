@@ -6,6 +6,10 @@
 
 class Canvas {
 public:
+    //TODO: will return a unique ID for removing textures
+    int paintToCanvas(Canvas_LayerData layerData, int layer);
+    void removeFromCanvas(int textureInstanceId);
+    void draw();
 
 private:
 
@@ -13,10 +17,6 @@ private:
     const maxTexturesPerLayer = 100;
     Canvas_LayerData layerArray[3][maxTexturesPerLayer];
 
-    //TODO: will return a unique ID for removing textures
-    int paintToCanvas(Canvas_LayerData layerData, int layer);
-
-    void removeFromCanvas(int textureInstanceId);
 
 
 };
