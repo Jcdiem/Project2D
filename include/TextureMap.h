@@ -10,7 +10,7 @@ public:
     ~TextureMap();
 
     void loadMap(int inArray[20][25]);
-    int getMap()[20][25];
+    void getMap(int* newArr[20][25]);
     const char* getTexturePath(int textureID);
     void populateTexturePath(std::vector<const char*> fileNames);
 

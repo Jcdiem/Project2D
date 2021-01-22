@@ -45,8 +45,9 @@ void TextureMap::loadMap(int inArray[textureMapRows][textureMapCols]) {
     }
 }
 
-int[20][25] TextureMap::getMap(){
-    return textureMap;
+void TextureMap::getMap(int* newArr[20][25]){
+    //Be warned, odds are entering a non nullptr will result in a memory leak, yikes!
+    newArr = textureMap;
 }
 
 const char* TextureMap::getTexturePath(int textureID){
