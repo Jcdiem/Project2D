@@ -1,7 +1,8 @@
 #ifndef PROJECT2DTD_TEXTUREMAP_H
 #define PROJECT2DTD_TEXTUREMAP_H
 
-using std::vector;
+#include <vector>
+#include "SDL2/SDL.h"
 
 class TextureMap {
 public:
@@ -11,7 +12,7 @@ public:
     void loadMap(int inArray[20][25]);
     int getMap()[20][25];
     const char* getTexturePath(int textureID);
-    void populateTexturePath(vector<const char*> fileNames);
+    void populateTexturePath(std::vector<const char*> fileNames);
 
 
 private:
@@ -25,7 +26,7 @@ private:
 
     int textureMap[textureMapRows][textureMapCols];
 
-    vector<const char*> texturePaths;
+    std::vector<const char*> texturePaths;
 };
 
 

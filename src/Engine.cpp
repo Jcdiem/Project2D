@@ -89,12 +89,6 @@ void Engine::update() {
 
 void Engine::render() {
     SDL_RenderClear(renderer);
-    //Begin rendering
-
-//    for(EntityType* cEnt : Engine::entsInUse){
-//        cEnt->render();
-//    }
-
 
     //WE ARE USING PAINTERS; FIRST ON LIST IS FIRST TO BE DRAWN, NEXT ON LIST IS DRAWN OVER TOP
     // (Background first, foreground last)

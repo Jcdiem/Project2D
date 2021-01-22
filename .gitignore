@@ -4,3 +4,6 @@ libs/*
 
 build/*
 !build/assets/
+venv/
+
+cmake-build-debug/CMakeFiles/

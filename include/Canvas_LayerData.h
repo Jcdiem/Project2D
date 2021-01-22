@@ -5,7 +5,7 @@
 class Canvas_LayerData {
 
 //    TODO: add the ability for animated backgrounds
-    Canvas_LayerData();
+    Canvas_LayerData(SDL_Texture* texture_ptr, int sizeX, int sizeY, int xOffset=0, int yOffset=0);
     ~Canvas_LayerData();
 
     SDL_Rect getSrcRect();
@@ -14,7 +14,6 @@ class Canvas_LayerData {
 private:
     SDL_Rect srcRect;
     SDL_Texture* savedTexture;
-
 };
 
 
