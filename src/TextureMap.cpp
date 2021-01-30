@@ -40,15 +40,16 @@ TextureMap::TextureMap() {
 void TextureMap::loadMap(int inArray[textureMapRows][textureMapCols]) {
     for(int row = 0; row < textureMapRows; row++){
         for(int col = 0; col < textureMapCols; col++){
-            textureMap[row][col] = array[row][col];
+            textureMap[row][col] = inArray[row][col];
         }
     }
 }
 
-void TextureMap::getMap(int* newArr[20][25]){
-    //Be warned, odds are entering a non nullptr will result in a memory leak, yikes!
-    newArr = textureMap;
-}
+//TODO: Determine whether getMap is needed and fix if is needed
+//void TextureMap::getMap(int* newArr[20][25]){
+//    //Be warned, odds are entering a non nullptr will result in a memory leak, yikes!
+//    newArr = textureMap;
+//}
 
 const char* TextureMap::getTexturePath(int textureID){
     return texturePaths[textureID];

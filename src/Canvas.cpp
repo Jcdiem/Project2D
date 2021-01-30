@@ -1,13 +1,13 @@
 #include "../include/Canvas.h"
 
-int Canvas::PaintToCanvas(int layer, const char *fileName, int sizeX, int sizeY, int offsetX=0, int offsetY=0){
-    layerArray[layer].push_back(new Canvas_LayerData(TextureHandler::LoadTexture(fileName),sizeX,sizeY,offsetY,offsetX,offsetY));
+int Canvas::paintToCanvas(int layer, const char *fileName, int sizeX, int sizeY, int offsetX, int offsetY){
+    layerArray[layer].push_back(new Canvas_LayerData(TextureHandler::LoadTexture(fileName),sizeX,sizeY,offsetY,offsetX));
     //TODO: Return a unique ID
     return -1;
 }
 
 void Canvas::draw(){
-    for(int curLayer = 0; curLayer < layerArray.length(); curLayer++){
+    for(int curLayer = 0; curLayer < layerArray.size(); curLayer++){
         for(int curTexture = 0; curTexture < layerArray[0].length(); curTexture++){
             TextureHandler::Draw(layerArray[curLayer][curTexture].getTexture, layerArray[curLayer][curTexture].getSrcRect, layerArray[curLayer][curTexture].getSrcRect);
         }
@@ -15,10 +15,12 @@ void Canvas::draw(){
 }
 
 void Canvas::importTexMap(int texMap[20][25], vector<const char*> filePaths){
-    const int TEX_MAP_LAYER = 4;
-    const int TEX_MAP_SIZE = 32;
-    const int TEX_MAP_ROW = 20;
-    const int TEX_MAP_COL = 25;
+    //Can't use constant because that would require constant as an input
+    //Apparently c++ sees constant as a variable type :)
+    int TEX_MAP_LAYER = 4;
+    int TEX_MAP_SIZE = 32;
+    int TEX_MAP_ROW = 20;
+    int TEX_MAP_COL = 25;
 
     int type = 0;
 
