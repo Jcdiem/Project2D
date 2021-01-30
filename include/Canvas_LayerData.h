@@ -5,6 +5,7 @@
 class Canvas_LayerData {
 public:
 //    TODO: add the ability for animated backgrounds
+    //TODO: Fix constructor default values not working
     Canvas_LayerData(SDL_Texture* texture_ptr, int sizeX, int sizeY, int xOffset=0, int yOffset=0);
     ~Canvas_LayerData();
 

@@ -1,15 +1,15 @@
 #include "../include/Canvas.h"
 
 int Canvas::paintToCanvas(int layer, const char *fileName, int sizeX, int sizeY, int offsetX, int offsetY){
-    layerArray[layer].push_back(new Canvas_LayerData(TextureHandler::loadTexture(fileName),sizeX,sizeY,offsetY,offsetX));
+    layerVector.at(layer).push_back(new Canvas_LayerData(TextureHandler::loadTexture(fileName),sizeX,sizeY,offsetY,offsetX));
     //TODO: Return a unique ID
     return -1;
 }
 
 void Canvas::draw(){
-    for(int curLayer = 0; curLayer < layerArray.size(); curLayer++){
-        for(int curTexture = 0; curTexture < layerArray[0].length(); curTexture++){
-            TextureHandler::Draw(layerArray[curLayer][curTexture].getTexture, layerArray[curLayer][curTexture].getSrcRect, layerArray[curLayer][curTexture].getSrcRect);
+    for(unsigned int curLayer = 0; curLayer < layerVector.size(); curLayer++){
+        for(int curTexture = 0; curTexture < layerVector.at(0).size(); curTexture++){
+            TextureHandler::Draw(layerVector.at(curLayer).at(curTexture)->getTexturePtr(), layerVector.at(curLayer).at(curTexture)->getSrcRect(), layerVector.at(curLayer).at(curTexture)->getSrcRect());
         }
     }
 }
@@ -18,7 +18,6 @@ void Canvas::importTexMap(int texMap[20][25], vector<const char*> filePaths){
     //Can't use constant because that would require constant as an input
     //Apparently c++ sees constant as a variable type :)
     int TEX_MAP_LAYER = 4;
-    int TEX_MAP_SIZE = 32;
     int TEX_MAP_ROW = 20;
     int TEX_MAP_COL = 25;
 
@@ -34,8 +33,12 @@ void Canvas::importTexMap(int texMap[20][25], vector<const char*> filePaths){
 
             SDL_Texture *curTexture = TextureHandler::loadTexture(filePaths[texMap[row][col]]);
 
-            layerArray[TEX_MAP_LAYER].push_back(
-                    Canvas_LayerData(&curTexture, TEX_MAP_SIZE, TEX_MAP_SIZE)
+            layerVector[TEX_MAP_LAYER].push_back(
+                    //Template:
+                    //Canvas_LayerData(Texture for bg, sizeX, sizeY, offset, offset)
+                    //This is currently set up for importing texture maps
+                    //and shouldn't need to change unless texture maps are changed
+                    Canvas_LayerData(curTexture, 32, 32)
                     );
         }
     }

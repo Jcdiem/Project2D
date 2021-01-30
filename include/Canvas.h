@@ -18,7 +18,7 @@ private:
 
     enum layers{FRONT=0, MIDDLE_FRONT=1, MIDDLE_BACK=2, BACKGROUND=3};
     const int maxTexturesPerLayer = 100;
-    vector<vector<Canvas_LayerData>> layerArray;
+    vector<vector<Canvas_LayerData*>> layerVector;
 
 
 };
