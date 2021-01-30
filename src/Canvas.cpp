@@ -1,7 +1,7 @@
 #include "../include/Canvas.h"
 
 int Canvas::paintToCanvas(int layer, const char *fileName, int sizeX, int sizeY, int offsetX, int offsetY){
-    layerArray[layer].push_back(new Canvas_LayerData(TextureHandler::LoadTexture(fileName),sizeX,sizeY,offsetY,offsetX));
+    layerArray[layer].push_back(new Canvas_LayerData(TextureHandler::loadTexture(fileName),sizeX,sizeY,offsetY,offsetX));
     //TODO: Return a unique ID
     return -1;
 }
