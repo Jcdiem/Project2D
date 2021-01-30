@@ -128,7 +128,7 @@ public:
     }
 
     Entity& addEntity(){
-        int lastSize = entityList.size();
+        unsigned int lastSize = entityList.size();
         auto* entityPtr = new Entity();
         std::unique_ptr<Entity> uniquePtr(entityPtr);
         entityList.emplace_back(std::move(uniquePtr));

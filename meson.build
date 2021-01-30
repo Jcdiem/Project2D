@@ -13,7 +13,6 @@ executable(
 		'src/TextureHandler.cpp',
 		'src/Canvas_LayerData.cpp',
 		'src/Canvas.cpp',
-		'src/TextureMap.cpp',
 		'src/Engine.cpp',
 		'src/Main.cpp'
 	],
