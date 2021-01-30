@@ -2,9 +2,7 @@
 #define P2D_CANVAS_H
 #include "../include/TextureHandler.h"
 #include "../include/Canvas_LayerData.h"
-#include "../include/TextureMap.h"
-
-using std::vector;
+#include <vector>
 
 class Canvas {
 public:
@@ -12,13 +10,12 @@ public:
     int paintToCanvas(int layer, const char *fileName, int sizeX, int sizeY, int offsetX=0, int offsetY=0);
     void removeFromCanvas(int textureInstanceId);
     void draw();
-    void importTexMap(int texMap[20][25], vector<const char*> filePaths);
 
 private:
 
     enum layers{FRONT=0, MIDDLE_FRONT=1, MIDDLE_BACK=2, BACKGROUND=3};
     const int maxTexturesPerLayer = 100;
-    vector<vector<Canvas_LayerData*>> layerVector;
+    std::vector<std::vector<Canvas_LayerData*>> layerVector;
 
 
 };
