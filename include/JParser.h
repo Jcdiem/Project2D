@@ -22,6 +22,8 @@ public:
     static std::string getTitle();
     static int getXSize();
     static int getYSize();
+    static bool getFullscreen();
+    static bool getResizable();
 private:
     void objFromJson(const char* path);
     Manager *eManager;

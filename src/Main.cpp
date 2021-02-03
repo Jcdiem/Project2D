@@ -19,6 +19,8 @@ void print_exception(const std::exception& e, int level =  0)
 int main (int argc, char* argv[]) {
     //FLAGS
     bool debug = false;
+    bool fullscreen = false;
+    bool resizable = false;
     int width = 0;
     int height = 0;
     //FLAGS
@@ -33,7 +35,7 @@ int main (int argc, char* argv[]) {
             printf("Forcing Height!\n");
             i += 1;
             try {
-                height = std::stoi(argv[i]);
+                width = std::stoi(argv[i]);
             } catch(...) {
                 printf("Unable to parse height, ignoring!");
             }
@@ -41,20 +43,30 @@ int main (int argc, char* argv[]) {
             printf("Forcing Width!\n");
             i += 1;
             try {
-                width = std::stoi(argv[i]);
+                height = std::stoi(argv[i]);
             } catch(...) {
-                printf("Unable to parse width, ignoring!");
+                printf("Unable to parse width, ignoring! Did you mean --help?");
             }
+        } else if(strcmp(argv[i], "--fullscreen") == 0 || strcmp(argv[i], "-f") == 0) {
+            printf("Forcing Fullscreen (If display resolution is less than selected resolution, fullscreen is disabled)\n");
+            fullscreen = true;
+        } else if(strcmp(argv[i], "--resizable") == 0 || strcmp(argv[i], "-r") == 0) {
+            printf("Forcing Resizability\n");
+            resizable = true;
         } else if(strcmp(argv[i], "--help") == 0) {
             printf("Showing Help!\n");
             printf("The Following flags are available:\n");
-            printf("--debug  \\ -d | Enable debug mode\n");
-            printf("--width  \\ -w | Ignore width in config file\n");
-            printf("--height \\ -h | Ignore height in config file\n");
-            printf("--help         | Show this help message\n");
-            std::exit(0);
+            printf("--debug  \\ -d     | Enable debug mode\n");
+            printf("--width  \\ -w     | Ignore width in config file\n");
+            printf("--height \\ -h     | Ignore height in config file\n");
+            printf("--fullscreen \\ -f | Ignore height in config file\n");
+            printf("--resizable \\ -r  | Ignore height in config file\n");
+            printf("--help            | Show this help message\n");
+
+            std::exit(0); //This is probably the only acceptable usage to std::exit, other than some weird error
+            //handling, and even then it's probably better to throw an exception.
         } else {
-            printf("Unknown flag.\n '--help' to get all flags");
+            printf("Unknown flag.\n '--help' to get all flags\n");
         }
 
     }
@@ -82,8 +94,14 @@ int main (int argc, char* argv[]) {
         if(height == 0) {
             height = JParser::getYSize();
         }
+        if(!fullscreen) {
+            fullscreen = JParser::getFullscreen();
+        }
+        if(!resizable) {
+            resizable = JParser::getResizable();
+        }
 
-        engine->init(&JParser::getTitle()[0],SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED, width, height, false, false);
+        engine->init(&JParser::getTitle()[0],SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED, width, height, fullscreen, resizable);
 
         renderingThread = SDL_CreateThread(renderThread, "renderer", nullptr);
 

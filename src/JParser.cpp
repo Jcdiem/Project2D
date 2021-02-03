@@ -105,3 +105,13 @@ int JParser::getYSize() {
     nlohmann::json file = nlohmann::json::parse(std::fstream("assets/engineSettings.json"), nullptr, true, true);
     return file["WindowYRes"].get<int>();
 }
+
+bool JParser::getFullscreen() {
+    nlohmann::json file = nlohmann::json::parse(std::fstream("assets/engineSettings.json"), nullptr, true, true);
+    return file["Fullscreen"].get<bool>();
+}
+
+bool JParser::getResizable() {
+    nlohmann::json file = nlohmann::json::parse(std::fstream("assets/engineSettings.json"), nullptr, true, true);
+    return file["ForceResizable"].get<bool>();
+}
