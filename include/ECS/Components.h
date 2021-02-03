@@ -2,7 +2,7 @@
 #define PROJECT2DTD_COMPONENTS_H
 
 #include "EntityComponentSystem.h"
-#include "PositionComponent.h"
+#include "ScriptComponent.h"
 #include "SpriteComponent.h"
 
 class Components{

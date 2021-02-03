@@ -5,7 +5,6 @@
 #include <algorithm>
 #include <bitset>
 #include <array>
-
 #include <iostream>
 
 // Design pattern by Vittorio Romeo
@@ -13,6 +12,7 @@
 
 class Component;
 class Entity;
+class Manager;
 
 using ComponentID = std::size_t;
 
@@ -36,10 +36,11 @@ using componentArray = std::array<Component*,maxComponents>; //Array of pointers
 
 
 
+
 //interface for Component
 class Component{
 public:
-    Entity* entity;
+    Entity* entity{};
 
     virtual void init(){}
     virtual void update(){}
@@ -56,6 +57,7 @@ public:
 //Entity interface
 class Entity{
 public:
+
     void update(){
         //iterate through all the Components and tell them to draw/update
         for (auto& component : componentList) component->update();
@@ -87,6 +89,7 @@ public:
         compBitSet[getComponentTypeId<type>()] = true; //Set the bit for this component being used with the entity (For masking)
 
         component->init();
+
         return *component;
     }
 
@@ -99,9 +102,8 @@ private:
     bool active = true;
     std::vector<std::unique_ptr<Component>> componentList;
 
-    componentArray compArray;
+    componentArray compArray{};
     componentBitSet compBitSet;
-
 };
 
 class Manager{
@@ -121,8 +123,12 @@ public:
                std::end(entityList));
     }
 
+    std::vector<std::unique_ptr<Entity>>* getEntityList() {
+        return &entityList;
+    }
+
     Entity& addEntity(){
-        int lastSize = entityList.size();
+        unsigned int lastSize = entityList.size();
         auto* entityPtr = new Entity();
         std::unique_ptr<Entity> uniquePtr(entityPtr);
         entityList.emplace_back(std::move(uniquePtr));
@@ -134,9 +140,27 @@ public:
         return *entityPtr;
     }
 
+    void setWW(int width) {
+        windowW = width;
+    }
+
+    void setWH(int height) {
+        windowH = height;
+    }
+
+    [[nodiscard]] int getWW() const {
+        return windowW;
+    }
+
+    [[nodiscard]] int getWH() const {
+        return windowH;
+    }
+
 private:
     std::vector<std::unique_ptr<Entity>> entityList; //List of entity pointers
 
+    int windowW;
+    int windowH;
 };
 
 #endif //PROJECT2DTD_ENTITYCOMPONENTSYSTEM_H

@@ -1,14 +1,12 @@
-#include "Engine.h"
+#include "../include/Engine.h"
 
 Engine::Engine() = default;
 
 Engine::~Engine() = default;
 
-//TODO: REMOVE EXAMPLE texMap
-TextureMap *texMap;
-
 
 //Globals (SHOULD ALL BE PRIVATE)
+Canvas *Engine::gameCanvas = nullptr;
 SDL_Renderer *Engine::renderer = nullptr;
 int *Engine::engineHeight = nullptr;
 int *Engine::engineWidth = nullptr;
@@ -21,8 +19,6 @@ void Engine::init(const char *title, int xpos, int ypos, int width, int height, 
     if (resizable) {
         flags += SDL_WINDOW_RESIZABLE;
     }
-
-    SDL_GetWindowSize(window, engineWidth, engineHeight);
 
     if (SDL_Init(SDL_INIT_EVERYTHING) == 0) {
         std::cout << "SDL Initialised" << std::endl;
@@ -47,17 +43,22 @@ void Engine::init(const char *title, int xpos, int ypos, int width, int height, 
         std::throw_with_nested(std::runtime_error(std::string("SDL_Init failed: %s\n").append(SDL_GetError())));
     }
 
+    SDL_GetWindowSize(window, engineWidth, engineHeight);
+
+    manager.setWW(width);
+    manager.setWH(height);
+
     try {
-        LevelLoader::genLevelList();
+        JParser::genLevelList();
     }
     catch(...) {
         std::throw_with_nested(std::runtime_error("Level list generation failed."));
     }
 
     //TODO: Get entities from file
-    texMap = new TextureMap();
+    gameCanvas = new Canvas();
 
-    levelloader->genObjs(LevelLoader::getLevel(0));
+    jParser->genObjs(JParser::getLevel(0));
 }
 
 
@@ -82,16 +83,10 @@ void Engine::update() {
 
 void Engine::render() {
     SDL_RenderClear(renderer);
-    //Begin rendering
-
-//    for(EntityType* cEnt : Engine::entsInUse){
-//        cEnt->render();
-//    }
-
 
     //WE ARE USING PAINTERS; FIRST ON LIST IS FIRST TO BE DRAWN, NEXT ON LIST IS DRAWN OVER TOP
     // (Background first, foreground last)
-    texMap->drawMap();
+    gameCanvas->draw();
     manager.draw();
 
 
@@ -104,14 +99,6 @@ void Engine::clean() {
     SDL_DestroyRenderer(renderer);
     SDL_Quit();
     printf("Shutdown complete");
-}
-
-int *Engine::getEngineWidth() {
-    return engineWidth;
-}
-
-int *Engine::getEngineHeight() {
-    return engineHeight;
 }
 
 SDL_Renderer *Engine::getRenderer() {

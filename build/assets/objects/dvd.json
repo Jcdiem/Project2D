@@ -1,0 +1,27 @@
+{
+  "dvd": {
+    "components": {
+      "ScriptComponent": {
+        "X": 0,
+        "Y": 0,
+        "path": "assets/scripts/dvd.chai"
+      },
+      "SpriteComponent": {
+        "0": {
+          "path": "assets/textures/dvd24frame.png",
+          "width": 200,
+          "height": 82,
+          "frames": 24,
+          "framerate": 24
+        },
+        "1": {
+          "path": "assets/textures/dvd.png",
+          "width": 200,
+          "height": 82,
+          "frames": 1,
+          "framerate": 1
+        }
+      }
+    }
+  }
+}
