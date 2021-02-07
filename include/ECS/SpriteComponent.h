@@ -5,6 +5,7 @@
 #include "EntityComponentSystem.h"
 #include "AnimStruct.h"
 
+#include <chrono>
 
 class SpriteComponent : public Component{
 public:

@@ -1,7 +1,7 @@
 {
   "Title": "P2D",
-  "WindowXRes": 1920,
-  "WindowYRes": 1080,
+  "WindowXRes": 640,
+  "WindowYRes": 480,
   "Fullscreen": false, //If display resolution is less than selected resolution, fullscreen is disabled
   "ForceResizable": false
 }

@@ -4,7 +4,7 @@
       "ScriptComponent": {
         "X": 0,
         "Y": 0,
-        "path": "assets/scripts/dvd.chai"
+        "path": "assets/scripts/dvd.lua"
       },
       "SpriteComponent": {
         "0": {

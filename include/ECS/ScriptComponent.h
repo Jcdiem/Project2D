@@ -1,42 +1,63 @@
 #ifndef PROJECT2DTD_POSITIONCOMPONENT_H
 #define PROJECT2DTD_POSITIONCOMPONENT_H
 
-#include <iostream>
+#include <string>
+#include <fstream>
+#include <streambuf>
 
 #include "EntityComponentSystem.h"
-#include "ChaiEngine.h"
+#include "LuaEngine.h"
 
 class ScriptComponent : public Component{
 public:
     ScriptComponent(Manager* manager, char* path){
         xPos = 0;
         yPos = 0;
-        this->manager = manager;
         this->path = path;
-        chai  = new ChaiEngine(manager, path);
+        this->manager = manager;
         engineW = manager->getWW();
         engineH = manager->getWH();
+
+        std::ifstream t(path);
+
+        //Finding the end of file
+        t.seekg(0, std::ios::end);
+        script.reserve(t.tellg());
+        t.seekg(0, std::ios::beg);
+        //Finding the end of file
+
+        script.assign((std::istreambuf_iterator<char>(t)),
+                   std::istreambuf_iterator<char>());
     }
     ScriptComponent(Manager* manager, char* path, int x, int y){
         xPos = x;
         yPos = y;
-        this->manager = manager;
         this->path = path;
-        chai  = new ChaiEngine(manager, path);
+        this->manager = manager;
         engineW = manager->getWW();
         engineH = manager->getWH();
+
+        std::ifstream t(path);
+
+        //Finding the end of file
+        t.seekg(0, std::ios::end);
+        script.reserve(t.tellg());
+        t.seekg(0, std::ios::beg);
+        //Finding the end of file
+
+        script.assign((std::istreambuf_iterator<char>(t)),
+                      std::istreambuf_iterator<char>());
     }
 
     void init() override{
-        chaiscript::ChaiScript* tea = chai->brew();
-        tea->add(chaiscript::fun(&ScriptComponent::setPos, this), "set_pos");
-        tea->add(chaiscript::fun(&ScriptComponent::setX, this), "set_x");
-        tea->add(chaiscript::fun(&ScriptComponent::setY, this), "set_y");
-        tea->add(chaiscript::fun(&ScriptComponent::x, this), "get_x");
-        tea->add(chaiscript::fun(&ScriptComponent::y, this), "get_y");
-        tea->add(chaiscript::fun(&ScriptComponent::getEH, this), "get_eh");
-        tea->add(chaiscript::fun(&ScriptComponent::getEW, this), "get_ew");
-        tea->add(chaiscript::fun(&Manager::getEntityList, this->manager), "get_elist");
+        lua.gLu()->set_function("x", &ScriptComponent::x, this);
+        lua.gLu()->set_function("y", &ScriptComponent::y, this);
+        lua.gLu()->set_function("setX", &ScriptComponent::setX, this);
+        lua.gLu()->set_function("setY", &ScriptComponent::setY, this);
+        lua.gLu()->set_function("EW", &ScriptComponent::getEW, this);
+        lua.gLu()->set_function("EH", &ScriptComponent::getEH, this);
+
+        lua.initScript(script);
     }
 
     [[nodiscard]] int x() const {
@@ -69,7 +90,7 @@ public:
     }
 
     void update() override{
-        chai->run();
+        lua.runScript();
     }
 
 private:
@@ -78,10 +99,11 @@ private:
     int engineW;
     int engineH;
 
+    char* path;
 
+    LuaEngine lua;
     Manager* manager;
-    ChaiEngine* chai;
-    std::string path;
+    std::string script;
 };
 
 

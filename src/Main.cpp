@@ -71,6 +71,8 @@ int main (int argc, char* argv[]) {
 
     }
 
+    //FLAGS DONE :)
+
     try {
         SDL_Thread *renderingThread;
         int threadReturn;
@@ -112,9 +114,12 @@ int main (int argc, char* argv[]) {
         while(engine->running()) {
             auto frameStart = std::chrono::steady_clock::now();
 
+
+            //! MAIN LOOP CALLS
             engine->handleEvents();
             engine->update();
             engine->render();
+            //! MAIN LOOP CALLS
 
             auto frameEnd = std::chrono::steady_clock::now();
             frameTime = std::chrono::duration_cast<std::chrono::nanoseconds>(frameEnd-frameStart).count();
