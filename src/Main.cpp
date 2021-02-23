@@ -2,17 +2,19 @@
 
 Engine *engine = nullptr;
 
-static int renderThread([[maybe_unused]] void *ptr) {
-    return 0;
+void renderThread() {
+    while(engine->running()) {
+        engine->render();
+    }
 }
 
-void print_exception(const std::exception& e, int level =  0)
+void printException(const std::exception& e, int level =  0)
 {
     std::cerr << std::string(level, ' ') << "exception: " << e.what() << '\n';
     try {
         std::rethrow_if_nested(e);
     } catch(const std::exception& e) {
-        print_exception(e, level+1);
+        printException(e, level+1);
     } catch(...) {}
 }
 
@@ -74,9 +76,6 @@ int main (int argc, char* argv[]) {
     //FLAGS DONE :)
 
     try {
-        SDL_Thread *renderingThread;
-        int threadReturn;
-
         const int TPS = 120;//! Target TPS
                             //! Different from FPS, this is the cycle speed of main loop, 30 cap is good,
                             //! adjusting this number affects game speed
@@ -105,11 +104,7 @@ int main (int argc, char* argv[]) {
 
         engine->init(&JParser::getTitle()[0],SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED, width, height, fullscreen, resizable);
 
-        renderingThread = SDL_CreateThread(renderThread, "renderer", nullptr);
-
-        if (nullptr == renderingThread) {
-            std::throw_with_nested(SDL_GetError());
-        }
+        std::thread thread_obj(renderThread);
 
         while(engine->running()) {
             auto frameStart = std::chrono::steady_clock::now();
@@ -118,7 +113,6 @@ int main (int argc, char* argv[]) {
             //! MAIN LOOP CALLS
             engine->handleEvents();
             engine->update();
-            engine->render();
             //! MAIN LOOP CALLS
 
             auto frameEnd = std::chrono::steady_clock::now();
@@ -159,17 +153,12 @@ int main (int argc, char* argv[]) {
             }
         }
 
-//    render.join();
-        //Kill the rendering thread
-        SDL_WaitThread(renderingThread, &threadReturn);
-        printf("Rendering thread finished; value: %d (expected value is 0) \n", threadReturn);
-
         engine->clean();
 
         return 0;
     }
     catch(const std::exception& e) {
-        print_exception(e);
+        printException(e);
         return 1;
     }
 }
