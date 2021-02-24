@@ -20,7 +20,6 @@ executable(
 	'P2D',
 	sources:[
 	    'src/ECS/LuaEngine.cpp',
-	    'src/ECS/ScriptComponent.cpp',
 		'src/JParser.cpp',
 		'src/TextureHandler.cpp',
 		'src/Canvas_LayerData.cpp',

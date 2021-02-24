@@ -1,9 +1,9 @@
 {
   "Title": "P2D",
-  "WindowXRes": 1366,
-  "WindowYRes": 768,
+  "WindowXRes": 640,
+  "WindowYRes": 480,
   "Tickrate": 240,
   "Framerate": 60,
-  "Fullscreen": true, //If display resolution is less than selected resolution, fullscreen is disabled
+  "Fullscreen": false, //If display resolution is less than selected resolution, fullscreen is disabled
   "ForceResizable": false
 }
