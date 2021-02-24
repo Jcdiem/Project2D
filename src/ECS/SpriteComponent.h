@@ -9,8 +9,6 @@
 
 class SpriteComponent : public Component{
 public:
-
-    SpriteComponent() = default;
     SpriteComponent(std::vector<animToolkit::animation*> anims){
         this->anims = anims;
         srcRect.y = 0;
@@ -57,7 +55,7 @@ public:
         curFrame = timeSince / flipPoint;
 
         if(curFrame - lastFrame > 1) {
-            printf("Uh oh, animation cycles can't keep up!");
+            std::cout << "Uh oh, animation cycles can't keep up! Framerate too low?" << std::endl;
         }
 
         srcRect.x = curFrame * curAnim->width;

@@ -1,4 +1,4 @@
-#include "../include/Canvas.h"
+#include "Canvas.h"
 
 int Canvas::paintToCanvas(int layer, const char *fileName, int sizeX, int sizeY, int offsetX, int offsetY){
     layerVector.at(layer).push_back(new Canvas_LayerData(TextureHandler::loadTexture(fileName),sizeX,sizeY,offsetY,offsetX));

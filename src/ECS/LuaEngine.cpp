@@ -1,4 +1,4 @@
-#include "../../include/ECS/LuaEngine.h"
+#include "LuaEngine.h"
 
 LuaEngine::LuaEngine() {
     lua.open_libraries(sol::lib::base);

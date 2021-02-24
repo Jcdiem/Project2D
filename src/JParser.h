@@ -24,6 +24,8 @@ public:
     static int getYSize();
     static bool getFullscreen();
     static bool getResizable();
+    static int getTPS();
+    static int getFPS();
 private:
     void objFromJson(const char* path);
     Manager *eManager;

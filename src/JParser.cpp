@@ -1,5 +1,5 @@
 #include <iostream>
-#include "../include/JParser.h"
+#include "JParser.h"
 
 std::vector<std::string> JParser::levelList;
 
@@ -114,4 +114,14 @@ bool JParser::getFullscreen() {
 bool JParser::getResizable() {
     nlohmann::json file = nlohmann::json::parse(std::fstream("assets/engineSettings.json"), nullptr, true, true);
     return file["ForceResizable"].get<bool>();
+}
+
+int JParser::getTPS() {
+    nlohmann::json file = nlohmann::json::parse(std::fstream("assets/engineSettings.json"), nullptr, true, true);
+    return file["Tickrate"].get<int>();
+}
+
+int JParser::getFPS() {
+    nlohmann::json file = nlohmann::json::parse(std::fstream("assets/engineSettings.json"), nullptr, true, true);
+    return file["Framerate"].get<int>();
 }

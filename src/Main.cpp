@@ -1,10 +1,37 @@
-#include "../include/Engine.h"
+#include "Engine.h"
 
 Engine *engine = nullptr;
 
-void renderThread() {
+void renderThread(bool debug, int framerate) {
+    //This function implements nearly identical logic to the engine thread, but this one doesnt try to "Catch Up" if if lags behind
+
+    int frameTime;
+
+    const int frameDelay = 1000000000 / framerate; //expected frame time in ns
+    if (debug) {
+        std::cout << "Goal frame-time: " << frameDelay / 1000000.0 << "ms"<< std::endl;
+    }
+
     while(engine->running()) {
+        auto frameStart = std::chrono::steady_clock::now();
+
         engine->render();
+
+        auto frameEnd = std::chrono::steady_clock::now();
+        frameTime = std::chrono::duration_cast<std::chrono::nanoseconds>(frameEnd-frameStart).count();
+
+        if(frameDelay > frameTime && frameTime != 0){
+            using namespace std::chrono_literals;
+            int sleepTime = frameDelay - frameTime;
+            if(debug) {
+                std::cout << "Sleep time        = " << sleepTime / 1000000.0 << "ms" << std::endl;
+                std::cout << "Total time        = " << sleepTime + frameTime << "ms, (Should be same as goal frametime)" << std::endl;
+            }
+            std::this_thread::sleep_for(1ns * (sleepTime));
+        } else {
+            float lostFrames = float(frameTime) / frameDelay;
+            std::cout << "Uh oh, render thread can't keep up! About " << lostFrames << " frames behind..." << std::endl;
+        }
     }
 }
 
@@ -25,6 +52,8 @@ int main (int argc, char* argv[]) {
     bool resizable = false;
     int width = 0;
     int height = 0;
+    int TPS = 0;
+    int FPS = 0;
     //FLAGS
 
     for(int i = 1; i < argc; i++) {
@@ -48,6 +77,22 @@ int main (int argc, char* argv[]) {
                 height = std::stoi(argv[i]);
             } catch(...) {
                 printf("Unable to parse width, ignoring! Did you mean --help?");
+            }
+        } else if(strcmp(argv[i], "--fps") == 0 || strcmp(argv[i], "-fr") == 0) {
+            printf("Forcing FPS!\n");
+            i += 1;
+            try {
+                FPS = std::stoi(argv[i]);
+            } catch(...) {
+                printf("Unable to parse TPS, ignoring!");
+            }
+        } else if(strcmp(argv[i], "--tps") == 0 || strcmp(argv[i], "-t") == 0) {
+            printf("Forcing TPS!\n");
+            i += 1;
+            try {
+                TPS = std::stoi(argv[i]);
+            } catch(...) {
+                printf("Unable to parse TPS, ignoring!");
             }
         } else if(strcmp(argv[i], "--fullscreen") == 0 || strcmp(argv[i], "-f") == 0) {
             printf("Forcing Fullscreen (If display resolution is less than selected resolution, fullscreen is disabled)\n");
@@ -73,41 +118,54 @@ int main (int argc, char* argv[]) {
 
     }
 
+    if(width == 0) {
+        width = JParser::getXSize();
+    }
+    if(height == 0) {
+        height = JParser::getYSize();
+    }
+    if(!fullscreen) {
+        fullscreen = JParser::getFullscreen();
+    }
+    if(!resizable) {
+        resizable = JParser::getResizable();
+    }
+    if(TPS == 0) {
+        TPS = JParser::getTPS();
+        //! Target TPS
+        //! Different from FPS, this is the cycle speed of main loop, 120 cap is good,
+        //! adjusting this number affects game speed
+    }
+    if(FPS == 0) {
+        FPS = JParser::getFPS();
+        //! Target FPS
+        //! Different from TPS, this is the cycle speed of render loop,
+        //! should be no more than tps
+    }
+
+    if(FPS > TPS) {
+        std::cout << "WARNING: A framerate higher than the tickspeed causes redundant frames to be rendered." << std::endl;
+    }
+
     //FLAGS DONE :)
 
     try {
-        const int TPS = 120;//! Target TPS
-                            //! Different from FPS, this is the cycle speed of main loop, 30 cap is good,
-                            //! adjusting this number affects game speed
-        const int frameDelay = 1000000000 / TPS; //expected frame time in ns
+        const int tickDelay = 1000000000 / TPS; //expected frame time in ns
         if (debug) {
-            std::cout << "Goal frametime: " << frameDelay / 1000000.0 << "ms"<< std::endl;
+            std::cout << "Goal tick-time: " << tickDelay / 1000000.0 << "ms"<< std::endl;
         }
 
-        int frameTime;
+        int tickTime;
         int timeLost = 0;
 
         engine = new Engine();
 
-        if(width == 0) {
-            width = JParser::getXSize();
-        }
-        if(height == 0) {
-            height = JParser::getYSize();
-        }
-        if(!fullscreen) {
-            fullscreen = JParser::getFullscreen();
-        }
-        if(!resizable) {
-            resizable = JParser::getResizable();
-        }
-
         engine->init(&JParser::getTitle()[0],SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED, width, height, fullscreen, resizable);
 
-        std::thread thread_obj(renderThread);
+        std::thread renderer(renderThread, debug, FPS);
 
         while(engine->running()) {
-            auto frameStart = std::chrono::steady_clock::now();
+            auto tickStart = std::chrono::steady_clock::now();
 
 
             //! MAIN LOOP CALLS
@@ -115,24 +173,24 @@ int main (int argc, char* argv[]) {
             engine->update();
             //! MAIN LOOP CALLS
 
-            auto frameEnd = std::chrono::steady_clock::now();
-            frameTime = std::chrono::duration_cast<std::chrono::nanoseconds>(frameEnd-frameStart).count();
+            auto tickEnd = std::chrono::steady_clock::now();
+            tickTime = std::chrono::duration_cast<std::chrono::nanoseconds>(tickEnd-tickStart).count();
 //          Frame debugging
             if(debug) {
-                std::cout << "Time for frame was: " << frameTime / 1000000.0 << "ms" << std::endl;
+                std::cout << "Time for tick was: " << tickTime / 1000000.0 << "ms" << std::endl;
             }
 
-            if(frameDelay > frameTime && frameTime != 0){
+            if(tickDelay > tickTime && tickTime != 0){
                 using namespace std::chrono_literals;
                 if(timeLost == 0) {
-                    int sleepTime = frameDelay - frameTime;
+                    int sleepTime = tickDelay - tickTime;
                     if(debug) {
                         std::cout << "Sleep time        = " << sleepTime / 1000000.0 << "ms" << std::endl;
-                        std::cout << "Total time        = " << sleepTime + frameTime << "ms, (Should be same as goal frametime)" << std::endl;
+                        std::cout << "Total time        = " << sleepTime + tickTime << "ms, (Should be same as goal ticktime)" << std::endl;
                     }
                     std::this_thread::sleep_for(1ns * (sleepTime));
                 } else {
-                    int timeSaved = frameDelay - frameTime;
+                    int timeSaved = tickDelay - tickTime;
                     timeLost -= timeSaved;
                     if(debug) {
                         std::cout << timeSaved / 1000000.0 << "ms saved" << std::endl;
@@ -147,11 +205,13 @@ int main (int argc, char* argv[]) {
                     }
                 }
             } else {
-                float lostFrames = float(frameTime) / frameDelay;
-                std::cout << "Uh oh, engine thread can't keep up! About " << lostFrames << " frames behind..." << std::endl;
-                timeLost += (frameTime - frameDelay);
+                float lostTicks = float(tickTime) / tickDelay;
+                std::cout << "Uh oh, engine thread can't keep up! About " << lostTicks << " ticks behind..." << std::endl;
+                timeLost += (tickTime - tickDelay);
             }
         }
+
+        renderer.join();
 
         engine->clean();
 

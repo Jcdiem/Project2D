@@ -1,7 +1,7 @@
 #ifndef P2D_CANVAS_H
 #define P2D_CANVAS_H
-#include "../include/TextureHandler.h"
-#include "../include/Canvas_LayerData.h"
+#include "TextureHandler.h"
+#include "Canvas_LayerData.h"
 #include <vector>
 
 class Canvas {
