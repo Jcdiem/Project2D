@@ -72,10 +72,8 @@ public:
         lua.runScript();
     }
 
-    void playAnim(int animId, int loops) {
-        data->updAnim = true;
-        data->animId = animId;
-        data->loops = loops + 1;
+    void playAnim(int animId, int ms) {
+        entity->getComponent<SpriteComponent>().playAnim(animId, ms);
     }
 
 private:

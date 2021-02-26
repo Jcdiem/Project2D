@@ -19,12 +19,14 @@ public:
     void init() override{
         data = &entity->getComponent<EntityData>();
 
-        playAnim(0);
+        playAnim(0, -1);
     }
 
-    void playAnim(int animId) {
+    void playAnim(int animId, int ms) { //Ideally should be in loops instead of time period
         curAnim = anims[animId];
-        restartTimer();
+        restartTimers();
+
+        animDur = ms;
 
         modPoint = (float(curAnim->frames) / float(curAnim->framerate)) * 1000;
 
@@ -40,11 +42,18 @@ public:
         destRect.h = curAnim->dheight;
         destRect.x = int(data->x);
         destRect.y = int(data->y);
+
+        std::chrono::time_point<std::chrono::steady_clock> curTime = std::chrono::steady_clock::now();
+        int timeSince = std::chrono::duration_cast<std::chrono::milliseconds>(curTime-animTimer).count();
+
+        if(animDur != -1 && animDur < timeSince) {
+            playAnim(0, -1);
+        }
     }
 
     void draw() override{
         std::chrono::time_point<std::chrono::steady_clock> curTime = std::chrono::steady_clock::now();
-        int timeSince = std::chrono::duration_cast<std::chrono::milliseconds>(curTime-timer).count();
+        int timeSince = std::chrono::duration_cast<std::chrono::milliseconds>(curTime-frameTimer).count();
         timeSince %= modPoint;
 
         lastFrame = curFrame;
@@ -59,8 +68,8 @@ public:
         TextureHandler::Draw(curAnim->texture, srcRect, destRect);
     }
 
-    void restartTimer() {
-        timer = std::chrono::steady_clock::now();
+    void restartTimers() {
+        frameTimer = animTimer = std::chrono::steady_clock::now();
     }
 
 private:
@@ -76,7 +85,10 @@ private:
 
     EntityData* data;
 
-    std::chrono::time_point<std::chrono::steady_clock> timer;
+    std::chrono::time_point<std::chrono::steady_clock> frameTimer;
+    std::chrono::time_point<std::chrono::steady_clock> animTimer;
+
+    int animDur;
 
     SDL_Texture *texture;
     SDL_Rect srcRect, destRect;

@@ -12,25 +12,25 @@ function main()
     then
         xStep = -0.5
         flipX = true
-        playAnim(2, 1)
+        playAnim(2, 955)
     end
     if(y() + 82 > EH())
     then
         yStep = -0.5
         flipY = true
-        playAnim(2, 1)
+        playAnim(2, 955)
     end
     if(x() < 0)
     then
         xStep = 0.5
         flipX = true
-        playAnim(2, 1)
+        playAnim(2, 955)
     end
     if(y() < 0)
     then
         yStep = 0.5
         flipY = true
-        playAnim(2, 1)
+        playAnim(2, 955)
     end
 
     if(flipX and flipY)
