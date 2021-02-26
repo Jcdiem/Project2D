@@ -6,14 +6,16 @@
 namespace animToolkit {
     struct animation {
         SDL_Texture* texture{};
-        int width{};
-        int height{};
-        int frames = 1;
-        int framerate = 1;
-    };
+        int width;
+        int height;
+        int dwidth;
+        int dheight;
+        int frames;
+        int framerate;
 
-    static void addByPath(animation* anim, char* path) {
-        anim->texture = TextureHandler::loadTexture(path);
-    }
+        void addByPath(char* path) {
+            texture = TextureHandler::loadTexture(path);
+        }
+    };
 }
 #endif //P2D_ANIMSTRUCT_H

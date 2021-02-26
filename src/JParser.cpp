@@ -57,29 +57,66 @@ void JParser::objFromJson(const char* path) {
     nlohmann::json file;
 
     try {
-        file = nlohmann::json::parse(std::fstream(path), nullptr, true, true).front()["components"];
+        file = nlohmann::json::parse(std::fstream(path), nullptr, true, true).front();
     }
     catch(nlohmann::json::exception &e) {
         std::throw_with_nested(std::runtime_error(std::string(path).append(" could not be found...")));
     }
 
-    for (auto component = file.begin(); component != file.end(); ++component)
+    nlohmann::json components = file["components"];
+    nlohmann::json values = file["values"];
+
+    curObjPtr.addComponent<EntityData>();
+    EntityData* eData = &curObjPtr.getComponent<EntityData>();
+
+    for(auto kvPair = values.begin(); kvPair != values.end(); ++kvPair) {
+        if(kvPair.key() == "x") {
+            eData->x = kvPair.value().get<float>();
+        }
+        if(kvPair.key() == "y") {
+            eData->y = kvPair.value().get<float>();
+        }
+    }
+
+    for(auto component = components.begin(); component != components.end(); ++component)
     {
         if(component.key() == "ScriptComponent") {
-            auto chaiP = component.value()["path"].get<std::string>();
-            int x = component.value()["X"].get<int>();
-            int y = component.value()["Y"].get<int>();
-            curObjPtr.addComponent<ScriptComponent>(eManager, &chaiP[0], x, y);
+            auto scriptPath = component.value()["path"].get<std::string>();
+            curObjPtr.addComponent<ScriptComponent>(&scriptPath[0]);
         }
         if(component.key() == "SpriteComponent") {
             std::vector<animToolkit::animation*> animArray;
             for(auto anim = component->begin(); anim != component->end(); anim++) {
                 auto* curAnim = new animToolkit::animation;
-                animToolkit::addByPath(curAnim, &anim.value()["path"].get<std::string>()[0]);
+
+                //Req'd properties
+                curAnim->addByPath(&anim.value()["path"].get<std::string>()[0]);
                 curAnim->width = anim.value()["width"].get<int>();
                 curAnim->height = anim.value()["height"].get<int>();
-                curAnim->frames = anim.value()["frames"].get<int>();
-                curAnim->framerate = anim.value()["framerate"].get<int>();
+
+
+                //Optional properties
+                if(anim.value().contains("frames")) {
+                    curAnim->frames = anim.value()["frames"].get<int>();
+                } else {
+                    curAnim->frames = 1;
+                }
+                if(anim.value().contains("framerate")) {
+                    curAnim->framerate = anim.value()["framerate"].get<int>();
+                } else {
+                    curAnim->framerate = 1;
+                }
+                if(anim.value().contains("dwidth")) {
+                    curAnim->dwidth = anim.value()["dwidth"].get<int>();
+                } else {
+                    curAnim->dwidth = curAnim->width;
+                }
+                if(anim.value().contains("dheight")) {
+                    curAnim->dheight = anim.value()["dheight"].get<int>();
+                } else {
+                    curAnim->dheight = curAnim->height;
+                }
+
                 animArray.emplace_back(curAnim);
             }
             curObjPtr.addComponent<SpriteComponent>(animArray);

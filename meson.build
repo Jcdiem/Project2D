@@ -36,6 +36,5 @@ executable(
 		thread
 	],
 	link_args:[
-		'-ldl'
 	]
 )

@@ -5,6 +5,12 @@ Engine *engine = nullptr;
 void renderThread(bool debug, int framerate) {
     //This function implements nearly identical logic to the engine thread, but this one doesnt try to "Catch Up" if if lags behind
 
+    //issues with the current implementation:
+    //  Objects being updated while drawing causes buggy graphics, race condition?
+    //  Possible fix is locking this thread while the engine works. See thread wait? \/\/\/
+    //  https://en.cppreference.com/w/cpp/thread/condition_variable/wait
+
+
     int frameTime;
 
     const int frameDelay = 1000000000 / framerate; //expected frame time in ns
@@ -170,6 +176,7 @@ int main (int argc, char* argv[]) {
 
             //! MAIN LOOP CALLS
             engine->handleEvents();
+//            engine->render(); Rendering on separate thread
             engine->update();
             //! MAIN LOOP CALLS
 

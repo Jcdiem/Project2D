@@ -17,21 +17,16 @@ public:
     }
 
     void init() override{
-        position = &entity->getComponent<ScriptComponent>();
-        restartTimer();
+        data = &entity->getComponent<EntityData>();
 
-        modPoint = (curAnim->frames / curAnim->framerate) * 1000;
-
-//      flipPoint = (float(1) / float(curAnim->frames)) * (1000 * animDur);
-//      ^^ Unsimplified version of equation below, I don't get how the simplified one works. I only __made__ it :shrug:
-        flipPoint = float(1000) / float(curAnim->framerate);
+        playAnim(0);
     }
 
     void playAnim(int animId) {
         curAnim = anims[animId];
         restartTimer();
 
-        modPoint = (curAnim->frames / curAnim->framerate) * 1000;
+        modPoint = (float(curAnim->frames) / float(curAnim->framerate)) * 1000;
 
 //      flipPoint = (float(1) / float(curAnim->frames)) * (1000 * animDur);
 //      ^^ Unsimplified version of equation below, I don't get how the simplified one works. I only __made__ it :shrug:
@@ -39,11 +34,12 @@ public:
     }
 
     void update() override{
-        destRect.x = position->x();
-        destRect.y = position->y();
-
-        srcRect.w = destRect.w = curAnim->width;
-        srcRect.h = destRect.h = curAnim->height;
+        srcRect.w = curAnim->width;
+        srcRect.h = curAnim->height;
+        destRect.w = curAnim->dwidth;
+        destRect.h = curAnim->dheight;
+        destRect.x = int(data->x);
+        destRect.y = int(data->y);
     }
 
     void draw() override{
@@ -78,9 +74,10 @@ private:
     int lastFrame;
     int curFrame;
 
+    EntityData* data;
+
     std::chrono::time_point<std::chrono::steady_clock> timer;
 
-    ScriptComponent *position;
     SDL_Texture *texture;
     SDL_Rect srcRect, destRect;
 };

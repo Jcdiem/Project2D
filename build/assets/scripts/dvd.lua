@@ -1,32 +1,36 @@
 function init()
-    xStep = 1
-    yStep = 1
+    xStep = 0.5
+    yStep = 0.5
 end
 
 function main()
 --     todo: de-hardcode values
-    flipX = false;
-    flipY = false;
+    flipX = false
+    flipY = false
 
     if(x() + 200 > EW())
     then
-        xStep = -1
-        flipX = true;
+        xStep = -0.5
+        flipX = true
+        playAnim(2, 1)
     end
     if(y() + 82 > EH())
     then
-        yStep = -1
-        flipY = true;
+        yStep = -0.5
+        flipY = true
+        playAnim(2, 1)
     end
     if(x() < 0)
     then
-        xStep = 1
-        flipX = true;
+        xStep = 0.5
+        flipX = true
+        playAnim(2, 1)
     end
     if(y() < 0)
     then
-        yStep = 1
-        flipY = true;
+        yStep = 0.5
+        flipY = true
+        playAnim(2, 1)
     end
 
     if(flipX and flipY)
