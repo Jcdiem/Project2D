@@ -1,3 +1,4 @@
+#pragma once
 #ifndef P2D_CANVAS_H
 #define P2D_CANVAS_H
 #include "TextureHandler.h"

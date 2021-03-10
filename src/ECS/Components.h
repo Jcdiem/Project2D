@@ -1,3 +1,4 @@
+#pragma once
 #ifndef PROJECT2DTD_COMPONENTS_H
 #define PROJECT2DTD_COMPONENTS_H
 

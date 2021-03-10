@@ -1,3 +1,4 @@
+#pragma once
 #ifndef PROJECT2DTD_TEXTUREHANDLER_H
 #define PROJECT2DTD_TEXTUREHANDLER_H
 #include "SDL2/SDL.h"

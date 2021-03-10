@@ -1,5 +1,6 @@
 {
   "objects": {
-    "dvd":    "assets/objects/dvd.json"
+    "dvd":    "assets/objects/dvd.json",
+    "dvd1":    "assets/objects/dvdNew.json"
   }
 }

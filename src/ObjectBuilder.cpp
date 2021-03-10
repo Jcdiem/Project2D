@@ -1,17 +1,12 @@
-#include <iostream>
-#include "JParser.h"
-
-std::vector<std::string> JParser::levelList;
+#include "ObjectBuilder.h"
 
 const char *nullLevel = "assets/levels/null.json";
 const char *nullObj = "assets/objects/null.json";
 
-JParser::JParser(Manager *manager) {
-    eManager = manager;
-}
-
-void JParser::genLevelList() {
+std::vector<std::string> ObjectBuilder::genLevelList() {
+    std::vector<std::string> levelList;
     nlohmann::json file;
+
     try {
         file = nlohmann::json::parse(std::fstream("assets/levels/levelList.json"), nullptr, true, true)["levels"];
     }
@@ -29,9 +24,11 @@ void JParser::genLevelList() {
             levelList.emplace_back(std::string(nullLevel));
         }
     }
+
+    return levelList;
 }
 
-void JParser::genObjs(const char* levelPath) {
+void ObjectBuilder::genObjs(Manager* man, std::string levelPath) {
     nlohmann::json file;
     try {
         file = nlohmann::json::parse(std::fstream(levelPath), nullptr, true, true)["objects"];
@@ -43,17 +40,17 @@ void JParser::genObjs(const char* levelPath) {
     for (auto obj = file.begin(); obj != file.end(); ++obj)
     {
         try{
-            objFromJson(&std::string(obj.value())[0]);
+            objFromJson(man, &std::string(obj.value())[0]);
         }
         catch(...) {
             std::cout << "Failed to create object from " << obj.value() << ", either object is malformed or does not exist." << std::endl;
-            objFromJson(nullObj);
+            objFromJson(man, nullObj);
         }
     }
 }
 
-void JParser::objFromJson(const char* path) {
-    auto &curObjPtr(eManager->addEntity());
+void ObjectBuilder::objFromJson(Manager* man, const char* path) {
+    auto &curObjPtr(man->addEntity());
     nlohmann::json file;
 
     try {
@@ -68,6 +65,9 @@ void JParser::objFromJson(const char* path) {
 
     curObjPtr.addComponent<EntityData>();
     EntityData* eData = &curObjPtr.getComponent<EntityData>();
+
+    eData->windowWidth = man->getWW();
+    eData->windowHeight = man->getWH();
 
     for(auto kvPair = values.begin(); kvPair != values.end(); ++kvPair) {
         if(kvPair.key() == "x") {
@@ -122,43 +122,4 @@ void JParser::objFromJson(const char* path) {
             curObjPtr.addComponent<SpriteComponent>(animArray);
         }
     }
-}
-
-const char* JParser::getLevel(int levelNum) {
-    return &levelList[levelNum][0];
-}
-
-std::string JParser::getTitle() {
-    nlohmann::json file = nlohmann::json::parse(std::fstream("assets/engineSettings.json"), nullptr, true, true);
-    return file["Title"].get<std::string>();
-}
-
-int JParser::getXSize() {
-    nlohmann::json file = nlohmann::json::parse(std::fstream("assets/engineSettings.json"), nullptr, true, true);
-    return file["WindowXRes"].get<int>();
-}
-
-int JParser::getYSize() {
-    nlohmann::json file = nlohmann::json::parse(std::fstream("assets/engineSettings.json"), nullptr, true, true);
-    return file["WindowYRes"].get<int>();
-}
-
-bool JParser::getFullscreen() {
-    nlohmann::json file = nlohmann::json::parse(std::fstream("assets/engineSettings.json"), nullptr, true, true);
-    return file["Fullscreen"].get<bool>();
-}
-
-bool JParser::getResizable() {
-    nlohmann::json file = nlohmann::json::parse(std::fstream("assets/engineSettings.json"), nullptr, true, true);
-    return file["ForceResizable"].get<bool>();
-}
-
-int JParser::getTPS() {
-    nlohmann::json file = nlohmann::json::parse(std::fstream("assets/engineSettings.json"), nullptr, true, true);
-    return file["Tickrate"].get<int>();
-}
-
-int JParser::getFPS() {
-    nlohmann::json file = nlohmann::json::parse(std::fstream("assets/engineSettings.json"), nullptr, true, true);
-    return file["Framerate"].get<int>();
 }

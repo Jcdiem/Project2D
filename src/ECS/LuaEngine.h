@@ -1,3 +1,4 @@
+#pragma once
 #ifndef PROJECT2D_LUAENGINE_H
 #define PROJECT2D_LUAENGINE_H
 

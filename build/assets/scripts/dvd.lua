@@ -1,43 +1,51 @@
 function init()
-    xStep = 0.5
-    yStep = 0.5
+-- You **MUST** declare what inputs you want to use at some point
+    addBinding("move_up")
+    addBinding("move_down")
+    addBinding("move_left")
+    addBinding("move_right")
+
+    xStep = 0
+    yStep = 0
 end
 
 function main()
---     todo: de-hardcode values
-    flipX = false
-    flipY = false
+    xStep = xStep * 0.99;
+    yStep = yStep * 0.99;
 
-    if(x() + 200 > EW())
+    if(isPressed("move_up"))
     then
-        xStep = -0.5
-        flipX = true
-        playAnim(2, 955)
+        yStep = yStep - 0.25
     end
-    if(y() + 82 > EH())
+    if(isPressed("move_down"))
     then
-        yStep = -0.5
-        flipY = true
-        playAnim(2, 955)
-    end
-    if(x() < 0)
-    then
-        xStep = 0.5
-        flipX = true
-        playAnim(2, 955)
-    end
-    if(y() < 0)
-    then
-        yStep = 0.5
-        flipY = true
-        playAnim(2, 955)
+        yStep = yStep + 0.25
     end
 
-    if(flipX and flipY)
+    if(isPressed("move_left"))
     then
-        print("Hit the corner!")
+        xStep = xStep - 0.25
+    end
+    if(isPressed("move_right"))
+    then
+        xStep = xStep + 0.25
     end
 
-    setX(x() + xStep)
-    setY(y() + yStep)
+    if(x() + xStep > 0 and x() + xStep < EW() - 200)
+    then
+        setX(x() + xStep)
+    else
+        playAnim(2, 955)
+        xStep = xStep * -1
+        setX(x() + xStep)
+    end
+
+    if(y() + yStep > 0 and y() + yStep < EH() - 82)
+    then
+        setY(y() + yStep)
+    else
+        playAnim(2, 955)
+        yStep = yStep * -1
+        setY(y() + yStep)
+    end
 end

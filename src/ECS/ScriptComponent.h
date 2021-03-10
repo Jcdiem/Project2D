@@ -1,3 +1,4 @@
+#pragma once
 #ifndef PROJECT2DTD_POSITIONCOMPONENT_H
 #define PROJECT2DTD_POSITIONCOMPONENT_H
 
@@ -7,6 +8,7 @@
 
 #include "EntityComponentSystem.h"
 #include "LuaEngine.h"
+#include "InputManager.h"
 
 class ScriptComponent : public Component{
 public:
@@ -35,8 +37,13 @@ public:
         lua.gLu()->set_function("EW", &ScriptComponent::getEW, this);
         lua.gLu()->set_function("EH", &ScriptComponent::getEH, this);
         lua.gLu()->set_function("playAnim", &ScriptComponent::playAnim, this);
+        lua.gLu()->set_function("addBinding", &InputManager::addBinding, inputManager);
+        lua.gLu()->set_function("refreshBindings", &InputManager::refreshBindings, inputManager);
+        lua.gLu()->set_function("isPressed", &InputManager::isPressed, inputManager);
 
         lua.initScript(script);
+
+        inputManager->refreshBindings();
     }
 
     float getX() {
@@ -48,11 +55,11 @@ public:
     }
 
     int getEW() {
-        return engineW;
+        return data->windowWidth;
     }
 
     int getEH() {
-        return engineH;
+        return data->windowHeight;
     }
 
     void setPos(float x, float y) {
@@ -77,10 +84,8 @@ public:
     }
 
 private:
-    int engineW = 640;
-    int engineH = 480;
-
     EntityData* data;
+    InputManager* inputManager = new InputManager();
 
     char* path;
 

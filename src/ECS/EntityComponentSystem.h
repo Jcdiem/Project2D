@@ -1,3 +1,4 @@
+#pragma once
 #ifndef PROJECT2DTD_ENTITYCOMPONENTSYSTEM_H
 #define PROJECT2DTD_ENTITYCOMPONENTSYSTEM_H
 #include <vector>
@@ -148,11 +149,11 @@ public:
         windowH = height;
     }
 
-    [[nodiscard]] int getWW() const {
+    int getWW() const {
         return windowW;
     }
 
-    [[nodiscard]] int getWH() const {
+    int getWH() const {
         return windowH;
     }
 

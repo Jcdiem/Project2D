@@ -2,7 +2,11 @@
   "dvd": {
     "components": {
       "ScriptComponent": {
-        "path": "assets/scripts/dvd.lua"
+        "path": "assets/scripts/dvd.lua",
+        "move_up": "up",
+        "move_down": "down",
+        "move_left": "left",
+        "move_right": "right"
       },
       "SpriteComponent": {
         "0": {

@@ -4,7 +4,6 @@ Engine::Engine() = default;
 
 Engine::~Engine() = default;
 
-
 //Globals (SHOULD ALL BE PRIVATE)
 Canvas *Engine::gameCanvas = nullptr;
 SDL_Renderer *Engine::renderer = nullptr;
@@ -49,7 +48,7 @@ void Engine::init(const char *title, int xpos, int ypos, int width, int height, 
     manager.setWH(height);
 
     try {
-        JParser::genLevelList();
+        levelList = ObjectBuilder::genLevelList();
     }
     catch(...) {
         std::throw_with_nested(std::runtime_error("Level list generation failed."));
@@ -58,25 +57,15 @@ void Engine::init(const char *title, int xpos, int ypos, int width, int height, 
     //TODO: Get entities from file
     gameCanvas = new Canvas();
 
-    jParser->genObjs(JParser::getLevel(0));
+    ObjectBuilder::genObjs(&manager, levelList[0]);
 }
 
 
 void Engine::handleEvents() {
-    SDL_Event event;
-    SDL_PollEvent(&event);
-    switch (event.type) {
-        case SDL_QUIT:
-            isRunning = false;
-            break;
-
-        default:
-            break;
-    }
+    SDL_PumpEvents();
 }
 
 void Engine::update() {
-//    Manager *man = levelloader->getManager();
     manager.refresh();
     manager.update();
 }
@@ -99,6 +88,10 @@ void Engine::clean() {
     SDL_DestroyRenderer(renderer);
     SDL_Quit();
     printf("Shutdown complete");
+}
+
+void Engine::quit() {
+    isRunning = false;
 }
 
 SDL_Renderer *Engine::getRenderer() {

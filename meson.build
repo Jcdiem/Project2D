@@ -3,7 +3,9 @@ project('P2D', 'cpp', default_options:['cpp_std=gnu++2a'])
 #Standard Deps
 sdl2 = dependency('SDL2')
 sdl2_image = dependency('SDL2_image')
-lua = dependency('luajit')
+lua = dependency('lua')
+#Replace 'lua' with whatever flavor you prefer, IE: luajit, lua, lua53, lua52, lua51 and so on,
+#As long as sol2 supports it, it should work here.
 
 #Meson Built-ins
 thread = dependency('threads')
@@ -20,7 +22,8 @@ executable(
 	'P2D',
 	sources:[
 	    'src/ECS/LuaEngine.cpp',
-		'src/JParser.cpp',
+	    'src/ECS/InputManager.cpp',
+		'src/ObjectBuilder.cpp',
 		'src/TextureHandler.cpp',
 		'src/Canvas_LayerData.cpp',
 		'src/Canvas.cpp',

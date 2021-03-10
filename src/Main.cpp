@@ -1,8 +1,6 @@
 #include "Engine.h"
 
-Engine *engine = nullptr;
-
-void renderThread(bool debug, int framerate) {
+void renderThread(Engine* engine, bool debug, int framerate) {
     //This function implements nearly identical logic to the engine thread, but this one doesnt try to "Catch Up" if if lags behind
 
     //issues with the current implementation:
@@ -20,10 +18,9 @@ void renderThread(bool debug, int framerate) {
 
     while(engine->running()) {
         auto frameStart = std::chrono::steady_clock::now();
-
         engine->render();
-
         auto frameEnd = std::chrono::steady_clock::now();
+
         frameTime = std::chrono::duration_cast<std::chrono::nanoseconds>(frameEnd-frameStart).count();
 
         if(frameDelay > frameTime && frameTime != 0){
@@ -35,10 +32,19 @@ void renderThread(bool debug, int framerate) {
             }
             std::this_thread::sleep_for(1ns * (sleepTime));
         } else {
-            float lostFrames = float(frameTime) / frameDelay;
-            std::cout << "Uh oh, render thread can't keep up! About " << lostFrames << " frames behind..." << std::endl;
+            std::cout << "Uh oh, render thread can't keep up! About " << float(frameTime) / frameDelay << " frames behind..." << std::endl;
         }
     }
+}
+
+void exitListener(Engine* engine) {
+    SDL_Event event;
+
+    while(event.type != SDL_QUIT) {
+        SDL_WaitEvent(&event);
+    }
+
+    engine->quit();
 }
 
 void printException(const std::exception& e, int level =  0)
@@ -51,7 +57,7 @@ void printException(const std::exception& e, int level =  0)
     } catch(...) {}
 }
 
-int main (int argc, char* argv[]) {
+int main(int argc, char* argv[]) {
     //FLAGS
     bool debug = false;
     bool fullscreen = false;
@@ -124,29 +130,33 @@ int main (int argc, char* argv[]) {
 
     }
 
+    using ObjectBuilder::getValue;
+    const std::string configFile = "assets/engineSettings.json";
     if(width == 0) {
-        width = JParser::getXSize();
+        width = getValue<int>(configFile, "WindowXRes");
     }
     if(height == 0) {
-        height = JParser::getYSize();
+        height = getValue<int>(configFile, "WindowYRes");
     }
     if(!fullscreen) {
-        fullscreen = JParser::getFullscreen();
+        fullscreen = getValue<bool>(configFile, "Fullscreen");
     }
     if(!resizable) {
-        resizable = JParser::getResizable();
+        resizable = getValue<bool>(configFile, "ForceResizable");
     }
     if(TPS == 0) {
-        TPS = JParser::getTPS();
+        TPS = getValue<int>(configFile, "Tickrate");
         //! Target TPS
         //! Different from FPS, this is the cycle speed of main loop, 120 cap is good,
         //! adjusting this number affects game speed
     }
     if(FPS == 0) {
-        FPS = JParser::getFPS();
+        FPS = getValue<int>(configFile, "Framerate");
         //! Target FPS
         //! Different from TPS, this is the cycle speed of render loop,
         //! should be no more than tps
+
+        //! Also manages input handling speed.
     }
 
     if(FPS > TPS) {
@@ -164,18 +174,19 @@ int main (int argc, char* argv[]) {
         int tickTime;
         int timeLost = 0;
 
-        engine = new Engine();
+        Engine* engine = new Engine();
 
-        engine->init(&JParser::getTitle()[0],SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED, width, height, fullscreen, resizable);
+        engine->init(&getValue<std::string>(configFile, "Title")[0], SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, fullscreen, resizable);
 
-        std::thread renderer(renderThread, debug, FPS);
+        std::thread renderer(renderThread, engine, debug, FPS);
+        std::thread exiter(exitListener, engine);
 
         while(engine->running()) {
             auto tickStart = std::chrono::steady_clock::now();
 
 
             //! MAIN LOOP CALLS
-            engine->handleEvents();
+//            engine->handleEvents(); Events on separate thread
 //            engine->render(); Rendering on separate thread
             engine->update();
             //! MAIN LOOP CALLS
@@ -219,6 +230,7 @@ int main (int argc, char* argv[]) {
         }
 
         renderer.join();
+        exiter.join();
 
         engine->clean();
 
