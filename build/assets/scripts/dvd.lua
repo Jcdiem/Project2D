@@ -35,7 +35,7 @@ function main()
     then
         setX(x() + xStep)
     else
-        playAnim(2, 955)
+        playAnim(2, 1)
         xStep = xStep * -1
         setX(x() + xStep)
     end
@@ -44,7 +44,7 @@ function main()
     then
         setY(y() + yStep)
     else
-        playAnim(2, 955)
+        playAnim(2, 1)
         yStep = yStep * -1
         setY(y() + yStep)
     end

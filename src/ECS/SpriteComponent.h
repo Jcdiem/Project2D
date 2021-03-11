@@ -23,13 +23,13 @@ public:
         playAnim(0, -1);
     }
 
-    void playAnim(int animId, int ms) { //Ideally should be in loops instead of time period
+    void playAnim(int animId, int loops) { //Ideally should be in loops instead of time period
         curAnim = anims[animId];
         restartTimers();
 
-        animDur = ms;
-
         modPoint = (float(curAnim->frames) / float(curAnim->framerate)) * 1000;
+
+        animDur = modPoint * loops;
 
 //      flipPoint = (float(1) / float(curAnim->frames)) * (1000 * animDur);
 //      ^^ Unsimplified version of equation below, I don't get how the simplified one works. I only __made__ it :shrug:
@@ -47,7 +47,7 @@ public:
         std::chrono::time_point<std::chrono::steady_clock> curTime = std::chrono::steady_clock::now();
         int timeSince = std::chrono::duration_cast<std::chrono::milliseconds>(curTime-animTimer).count();
 
-        if(animDur != -1 && animDur < timeSince) {
+        if(animDur > -1 && animDur < timeSince) {
             playAnim(0, -1);
         }
     }
