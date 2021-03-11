@@ -14,7 +14,7 @@ Nope! If you are interested in playing a game made on this engine, we will be li
   <li>Run 'ninja -C build/'</li>
   <li>Run 'ninja -C build/ install'</li>
 </ol>
-Windows is currently not tested, so please refer to the Meson guide linked in step 2 for setting up on Windows.
+Windows support can be found on our Windows branch and is currently in an unstable state.
 
 
 If you run into any issues, please open an issue request.
