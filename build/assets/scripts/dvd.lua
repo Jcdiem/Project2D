@@ -11,7 +11,7 @@ end
 
 function main()
     xStep = xStep * 0.99;
-    yStep = yStep * 0.99;
+    yStep = yStep * 0.99
 
     if(isPressed("move_up"))
     then

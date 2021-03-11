@@ -19,14 +19,14 @@ public:
     bool isPressed(std::string action);
     void refreshBindings();
 private:
-    std::map<std::string, int> keybinds;
+    std::map<std::string, std::vector<int>> keybinds;
     std::vector<std::string> actionList;
 
     //Basic function to get json values.
-    template<typename T>
-    T getValue(std::string filePath, std::string key) {
+    template<typename type>
+    type getValue(std::string filePath, std::string key) {
         nlohmann::json file = nlohmann::json::parse(std::fstream(filePath), nullptr, true, true);
-        return file[key].get<T>();
+        return file[key].get<type>();
     }
 
     const Uint8 *keystate;
