@@ -66,6 +66,7 @@ int main(int argc, char* argv[]) {
     int height = 0;
     int TPS = 0;
     int FPS = 0;
+    bool multithread = false;
     //FLAGS
 
     for(int i = 1; i < argc; i++) {
@@ -112,7 +113,10 @@ int main(int argc, char* argv[]) {
         } else if(strcmp(argv[i], "--resizable") == 0 || strcmp(argv[i], "-r") == 0) {
             printf("Forcing Resizability\n");
             resizable = true;
-        } else if(strcmp(argv[i], "--help") == 0) {
+        } else if(strcmp(argv[i], "--multithread") == 0 || strcmp(argv[i], "-m") == 0) {
+            printf("Enabling Multithread for objects\n");
+            multithread = true;
+        }  else if(strcmp(argv[i], "--help") == 0) {
             printf("Showing Help!\n");
             printf("The Following flags are available:\n");
             printf("--debug  \\ -d     | Enable debug mode\n");
@@ -158,6 +162,9 @@ int main(int argc, char* argv[]) {
 
         //! Also manages input handling speed.
     }
+    if(!multithread) {
+        multithread = getValue<bool>(configFile, "MultithreadObjects");
+    }
 
     if(FPS > TPS) {
         std::cout << "WARNING: A framerate higher than the tickspeed causes redundant frames to be rendered." << std::endl;
@@ -176,7 +183,7 @@ int main(int argc, char* argv[]) {
 
         Engine* engine = new Engine();
 
-        engine->init(&getValue<std::string>(configFile, "Title")[0], SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, fullscreen, resizable);
+        engine->init(&getValue<std::string>(configFile, "Title")[0], SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, fullscreen, resizable, multithread);
 
         std::thread renderer(renderThread, engine, debug, FPS);
         std::thread exiter(exitListener, engine);

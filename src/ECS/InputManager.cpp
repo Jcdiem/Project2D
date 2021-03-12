@@ -22,6 +22,14 @@ void InputManager::refreshBindings() {
         std::vector<int> keyList;
         nlohmann::json arr = getValue<nlohmann::json>(configFile, action);
 
+//        try {
+//            if(!arr) {
+//                std::cout << "Error parsing keybinds" << std::endl;
+//            }
+//        } catch(...) {
+//            std::throw_with_nested(std::runtime_error("Error parsing keybinds, " + action + " doesn't exist."));
+//        }
+
         for(auto item : arr) {
             keyList.emplace_back(item.get<int>());
         }

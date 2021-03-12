@@ -5,6 +5,11 @@ function init()
     addBinding("move_left")
     addBinding("move_right")
 
+    addBinding("move_up_fast")
+    addBinding("move_down_fast")
+    addBinding("move_left_fast")
+    addBinding("move_right_fast")
+
     xStep = 0
     yStep = 0
 end
@@ -27,6 +32,24 @@ function main()
         xStep = xStep - 0.25
     end
     if(isPressed("move_right"))
+    then
+        xStep = xStep + 0.25
+    end
+
+    if(isPressed("move_up_fast"))
+    then
+        yStep = yStep - 0.25
+    end
+    if(isPressed("move_down_fast"))
+    then
+        yStep = yStep + 0.25
+    end
+
+    if(isPressed("move_left_fast"))
+    then
+        xStep = xStep - 0.25
+    end
+    if(isPressed("move_right_fast"))
     then
         xStep = xStep + 0.25
     end

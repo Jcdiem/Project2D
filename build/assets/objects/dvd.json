@@ -9,14 +9,14 @@
         "move_right": "right"
       },
       "SpriteComponent": {
-        "0": {
+        "1": {
           "path": "assets/textures/dvd24frame.png",
           "width": 200,
           "height": 82,
           "frames": 24,
           "framerate": 24
         },
-        "1": {
+        "0": {
           "path": "assets/textures/dvd.png",
           "width": 200,
           "height": 82

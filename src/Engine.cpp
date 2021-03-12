@@ -10,7 +10,7 @@ SDL_Renderer *Engine::renderer = nullptr;
 int *Engine::engineHeight = nullptr;
 int *Engine::engineWidth = nullptr;
 
-void Engine::init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen, bool resizable) {
+void Engine::init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen, bool resizable, bool multithread) {
     int flags = 0;
     if (fullscreen) {
         flags += SDL_WINDOW_FULLSCREEN;
@@ -18,6 +18,8 @@ void Engine::init(const char *title, int xpos, int ypos, int width, int height, 
     if (resizable) {
         flags += SDL_WINDOW_RESIZABLE;
     }
+
+    this->multithread = multithread;
 
     if (SDL_Init(SDL_INIT_EVERYTHING) == 0) {
         std::cout << "SDL Initialised" << std::endl;
@@ -67,7 +69,12 @@ void Engine::handleEvents() {
 
 void Engine::update() {
     manager.refresh();
-    manager.update();
+
+    if(multithread) {
+        manager.multithreaded_update();
+    } else {
+        manager.update();
+    }
 }
 
 void Engine::render() {

@@ -7,6 +7,7 @@
 #include <bitset>
 #include <array>
 #include <iostream>
+#include <thread>
 
 // Design pattern by Vittorio Romeo
 // https://vittorioromeo.info/
@@ -109,9 +110,35 @@ private:
 
 class Manager{
 public:
+    void hello() {
+        std::cout << "Hello" << std::endl;
+    }
+
+    void multithreaded_update(){
+        std::thread threads[entityList.size()];
+        int index = 0;
+
+        for (auto& entity : entityList){
+            threads[index] = std::thread(&Entity::update, entity.get());
+
+//            threads[index].detach();
+//            Significantly faster, however if a thread ever gets stuck
+//            it won't be killed on program exit, leaving it dangling.
+//
+//            Don't replace standard exit unless you are confident in your lua scripts
+//            And some of my shoddy programming.
+            index++;
+        }
+
+        for(int i = 0; i < index; i++) {
+            threads[i].join();
+        }
+    }
+
     void update(){
         for (auto& entity : entityList) entity->update();
     }
+
     void draw(){
         for (auto& entity : entityList) entity->draw();
     }

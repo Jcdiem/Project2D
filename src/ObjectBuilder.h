@@ -14,7 +14,6 @@ namespace ObjectBuilder {
     //Used to generate objects and levels
     std::vector<std::string> genLevelList();
     void genObjs(Manager* man, std::string levelPath);
-    const char* getLevel(int levelNum);
 
     template<typename T>
     T getValue(std::string filePath, std::string value) {

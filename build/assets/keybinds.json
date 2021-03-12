@@ -1,6 +1,10 @@
 {
-  "move_up": [26],
-  "move_left": [4],
-  "move_right": [7],
-  "move_down": [22]
+  "move_up": [82],
+  "move_left": [80],
+  "move_right": [79],
+  "move_down": [81],
+  "move_up_fast": [225, 82],
+  "move_left_fast": [225, 80],
+  "move_right_fast": [225, 79],
+  "move_down_fast": [225, 81]
 }

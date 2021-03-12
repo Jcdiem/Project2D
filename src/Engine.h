@@ -23,7 +23,7 @@ public:
     ~Engine();
 
 
-    void init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen, bool resizable);
+    void init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen, bool resizable, bool multithreaded);
 
     //void loadEntity(EntityType* entity);
 
@@ -46,6 +46,7 @@ private:
     static Canvas *gameCanvas;
     static int* engineWidth;
     static int* engineHeight;
+    bool multithread;
 
     Manager manager;
     std::vector<std::string> levelList;
