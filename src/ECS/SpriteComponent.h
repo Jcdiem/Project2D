@@ -60,9 +60,10 @@ public:
         lastFrame = curFrame;
         curFrame = timeSince / flipPoint;
 
-        if(curFrame - lastFrame > 1) {
-            std::cout << "Uh oh, animation cycles can't keep up! Framerate too low?" << std::endl;
-        }
+//        if(curFrame - lastFrame > 1) {
+//            std::cout << "Uh oh, animation cycles can't keep up! Framerate too low?" << std::endl;
+//        }
+//        Enable for warnings about animation cycling, not really needed most of the time.
 
         srcRect.x = curFrame * curAnim->width;
 

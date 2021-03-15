@@ -23,7 +23,7 @@ public:
     ~Engine();
 
 
-    void init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen, bool resizable, bool multithreaded);
+    void init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen, bool resizable, int threads);
 
     //void loadEntity(EntityType* entity);
 
@@ -47,6 +47,7 @@ private:
     static int* engineWidth;
     static int* engineHeight;
     bool multithread;
+    int threads;
 
     Manager manager;
     std::vector<std::string> levelList;

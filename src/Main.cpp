@@ -66,7 +66,7 @@ int main(int argc, char* argv[]) {
     int height = 0;
     int TPS = 0;
     int FPS = 0;
-    bool multithread = false;
+    int threads = 0;
     //FLAGS
 
     for(int i = 1; i < argc; i++) {
@@ -107,15 +107,20 @@ int main(int argc, char* argv[]) {
             } catch(...) {
                 printf("Unable to parse TPS, ignoring!");
             }
+        } else if(strcmp(argv[i], "--objthreads") == 0 || strcmp(argv[i], "-o") == 0) {
+            printf("Forcing obj Threads!\n");
+            i += 1;
+            try {
+                TPS = std::stoi(argv[i]);
+            } catch(...) {
+                printf("Unable to parse thread count, ignoring!");
+            }
         } else if(strcmp(argv[i], "--fullscreen") == 0 || strcmp(argv[i], "-f") == 0) {
             printf("Forcing Fullscreen (If display resolution is less than selected resolution, fullscreen is disabled)\n");
             fullscreen = true;
         } else if(strcmp(argv[i], "--resizable") == 0 || strcmp(argv[i], "-r") == 0) {
             printf("Forcing Resizability\n");
             resizable = true;
-        } else if(strcmp(argv[i], "--multithread") == 0 || strcmp(argv[i], "-m") == 0) {
-            printf("Enabling Multithread for objects\n");
-            multithread = true;
         }  else if(strcmp(argv[i], "--help") == 0) {
             printf("Showing Help!\n");
             printf("The Following flags are available:\n");
@@ -162,8 +167,8 @@ int main(int argc, char* argv[]) {
 
         //! Also manages input handling speed.
     }
-    if(!multithread) {
-        multithread = getValue<bool>(configFile, "MultithreadObjects");
+    if(threads == 0) {
+        threads = getValue<int>(configFile, "ObjectThreads");
     }
 
     if(FPS > TPS) {
@@ -183,7 +188,7 @@ int main(int argc, char* argv[]) {
 
         Engine* engine = new Engine();
 
-        engine->init(&getValue<std::string>(configFile, "Title")[0], SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, fullscreen, resizable, multithread);
+        engine->init(&getValue<std::string>(configFile, "Title")[0], SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, fullscreen, resizable, threads);
 
         std::thread renderer(renderThread, engine, debug, FPS);
         std::thread exiter(exitListener, engine);

@@ -9,6 +9,8 @@
 #include <iostream>
 #include <thread>
 
+#include "QueueingThread.h"
+
 // Design pattern by Vittorio Romeo
 // https://vittorioromeo.info/
 
@@ -110,21 +112,20 @@ private:
 
 class Manager{
 public:
-    void hello() {
-        std::cout << "Hello" << std::endl;
-    }
+    void multithreaded_update(int maxThreads){
+        threads.resize(maxThreads);
+        int perThread = entityList.size() / maxThreads;
 
-    void multithreaded_update(){
-        int index = 0;
-
-        for (auto& entity : entityList){
-            if(threads.size() > index) {
-                threads[index].join();
-                threads[index] = std::thread(&Entity::update, entity.get());
-            } else {
-                threads.emplace_back(std::thread(&Entity::update, entity.get()));
+        int i = 0;
+        int j = 0;
+        for(; i < maxThreads - 1; i++) {
+            for(; j - i*perThread < perThread; j++) {
+                threads[i].que(entityList[j].get());
             }
-            index++;
+        }
+
+        for(; j < entityList.size(); j++) {
+            threads[i].que(entityList[j].get());
         }
     }
 
@@ -179,10 +180,9 @@ public:
 
 private:
     std::vector<std::unique_ptr<Entity>> entityList; //List of entity pointers
-    std::vector<std::thread> threads;
+    std::vector<QueueingThread<Entity>> threads;
 
     int windowW;
-
     int windowH;
 };
 
