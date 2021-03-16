@@ -113,19 +113,26 @@ private:
 class Manager{
 public:
     void multithreaded_update(int maxThreads){
-        threads.resize(maxThreads);
+        while(maxThreads < threads.size()) {
+            threads.pop_back();
+        }
+        while(maxThreads > threads.size()) {
+            threads.push_back(new QueueingThread<Entity>(200));
+            //The higher the que size the higher the memory usage.
+        }
+
         int perThread = entityList.size() / maxThreads;
 
         int i = 0;
         int j = 0;
         for(; i < maxThreads - 1; i++) {
             for(; j - i*perThread < perThread; j++) {
-                threads[i].que(entityList[j].get());
+                threads[i]->que(entityList[j].get());
             }
         }
 
         for(; j < entityList.size(); j++) {
-            threads[i].que(entityList[j].get());
+            threads[i]->que(entityList[j].get());
         }
     }
 
@@ -180,7 +187,7 @@ public:
 
 private:
     std::vector<std::unique_ptr<Entity>> entityList; //List of entity pointers
-    std::vector<QueueingThread<Entity>> threads;
+    std::vector<QueueingThread<Entity>*> threads;
 
     int windowW;
     int windowH;
