@@ -1,3 +1,5 @@
+[![forthebadge](https://forthebadge.com/images/badges/60-percent-of-the-time-works-every-time.svg)](https://forthebadge.com)
+
 # P2D
 A simple 2D game engine built with C++ and SDL2. The game engine currently using meson for build and a custom script for acquiring libraries.
 
