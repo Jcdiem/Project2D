@@ -13,6 +13,8 @@ function init()
     self.rotX = 0
     self.rotY = 0
 
+-- This function call does not work as it is overwritten by some internal calls
+-- (in the init function, it works elsewhere)
     resetRotPos()
 
     xStep = 0

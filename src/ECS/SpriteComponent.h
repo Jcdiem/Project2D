@@ -22,15 +22,15 @@ public:
         data = &entity->getComponent<EntityData>();
         playAnim(0, -1);
 
-        srcRect.w = curAnim->width;
-        srcRect.h = curAnim->height;
+        data->w = curAnim->dwidth;
+        data->h = curAnim->dheight;
     }
 
     void playAnim(int animId, int loops) { //Ideally should be in loops instead of time period
         curAnim = anims[animId];
         restartTimers();
 
-        modPoint = (float(curAnim->frames) / float(curAnim->framerate)) * 1000;
+        modPoint = int((float(curAnim->frames) / float(curAnim->framerate)) * 1000);
 
         animDur = modPoint * loops;
 
@@ -43,10 +43,10 @@ public:
         srcRect.w = curAnim->width;
         srcRect.h = curAnim->height;
 
-        destRect.w = int(data->w);
-        destRect.h = int(data->h);
         destRect.x = int(data->x);
         destRect.y = int(data->y);
+        destRect.w = int(data->w);
+        destRect.h = int(data->h);
 
         flipStatus = SDL_FLIP_NONE;
 
@@ -79,7 +79,6 @@ public:
 
         srcRect.x = curFrame * curAnim->width;
 
-        //Allow rotation point to be set
         TextureHandler::Draw(curAnim->texture, srcRect, destRect, data->rot, rotPoint, flipStatus);
     }
 private:
