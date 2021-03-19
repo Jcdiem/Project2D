@@ -30,13 +30,25 @@ public:
     void init() {
         data = &entity->getComponent<EntityData>();
 
-        lua.gLu()->set_function("x", &ScriptComponent::getX, this);
-        lua.gLu()->set_function("y", &ScriptComponent::getY, this);
-        lua.gLu()->set_function("setX", &ScriptComponent::setX, this);
-        lua.gLu()->set_function("setY", &ScriptComponent::setY, this);
-        lua.gLu()->set_function("EW", &ScriptComponent::getEW, this);
-        lua.gLu()->set_function("EH", &ScriptComponent::getEH, this);
+        sol::usertype<EntityData> self_data =
+                lua.gLu()->new_usertype<EntityData>("data", sol::no_constructor);
+
+        self_data["EW"] = &EntityData::windowWidth;
+        self_data["EH"] = &EntityData::windowHeight;
+        self_data["x"] = &EntityData::x;
+        self_data["y"] = &EntityData::y;
+        self_data["w"] = &EntityData::w;
+        self_data["h"] = &EntityData::h;
+        self_data["rot"] = &EntityData::rot;
+        self_data["rotX"] = &EntityData::rotX;
+        self_data["rotY"] = &EntityData::rotY;
+        self_data["vflip"] = &EntityData::vflip;
+        self_data["hflip"] = &EntityData::hflip;
+
+        lua.newVar<EntityData*>("self", data);
+
         lua.gLu()->set_function("playAnim", &ScriptComponent::playAnim, this);
+        lua.gLu()->set_function("resetRotPos", &ScriptComponent::resetRotPos, this);
         lua.gLu()->set_function("addBinding", &InputManager::addBinding, inputManager);
         lua.gLu()->set_function("refreshBindings", &InputManager::refreshBindings, inputManager);
         lua.gLu()->set_function("isPressed", &InputManager::isPressed, inputManager);
@@ -46,43 +58,22 @@ public:
         inputManager->refreshBindings();
     }
 
-    float getX() {
-        return data->x;
-    }
-
-    float getY() {
-        return data->y;
-    }
-
-    int getEW() {
-        return data->windowWidth;
-    }
-
-    int getEH() {
-        return data->windowHeight;
-    }
-
-    void setPos(float x, float y) {
-        data->x = x;
-        data->y = y;
-    }
-
-    void setX(float x) {
-        data->x = x;
-    }
-
-    void setY(float y) {
-        data->y = y;
-    }
-
     void update() {
         lua.runScript();
     }
 
     void playAnim(int animId, int ms) {
-        entity->getComponent<SpriteComponent>().playAnim(animId, ms);
+        try {
+            entity->getComponent<SpriteComponent>().playAnim(animId, ms);
+        } catch(...) {}
     }
 
+    void resetRotPos() {
+        try {
+            data->rotX = data->w / 2.0;
+            data->rotY = data->h / 2.0;
+        } catch(...) {}
+    }
 private:
     EntityData* data;
     InputManager* inputManager = new InputManager();

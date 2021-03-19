@@ -114,11 +114,12 @@ class Manager{
 public:
     void multithreaded_update(int maxThreads){
         while(maxThreads < threads.size()) {
+            threads.back()->halt();
             threads.pop_back();
         }
         while(maxThreads > threads.size()) {
-            threads.push_back(new QueueingThread<Entity>(200));
-            //The higher the que size the higher the memory usage.
+            threads.push_back(new QueueingThread<Entity>(-1));
+            //The higher the que size the higher the memory usage. -1 for no limit (Not recommended)
         }
 
         int perThread = entityList.size() / maxThreads;

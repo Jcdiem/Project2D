@@ -34,7 +34,10 @@
     },
     "values": {
       "x": 200,
-      "y": 200
+      "y": 200,
+      "rot": 0,
+      "vflip": false,
+      "hflip": false
     }
   }
 }

@@ -6,11 +6,22 @@ LuaEngine::LuaEngine() {
 
 void LuaEngine::initScript(std::string script) {
     lua.script(script, &sol::script_default_on_error);
-    lua["init"]();
+
+    try {
+        lua.unsafe_script("init()");
+    }
+    catch( const sol::error& e ) {
+        std::cout << "An unexpected error has occurred:\n    " << e.what() << std::endl;
+    }
 }
 
 void LuaEngine::runScript() {
-    lua["main"]();
+    try {
+        lua.unsafe_script("main()");
+    }
+    catch( const sol::error& e ) {
+        std::cout << "an expected error has occurred:\n" << e.what() << std::endl;
+    }
 }
 
 void LuaEngine::updScript(std::string script) {

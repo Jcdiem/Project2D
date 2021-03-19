@@ -12,6 +12,7 @@ class SpriteComponent : public Component{
 public:
     SpriteComponent(std::vector<animToolkit::animation*> anims){
         this->anims = anims;
+
         srcRect.y = 0;
         curAnim = anims[0];
         curFrame = lastFrame = 0;
@@ -19,8 +20,10 @@ public:
 
     void init() override{
         data = &entity->getComponent<EntityData>();
-
         playAnim(0, -1);
+
+        srcRect.w = curAnim->width;
+        srcRect.h = curAnim->height;
     }
 
     void playAnim(int animId, int loops) { //Ideally should be in loops instead of time period
@@ -39,10 +42,19 @@ public:
     void update() override{
         srcRect.w = curAnim->width;
         srcRect.h = curAnim->height;
-        destRect.w = curAnim->dwidth;
-        destRect.h = curAnim->dheight;
+
+        destRect.w = int(data->w);
+        destRect.h = int(data->h);
         destRect.x = int(data->x);
         destRect.y = int(data->y);
+
+        flipStatus = SDL_FLIP_NONE;
+
+        if(data->hflip) flipStatus = (SDL_RendererFlip)(flipStatus | SDL_FLIP_HORIZONTAL);
+        if(data->vflip) flipStatus = (SDL_RendererFlip)(flipStatus | SDL_FLIP_VERTICAL);
+
+        rotPoint.x = int(data->rotX);
+        rotPoint.y = int(data->rotY);
 
         std::chrono::time_point<std::chrono::steady_clock> curTime = std::chrono::steady_clock::now();
         int timeSince = std::chrono::duration_cast<std::chrono::milliseconds>(curTime-animTimer).count();
@@ -67,14 +79,14 @@ public:
 
         srcRect.x = curFrame * curAnim->width;
 
-        TextureHandler::Draw(curAnim->texture, srcRect, destRect);
+        //Allow rotation point to be set
+        TextureHandler::Draw(curAnim->texture, srcRect, destRect, data->rot, rotPoint, flipStatus);
     }
-
+private:
     void restartTimers() {
         frameTimer = animTimer = std::chrono::steady_clock::now();
     }
 
-private:
     std::vector<animToolkit::animation*> anims;
 
     animToolkit::animation* curAnim;
@@ -84,6 +96,10 @@ private:
 
     int lastFrame;
     int curFrame;
+
+
+    SDL_RendererFlip flipStatus;
+    SDL_Point rotPoint;
 
     EntityData* data;
 

@@ -12,13 +12,14 @@ struct EntityData : public Component {
 //    positionData
     float x;
     float y;
+    float w;
+    float h;
+    float rotX;
+    float rotY;
+    float rot;
+    bool vflip;
+    bool hflip;
 //    positionData
-
-//    animData
-    bool updAnim = false;
-    int animId;
-    int loops = -1;
-//    animData
 };
 
 #endif //PROJECT2D_ENTITYDATA_H

@@ -76,6 +76,21 @@ void ObjectBuilder::objFromJson(Manager* man, const char* path) {
         if(kvPair.key() == "y") {
             eData->y = kvPair.value().get<float>();
         }
+        if(kvPair.key() == "rotX") {
+            eData->rotX = kvPair.value().get<float>();
+        }
+        if(kvPair.key() == "rotY") {
+            eData->rotY = kvPair.value().get<float>();
+        }
+        if(kvPair.key() == "rot") {
+            eData->rot = kvPair.value().get<float>();
+        }
+        if(kvPair.key() == "vflip") {
+            eData->vflip = kvPair.value().get<bool>();
+        }
+        if(kvPair.key() == "hflip") {
+            eData->hflip = kvPair.value().get<bool>();
+        }
     }
 
     for(auto component = components.begin(); component != components.end(); ++component)
