@@ -1,6 +1,7 @@
 #pragma once
 #ifndef PROJECT2DTD_ENTITYCOMPONENTSYSTEM_H
 #define PROJECT2DTD_ENTITYCOMPONENTSYSTEM_H
+#include <utility>
 #include <vector>
 #include <memory>
 #include <algorithm>
@@ -61,7 +62,6 @@ public:
 //Entity interface
 class Entity{
 public:
-
     void update(){
         //iterate through all the Components and tell them to draw/update
         for (auto& component : componentList) component->update();
@@ -102,7 +102,35 @@ public:
         return *static_cast<type*>(ptr); //return pointer of component
     }
 
+    void setName(std::string name) {
+        this->name = std::move(name);
+    }
+
+    std::string getName() {
+        return name;
+    }
+
+    void setParent(Entity* parent) {
+        this->parent = parent;
+    }
+
+    Entity* getParent() {
+        return parent;
+    }
+
+    void addChild(Entity* child) {
+        children.emplace_back(child);
+    }
+
+    std::vector<Entity*> getChildren() {
+        return children;
+    }
+
 private:
+    std::string name;
+    Entity* parent;
+    std::vector<Entity*> children;
+
     bool active = true;
     std::vector<std::unique_ptr<Component>> componentList;
 

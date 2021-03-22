@@ -198,7 +198,6 @@ int main(int argc, char* argv[]) {
 
 
             //! MAIN LOOP CALLS
-//            engine->handleEvents(); Events on separate thread
 //            engine->render(); Rendering on separate thread
             engine->update();
             //! MAIN LOOP CALLS

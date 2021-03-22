@@ -1,7 +1,6 @@
 #include "ObjectBuilder.h"
 
-const char *nullLevel = "assets/levels/null.json";
-const char *nullObj = "assets/objects/null.json";
+#include <utility>
 
 std::vector<std::string> ObjectBuilder::genLevelList() {
     std::vector<std::string> levelList;
@@ -21,7 +20,6 @@ std::vector<std::string> ObjectBuilder::genLevelList() {
         }
         catch(...) {
             std::cout << "Failed to get object path, does it exist?" << std::endl;
-            levelList.emplace_back(std::string(nullLevel));
         }
     }
 
@@ -39,32 +37,49 @@ void ObjectBuilder::genObjs(Manager* man, std::string levelPath) {
 
     for (auto obj = file.begin(); obj != file.end(); ++obj)
     {
-        try{
-            objFromJson(man, &std::string(obj.value())[0]);
-        }
-        catch(...) {
-            std::cout << "Failed to create object from " << obj.value() << ", either object is malformed or does not exist." << std::endl;
-            objFromJson(man, nullObj);
-        }
+        recurseChildren(man, obj, nullptr);
     }
 }
 
-void ObjectBuilder::objFromJson(Manager* man, const char* path) {
-    auto &curObjPtr(man->addEntity());
+Entity* ObjectBuilder::recurseChildren(Manager* man, auto root, Entity* parent) {
+    try {
+        auto entity = objFromJson(man, root.value()["self"], root.key(), parent);
+
+        if(root->contains("children")) {
+            for (auto child = root.value()["children"].begin(); child != root.value()["children"].end(); ++child) {
+                auto childEntity = recurseChildren(man, child, entity);
+                entity->addChild(childEntity);
+            }
+        }
+    }
+    catch(...) {
+        std::cout << "Failed to create object from " << root.value() << ", either object is malformed or does not exist." << std::endl;
+    }
+}
+
+Entity* ObjectBuilder::objFromJson(Manager* man, std::string path, std::string name, Entity* parent) {
+    auto& curObj = man->addEntity();
+
+    curObj.setName(std::move(name));
+
+    if(parent) {
+        curObj.setParent(parent);
+    }
+
     nlohmann::json file;
 
     try {
         file = nlohmann::json::parse(std::fstream(path), nullptr, true, true).front();
     }
     catch(nlohmann::json::exception &e) {
-        std::throw_with_nested(std::runtime_error(std::string(path).append(" could not be found...")));
+        std::throw_with_nested(std::runtime_error(path.append(" could not be found...")));
     }
 
     nlohmann::json components = file["components"];
     nlohmann::json values = file["values"];
 
-    curObjPtr.addComponent<EntityData>();
-    EntityData* eData = &curObjPtr.getComponent<EntityData>();
+    curObj.addComponent<EntityData>();
+    EntityData* eData = &curObj.getComponent<EntityData>();
 
     eData->windowWidth = man->getWW();
     eData->windowHeight = man->getWH();
@@ -97,7 +112,7 @@ void ObjectBuilder::objFromJson(Manager* man, const char* path) {
     {
         if(component.key() == "ScriptComponent") {
             auto scriptPath = component.value()["path"].get<std::string>();
-            curObjPtr.addComponent<ScriptComponent>(&scriptPath[0]);
+            curObj.addComponent<ScriptComponent>(&scriptPath[0]);
         }
         if(component.key() == "SpriteComponent") {
             std::vector<animToolkit::animation*> animArray;
@@ -134,7 +149,9 @@ void ObjectBuilder::objFromJson(Manager* man, const char* path) {
 
                 animArray.emplace_back(curAnim);
             }
-            curObjPtr.addComponent<SpriteComponent>(animArray);
+            curObj.addComponent<SpriteComponent>(animArray);
         }
     }
+
+    return &curObj;
 }
