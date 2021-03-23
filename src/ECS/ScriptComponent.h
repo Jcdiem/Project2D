@@ -27,7 +27,7 @@ public:
                       std::istreambuf_iterator<char>());
     }
 
-    void init() {
+    void init() override {
         data = &entity->getComponent<EntityData>();
 
         sol::usertype<EntityData> entity_data =
@@ -49,6 +49,17 @@ public:
 
         lua.newVar<EntityData*>("self", data);
 
+        Entity* parent = this->entity->getParent();
+        if(parent) {
+            EntityData* parentData = &parent->getComponent<EntityData>();
+            if(parentData) {
+                lua.newVar<EntityData*>("parent", parentData);
+            }
+        }
+
+        //Get children
+        lua.newVar("children", entity->getChildren());
+
         lua.gLu()->set_function("playAnim", &ScriptComponent::playAnim, this);
         lua.gLu()->set_function("resetRotPos", &ScriptComponent::resetRotPos, this);
         lua.gLu()->set_function("addBinding", &InputManager::addBinding, inputManager);
@@ -60,7 +71,7 @@ public:
         inputManager->refreshBindings();
     }
 
-    void update() {
+    void update() override {
         lua.runScript();
     }
 

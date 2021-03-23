@@ -56,6 +56,8 @@ Entity* ObjectBuilder::recurseChildren(Manager* man, auto root, Entity* parent) 
             }
         }
 
+        entity->init();
+
         return entity;
     }
     catch(...) {

@@ -63,6 +63,9 @@ public:
     void draw(){
         for (auto& component : componentList) component->draw();
     }
+    void init() {
+        for (auto& component : componentList) component->init();
+    }
     [[nodiscard]] bool isActive() const {
         return active;
     }
@@ -86,7 +89,7 @@ public:
         compArray[getComponentTypeId<type>()] = component; //Add component to array of related Components
         compBitSet[getComponentTypeId<type>()] = true; //Set the bit for this component being used with the entity (For masking)
 
-        component->init();
+//        component->init(); Init is now run by object builder for safety.
 
         return *component;
     }
@@ -167,6 +170,10 @@ public:
 
     void draw(){
         for (auto& entity : entityList) entity->draw();
+    }
+
+    void init(){
+        for (auto& entity : entityList) entity->init();
     }
 
     void refresh(){ //Delete inactive entities

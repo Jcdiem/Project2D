@@ -55,7 +55,6 @@ public:
                     data->realY += parentData->y;
                 }
             }
-
         } catch(...){}
 
         destRect.x = int(data->realX);

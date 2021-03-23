@@ -18,7 +18,7 @@ namespace ObjectBuilder {
     Entity* objFromJson(Manager* man, std::string path, std::string name, Entity* parent);
 
     template<typename T>
-    T getValue(std::string filePath, std::string value) {
+    T getValue(const std::string& filePath, const std::string& value) {
         nlohmann::json file = nlohmann::json::parse(std::fstream(filePath), nullptr, true, true);
         return file[value].get<T>();
     }
