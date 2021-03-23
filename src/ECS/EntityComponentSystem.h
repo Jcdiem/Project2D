@@ -119,8 +119,8 @@ public:
         children.push_back(child);
     }
 
-    std::vector<Entity*> getChildren() {
-        return children;
+    std::vector<Entity*>* getChildren() {
+        return &children;
     }
 
 private:

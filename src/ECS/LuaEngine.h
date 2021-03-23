@@ -12,9 +12,9 @@ class LuaEngine
 public:
     LuaEngine();
 
-    void initScript(std::string script);
+    void initScript(const std::string& script);
     void runScript();
-    void updScript(std::string script);
+    void updScript(const std::string& script);
 
     sol::state* gLu();
 

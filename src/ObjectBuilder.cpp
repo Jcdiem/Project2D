@@ -56,7 +56,11 @@ Entity* ObjectBuilder::recurseChildren(Manager* man, auto root, Entity* parent) 
             }
         }
 
-        entity->init();
+        try{
+            entity->init();
+        } catch(...) {
+            std::cout << "During initialization of object " << entity->getName() << " an error occured." << std::endl;
+        }
 
         return entity;
     }

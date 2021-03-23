@@ -49,7 +49,7 @@ public:
 
         lua.newVar<EntityData*>("self", data);
 
-        Entity* parent = this->entity->getParent();
+        Entity* parent = entity->getParent();
         if(parent) {
             EntityData* parentData = &parent->getComponent<EntityData>();
             if(parentData) {
@@ -58,7 +58,11 @@ public:
         }
 
         //Get children
-        lua.newVar("children", entity->getChildren());
+        for(Entity* child : *entity->getChildren()) {
+            childData.push_back(&child->getComponent<EntityData>());
+        }
+
+        lua.newVar("children", childData);
 
         lua.gLu()->set_function("playAnim", &ScriptComponent::playAnim, this);
         lua.gLu()->set_function("resetRotPos", &ScriptComponent::resetRotPos, this);
@@ -89,6 +93,8 @@ public:
     }
 private:
     EntityData* data;
+    std::vector<EntityData*> childData{};
+
     InputManager* inputManager = new InputManager();
 
     char* path;
