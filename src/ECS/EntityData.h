@@ -11,7 +11,9 @@ struct EntityData : public Component {
 
 //    positionData
     float x;
+    float realX; //Based on position of parents and self, do not write!
     float y;
+    float realY; //Based on position of parents and self, do not write!
     float w;
     float h;
     float rotX;

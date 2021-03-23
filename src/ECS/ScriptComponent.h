@@ -30,20 +30,22 @@ public:
     void init() {
         data = &entity->getComponent<EntityData>();
 
-        sol::usertype<EntityData> self_data =
+        sol::usertype<EntityData> entity_data =
                 lua.gLu()->new_usertype<EntityData>("data", sol::no_constructor);
 
-        self_data["EW"] = &EntityData::windowWidth;
-        self_data["EH"] = &EntityData::windowHeight;
-        self_data["x"] = &EntityData::x;
-        self_data["y"] = &EntityData::y;
-        self_data["w"] = &EntityData::w;
-        self_data["h"] = &EntityData::h;
-        self_data["rot"] = &EntityData::rot;
-        self_data["rotX"] = &EntityData::rotX;
-        self_data["rotY"] = &EntityData::rotY;
-        self_data["vflip"] = &EntityData::vflip;
-        self_data["hflip"] = &EntityData::hflip;
+        entity_data["EW"] = &EntityData::windowWidth;
+        entity_data["EH"] = &EntityData::windowHeight;
+        entity_data["x"] = &EntityData::x;
+        entity_data["y"] = &EntityData::y;
+        entity_data["realX"] = sol::readonly(&EntityData::realX);
+        entity_data["realY"] = sol::readonly(&EntityData::realY);
+        entity_data["w"] = &EntityData::w;
+        entity_data["h"] = &EntityData::h;
+        entity_data["rot"] = &EntityData::rot;
+        entity_data["rotX"] = &EntityData::rotX;
+        entity_data["rotY"] = &EntityData::rotY;
+        entity_data["vflip"] = &EntityData::vflip;
+        entity_data["hflip"] = &EntityData::hflip;
 
         lua.newVar<EntityData*>("self", data);
 

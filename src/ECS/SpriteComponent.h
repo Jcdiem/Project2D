@@ -43,8 +43,23 @@ public:
         srcRect.w = curAnim->width;
         srcRect.h = curAnim->height;
 
-        destRect.x = int(data->x);
-        destRect.y = int(data->y);
+        data->realX = data->x;
+        data->realY = data->y;
+
+        try {
+            Entity* parent = this->entity->getParent();
+            if(parent) {
+                EntityData* parentData = &parent->getComponent<EntityData>();
+                if(parentData) {
+                    data->realX += parentData->x;
+                    data->realY += parentData->y;
+                }
+            }
+
+        } catch(...){}
+
+        destRect.x = int(data->realX);
+        destRect.y = int(data->realY);
         destRect.w = int(data->w);
         destRect.h = int(data->h);
 

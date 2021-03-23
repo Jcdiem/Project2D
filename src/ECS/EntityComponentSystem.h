@@ -37,12 +37,8 @@ constexpr std::size_t maxComponents = 32; //Max classes an entity can have
 using componentBitSet = std::bitset<maxComponents>; //Sets the bitmask for Components
 using componentArray = std::array<Component*,maxComponents>; //Array of pointers for Components
 
+//! COMPONENT CLASS
 
-
-
-
-
-//interface for Component
 class Component{
 public:
     Entity* entity{};
@@ -54,14 +50,12 @@ public:
     virtual ~Component()= default;
 };
 
+//! ENTITY CLASS
 
-
-
-
-
-//Entity interface
 class Entity{
 public:
+    Manager* manager{};
+
     void update(){
         //iterate through all the Components and tell them to draw/update
         for (auto& component : componentList) component->update();
@@ -128,7 +122,7 @@ public:
 
 private:
     std::string name;
-    Entity* parent;
+    Entity* parent{};
     std::vector<Entity*> children;
 
     bool active = true;
@@ -137,6 +131,8 @@ private:
     componentArray compArray{};
     componentBitSet compBitSet;
 };
+
+//! MANAGER CLASS
 
 class Manager{
 public:
@@ -188,6 +184,8 @@ public:
     Entity& addEntity(){
         unsigned int lastSize = entityList.size();
         auto* entityPtr = new Entity();
+        entityPtr->manager = this;
+
         std::unique_ptr<Entity> uniquePtr(entityPtr);
         entityList.emplace_back(std::move(uniquePtr));
 
@@ -206,11 +204,11 @@ public:
         windowH = height;
     }
 
-    int getWW() const {
+    [[nodiscard]] int getWW() const {
         return windowW;
     }
 
-    int getWH() const {
+    [[nodiscard]] int getWH() const {
         return windowH;
     }
 

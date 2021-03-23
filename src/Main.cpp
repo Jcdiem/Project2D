@@ -40,9 +40,9 @@ void renderThread(Engine* engine, bool debug, int framerate) {
 void exitListener(Engine* engine) {
     SDL_Event event;
 
-    while(event.type != SDL_QUIT) {
+    do {
         SDL_WaitEvent(&event);
-    }
+    } while(event.type != SDL_QUIT);
 
     engine->quit();
 }

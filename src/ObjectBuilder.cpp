@@ -61,7 +61,7 @@ Entity* ObjectBuilder::recurseChildren(Manager* man, auto root, Entity* parent) 
     catch(...) {
         std::cout << "Failed to create object from " << root.value() << ", either object is malformed or does not exist." << std::endl;
     }
-    
+
     return nullptr;
 }
 
