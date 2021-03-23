@@ -119,7 +119,7 @@ public:
     }
 
     void addChild(Entity* child) {
-        children.emplace_back(child);
+        children.push_back(child);
     }
 
     std::vector<Entity*> getChildren() {
@@ -141,16 +141,16 @@ private:
 class Manager{
 public:
     void multithreaded_update(int maxThreads){
-        while(maxThreads < threads.size()) {
+        while(maxThreads < int(threads.size())) {
             threads.back()->halt();
             threads.pop_back();
         }
-        while(maxThreads > threads.size()) {
+        while(maxThreads > int(threads.size())) {
             threads.push_back(new QueueingThread<Entity>(-1));
             //The higher the que size the higher the memory usage. -1 for no limit (Not recommended)
         }
 
-        int perThread = entityList.size() / maxThreads;
+        int perThread = int(entityList.size()) / maxThreads;
 
         int i = 0;
         int j = 0;
@@ -160,7 +160,7 @@ public:
             }
         }
 
-        for(; j < entityList.size(); j++) {
+        for(; j < int(entityList.size()); j++) {
             threads[i]->que(entityList[j].get());
         }
     }

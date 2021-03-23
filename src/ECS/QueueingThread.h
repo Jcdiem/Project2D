@@ -22,7 +22,7 @@ public:
     }
 
     void que(type* entity) {
-        if(queue.size() < maxQue || maxQue == -1) {
+        if(int(queue.size()) < maxQue || maxQue == -1) {
             queue.push(entity);
 
             if(locked) {

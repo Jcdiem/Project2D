@@ -47,14 +47,22 @@ Entity* ObjectBuilder::recurseChildren(Manager* man, auto root, Entity* parent) 
 
         if(root->contains("children")) {
             for (auto child = root.value()["children"].begin(); child != root.value()["children"].end(); ++child) {
-                auto childEntity = recurseChildren(man, child, entity);
-                entity->addChild(childEntity);
+                try {
+                    auto childEntity = recurseChildren(man, child, entity);
+                    entity->addChild(childEntity);
+                } catch(...) {
+                    std::cout << "Failed to create child of object: " << root.key() << std::endl;
+                }
             }
         }
+
+        return entity;
     }
     catch(...) {
         std::cout << "Failed to create object from " << root.value() << ", either object is malformed or does not exist." << std::endl;
     }
+    
+    return nullptr;
 }
 
 Entity* ObjectBuilder::objFromJson(Manager* man, std::string path, std::string name, Entity* parent) {
