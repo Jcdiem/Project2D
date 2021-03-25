@@ -23,6 +23,7 @@ executable(
 	sources:[
 	    'src/ECS/LuaEngine.cpp',
 	    'src/ECS/InputManager.cpp',
+	    'src/ECS/EntityWrapper.cpp',
 		'src/ObjectBuilder.cpp',
 		'src/TextureHandler.cpp',
 		'src/Canvas_LayerData.cpp',

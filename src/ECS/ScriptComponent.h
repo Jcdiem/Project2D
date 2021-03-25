@@ -7,12 +7,12 @@
 #include <streambuf>
 
 #include "EntityComponentSystem.h"
+#include "EntityWrapper.h"
 #include "LuaEngine.h"
-#include "InputManager.h"
 
 class ScriptComponent : public Component{
 public:
-    ScriptComponent(char* path) {
+    ScriptComponent(const std::string& path) {
         this->path = path;
 
         std::ifstream t(path);
@@ -28,76 +28,58 @@ public:
     }
 
     void init() override {
-        data = &entity->getComponent<EntityData>();
-
-        sol::usertype<EntityData> entity_data =
-                lua.gLu()->new_usertype<EntityData>("data", sol::no_constructor);
-
-        entity_data["EW"] = &EntityData::windowWidth;
-        entity_data["EH"] = &EntityData::windowHeight;
-        entity_data["x"] = &EntityData::x;
-        entity_data["y"] = &EntityData::y;
-        entity_data["realX"] = sol::readonly(&EntityData::realX);
-        entity_data["realY"] = sol::readonly(&EntityData::realY);
-        entity_data["w"] = &EntityData::w;
-        entity_data["h"] = &EntityData::h;
-        entity_data["rot"] = &EntityData::rot;
-        entity_data["rotX"] = &EntityData::rotX;
-        entity_data["rotY"] = &EntityData::rotY;
-        entity_data["vflip"] = &EntityData::vflip;
-        entity_data["hflip"] = &EntityData::hflip;
-
-        lua.newVar<EntityData*>("self", data);
-
-        Entity* parent = entity->getParent();
-        if(parent) {
-            EntityData* parentData = &parent->getComponent<EntityData>();
-            if(parentData) {
-                lua.newVar<EntityData*>("parent", parentData);
-            }
+        self = EntityWrapper(entity);
+        if(entity->getParent()) {
+            parent = EntityWrapper(entity->getParent());
         }
 
-        //Get children
-        for(Entity* child : *entity->getChildren()) {
-            childData.push_back(&child->getComponent<EntityData>());
+        sol::usertype<EntityWrapper> entity_data =
+                lua.gLu()->new_usertype<EntityWrapper>("entity", sol::no_constructor);
+
+//        entity_data["EW"] = &DataComponent::windowWidth; //Should be global variable instead
+//        entity_data["EH"] = &DataComponent::windowHeight; //^^
+
+        //Data Variables
+        entity_data["x"] = sol::property(&EntityWrapper::getX, &EntityWrapper::setX);
+        entity_data["y"] = sol::property(&EntityWrapper::getY, &EntityWrapper::setY);
+        entity_data["realX"] = sol::property(&EntityWrapper::getRealX);
+        entity_data["realY"] = sol::property(&EntityWrapper::getRealY);
+        entity_data["w"] = sol::property(&EntityWrapper::getW, &EntityWrapper::setW);
+        entity_data["h"] = sol::property(&EntityWrapper::getH, &EntityWrapper::setH);
+        entity_data["rot"] = sol::property(&EntityWrapper::getRot, &EntityWrapper::setRot);
+        entity_data["rotX"] = sol::property(&EntityWrapper::getRotX, &EntityWrapper::setRotX);
+        entity_data["rotY"] = sol::property(&EntityWrapper::getRotY, &EntityWrapper::setRotY);
+        entity_data["vflip"] = sol::property(&EntityWrapper::getVFlip, &EntityWrapper::setVFlip);
+        entity_data["hflip"] = sol::property(&EntityWrapper::getHFlip, &EntityWrapper::setHFlip);
+
+        //Methods
+        entity_data["resetRotPos"] = &EntityWrapper::resetRotPos;
+        entity_data["playAnim"] = &EntityWrapper::playAnim;
+        entity_data["addBinding"] = &EntityWrapper::addBinding;
+        entity_data["isPressed"] = &EntityWrapper::isPressed;
+        entity_data["refreshBindings"] = &EntityWrapper::refreshBindings;
+
+        lua.newVar("EW", entity->getComponent<DataComponent>().windowWidth);
+        lua.newVar("EH", entity->getComponent<DataComponent>().windowHeight);
+
+        lua.newVar<EntityWrapper>("self", self);
+
+        if(entity->getParent()) {
+            lua.newVar<EntityWrapper>("parent", parent);
         }
-
-        lua.newVar("children", childData);
-
-        lua.gLu()->set_function("playAnim", &ScriptComponent::playAnim, this);
-        lua.gLu()->set_function("resetRotPos", &ScriptComponent::resetRotPos, this);
-        lua.gLu()->set_function("addBinding", &InputManager::addBinding, inputManager);
-        lua.gLu()->set_function("refreshBindings", &InputManager::refreshBindings, inputManager);
-        lua.gLu()->set_function("isPressed", &InputManager::isPressed, inputManager);
 
         lua.initScript(script);
-
-        inputManager->refreshBindings();
     }
 
     void update() override {
         lua.runScript();
     }
-
-    void playAnim(int animId, int ms) {
-        try {
-            entity->getComponent<SpriteComponent>().playAnim(animId, ms);
-        } catch(...) {}
-    }
-
-    void resetRotPos() {
-        try {
-            data->rotX = data->w / 2.0;
-            data->rotY = data->h / 2.0;
-        } catch(...) {}
-    }
 private:
-    EntityData* data;
-    std::vector<EntityData*> childData{};
+    EntityWrapper self;
+    EntityWrapper parent;
+    std::vector<EntityWrapper> children;
 
-    InputManager* inputManager = new InputManager();
-
-    char* path;
+    std::string path;
 
     LuaEngine lua;
     std::string script;

@@ -4,7 +4,7 @@
 
 //Include order matters, last has access to prior, first does not have access to later
 #include "EntityComponentSystem.h"
-#include "EntityData.h"
+#include "DataComponent.h"
 #include "SpriteComponent.h"
 #include "ScriptComponent.h"
 

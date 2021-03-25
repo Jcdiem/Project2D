@@ -1,16 +1,18 @@
 function init()
 -- You **MUST** declare what inputs you want to use at some point
-    addBinding("move_up")
-    addBinding("move_down")
-    addBinding("move_left")
-    addBinding("move_right")
+    self:addBinding("move_up")
+    self:addBinding("move_down")
+    self:addBinding("move_left")
+    self:addBinding("move_right")
 
-    addBinding("move_up_fast")
-    addBinding("move_down_fast")
-    addBinding("move_left_fast")
-    addBinding("move_right_fast")
+    self:addBinding("move_up_fast")
+    self:addBinding("move_down_fast")
+    self:addBinding("move_left_fast")
+    self:addBinding("move_right_fast")
 
--- This function call does not work as it is overwritten by some internal calls
+    self:refreshBindings()
+
+-- This function call may not work as it __may__ be overwritten by some internal calls
 -- (in the init function, it works elsewhere)
 --    resetRotPos()
 
@@ -22,65 +24,67 @@ function main()
     xStep = xStep * 0.99
     yStep = yStep * 0.99
 
+
+
     if not (parent == nil) then
         self.rotX = parent.x - self.realX
         self.rotY = parent.y - self.realY
     end
     if parent == nil then
-        if(isPressed("move_up"))
+        if(self:isPressed("move_up"))
         then
             yStep = yStep - 0.25
         end
-        if(isPressed("move_down"))
+        if(self:isPressed("move_down"))
         then
             yStep = yStep + 0.25
         end
 
-        if(isPressed("move_left"))
+        if(self:isPressed("move_left"))
         then
             xStep = xStep - 0.25
         end
-        if(isPressed("move_right"))
+        if(self:isPressed("move_right"))
         then
             xStep = xStep + 0.25
         end
 
-        if(isPressed("move_up_fast"))
+        if(self:isPressed("move_up_fast"))
         then
             yStep = yStep - 1
         end
-        if(isPressed("move_down_fast"))
+        if(self:isPressed("move_down_fast"))
         then
             yStep = yStep + 1
         end
 
-        if(isPressed("move_left_fast"))
+        if(self:isPressed("move_left_fast"))
         then
             xStep = xStep - 1
         end
-        if(isPressed("move_right_fast"))
+        if(self:isPressed("move_right_fast"))
         then
             xStep = xStep + 1
         end
 
-        if(self.x + xStep > 0 and self.x + xStep < self.EW - 200)
+        if(self.x + xStep > 0 and self.x + xStep < EW - 200)
         then
             self.x = self.x + xStep
         else
             xStep = xStep * -1
             self.x = self.x + xStep
             self.hflip = not self.hflip;
-            playAnim(2, 1)
+            self:playAnim(2, 1)
         end
 
-        if(self.y + yStep > 0 and self.y + yStep < self.EH - 82)
+        if(self.y + yStep > 0 and self.y + yStep < EH - 82)
         then
             self.y = self.y + yStep
         else
             yStep = yStep * -1
             self.y = self.y + yStep
             self.vflip = not self.vflip;
-            playAnim(2, 1)
+            self:playAnim(2, 1)
         end
     end
 

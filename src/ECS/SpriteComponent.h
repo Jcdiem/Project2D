@@ -19,14 +19,14 @@ public:
     }
 
     void init() override{
-        data = &entity->getComponent<EntityData>();
+        data = &entity->getComponent<DataComponent>();
         playAnim(0, -1);
 
         data->w = curAnim->dwidth;
         data->h = curAnim->dheight;
     }
 
-    void playAnim(int animId, int loops) { //Ideally should be in loops instead of time period
+    void playAnim(int animId, int loops) {
         curAnim = anims[animId];
         restartTimers();
 
@@ -49,7 +49,7 @@ public:
         try {
             Entity* parent = this->entity->getParent();
             if(parent) {
-                EntityData* parentData = &parent->getComponent<EntityData>();
+                DataComponent* parentData = &parent->getComponent<DataComponent>();
                 if(parentData) {
                     data->realX += parentData->x;
                     data->realY += parentData->y;
@@ -114,7 +114,7 @@ private:
     SDL_RendererFlip flipStatus;
     SDL_Point rotPoint;
 
-    EntityData* data;
+    DataComponent* data;
 
     std::chrono::time_point<std::chrono::steady_clock> frameTimer;
     std::chrono::time_point<std::chrono::steady_clock> animTimer;

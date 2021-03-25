@@ -92,8 +92,8 @@ Entity* ObjectBuilder::objFromJson(Manager* man, std::string path, std::string n
     nlohmann::json components = file["components"];
     nlohmann::json values = file["values"];
 
-    curObj.addComponent<EntityData>();
-    EntityData* eData = &curObj.getComponent<EntityData>();
+    curObj.addComponent<DataComponent>();
+    DataComponent* eData = &curObj.getComponent<DataComponent>();
 
     eData->windowWidth = man->getWW();
     eData->windowHeight = man->getWH();
@@ -126,7 +126,7 @@ Entity* ObjectBuilder::objFromJson(Manager* man, std::string path, std::string n
     {
         if(component.key() == "ScriptComponent") {
             auto scriptPath = component.value()["path"].get<std::string>();
-            curObj.addComponent<ScriptComponent>(&scriptPath[0]);
+            curObj.addComponent<ScriptComponent>(scriptPath);
         }
         if(component.key() == "SpriteComponent") {
             std::vector<animToolkit::animation*> animArray;
