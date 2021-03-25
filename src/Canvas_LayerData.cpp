@@ -1,4 +1,4 @@
-#include "../include/Canvas_LayerData.h"
+#include "Canvas_LayerData.h"
 
 Canvas_LayerData::Canvas_LayerData(SDL_Texture* texture_ptr, int sizeX, int sizeY, int xOffset, int yOffset){
 

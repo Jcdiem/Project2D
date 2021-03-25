@@ -1,11 +1,16 @@
+#pragma once
 #ifndef PROJECT2DTD_ENTITYCOMPONENTSYSTEM_H
 #define PROJECT2DTD_ENTITYCOMPONENTSYSTEM_H
+#include <utility>
 #include <vector>
 #include <memory>
 #include <algorithm>
 #include <bitset>
 #include <array>
 #include <iostream>
+#include <thread>
+
+#include "QueueingThread.h"
 
 // Design pattern by Vittorio Romeo
 // https://vittorioromeo.info/
@@ -32,12 +37,8 @@ constexpr std::size_t maxComponents = 32; //Max classes an entity can have
 using componentBitSet = std::bitset<maxComponents>; //Sets the bitmask for Components
 using componentArray = std::array<Component*,maxComponents>; //Array of pointers for Components
 
+//! COMPONENT CLASS
 
-
-
-
-
-//interface for Component
 class Component{
 public:
     Entity* entity{};
@@ -49,14 +50,11 @@ public:
     virtual ~Component()= default;
 };
 
+//! ENTITY CLASS
 
-
-
-
-
-//Entity interface
 class Entity{
 public:
+    Manager* manager{};
 
     void update(){
         //iterate through all the Components and tell them to draw/update
@@ -65,10 +63,17 @@ public:
     void draw(){
         for (auto& component : componentList) component->draw();
     }
+    void init() {
+        for (auto& component : componentList) component->init();
+    }
     [[nodiscard]] bool isActive() const {
         return active;
     }
     void destroy(){
+        for(Entity* child : children) {
+            child->destroy();
+        }
+
         active = false;
     }
 
@@ -88,7 +93,7 @@ public:
         compArray[getComponentTypeId<type>()] = component; //Add component to array of related Components
         compBitSet[getComponentTypeId<type>()] = true; //Set the bit for this component being used with the entity (For masking)
 
-        component->init();
+//        component->init(); Init is now run by object builder for safety.
 
         return *component;
     }
@@ -98,7 +103,35 @@ public:
         return *static_cast<type*>(ptr); //return pointer of component
     }
 
+    void setName(std::string name) {
+        this->name = std::move(name);
+    }
+
+    std::string getName() {
+        return name;
+    }
+
+    void setParent(Entity* parent) {
+        this->parent = parent;
+    }
+
+    Entity* getParent() {
+        return parent;
+    }
+
+    void addChild(Entity* child) {
+        children.push_back(child);
+    }
+
+    std::vector<Entity*>* getChildren() {
+        return &children;
+    }
+
 private:
+    std::string name;
+    Entity* parent{};
+    std::vector<Entity*> children;
+
     bool active = true;
     std::vector<std::unique_ptr<Component>> componentList;
 
@@ -106,13 +139,45 @@ private:
     componentBitSet compBitSet;
 };
 
+//! MANAGER CLASS
+
 class Manager{
 public:
+    void multithreaded_update(int maxThreads){
+        while(maxThreads < int(threads.size())) {
+            threads.back()->halt();
+            threads.pop_back();
+        }
+        while(maxThreads > int(threads.size())) {
+            threads.push_back(new QueueingThread<Entity>(-1));
+            //The higher the que size the higher the memory usage. -1 for no limit (Not recommended)
+        }
+
+        int perThread = int(entityList.size()) / maxThreads;
+
+        int i = 0;
+        int j = 0;
+        for(; i < maxThreads - 1; i++) {
+            for(; j - i*perThread < perThread; j++) {
+                threads[i]->que(entityList[j].get());
+            }
+        }
+
+        for(; j < int(entityList.size()); j++) {
+            threads[i]->que(entityList[j].get());
+        }
+    }
+
     void update(){
         for (auto& entity : entityList) entity->update();
     }
+
     void draw(){
         for (auto& entity : entityList) entity->draw();
+    }
+
+    void init(){
+        for (auto& entity : entityList) entity->init();
     }
 
     void refresh(){ //Delete inactive entities
@@ -130,6 +195,8 @@ public:
     Entity& addEntity(){
         unsigned int lastSize = entityList.size();
         auto* entityPtr = new Entity();
+        entityPtr->manager = this;
+
         std::unique_ptr<Entity> uniquePtr(entityPtr);
         entityList.emplace_back(std::move(uniquePtr));
 
@@ -156,8 +223,20 @@ public:
         return windowH;
     }
 
+    std::vector<Entity*> search(std::string name) {
+        std::vector<Entity*> result;
+
+        for(auto& entity : entityList) {
+            if(entity->getName() == name) {
+                result.push_back(entity.get());
+            }
+        }
+        return result;
+    }
+
 private:
     std::vector<std::unique_ptr<Entity>> entityList; //List of entity pointers
+    std::vector<QueueingThread<Entity>*> threads;
 
     int windowW;
     int windowH;

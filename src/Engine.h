@@ -1,14 +1,19 @@
+#pragma once
 #ifndef PROJECT2DTD_ENGINE_H
 #define PROJECT2DTD_ENGINE_H
-#include "SDL2/SDL.h"
-#include "TextureHandler.h"
-#include "Canvas.h"
-#include "ECS/Components.h"
-#include "JParser.h"
-
+#include <SDL2/SDL.h>
 #include <chrono>
 #include <random>
 #include <iostream>
+#include <thread>
+#include <vector>
+
+#include "TextureHandler.h"
+#include "Canvas.h"
+#include "ObjectBuilder.h"
+
+#include "ECS/Components.h"
+#include "ECS/InputManager.h"
 
 class TextureHandler;
 
@@ -18,7 +23,7 @@ public:
     ~Engine();
 
 
-    void init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen, bool resizable);
+    void init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen, bool resizable, int threads);
 
     //void loadEntity(EntityType* entity);
 
@@ -26,6 +31,8 @@ public:
     void update();
     void render();
     void clean();
+    void quit();
+
     bool running() {
         return isRunning;
     }
@@ -39,9 +46,11 @@ private:
     static Canvas *gameCanvas;
     static int* engineWidth;
     static int* engineHeight;
+    bool multithread;
+    int threads;
 
     Manager manager;
-    JParser* jParser = new JParser(&manager);
+    std::vector<std::string> levelList;
 };
 
 #endif //PROJECT2DTD_ENGINE_H

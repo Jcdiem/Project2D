@@ -2,9 +2,11 @@
   "dvd": {
     "components": {
       "ScriptComponent": {
-        "X": 0,
-        "Y": 0,
-        "path": "assets/scripts/dvd.chai"
+        "path": "assets/scripts/dvd.lua",
+        "move_up": "up",
+        "move_down": "down",
+        "move_left": "left",
+        "move_right": "right"
       },
       "SpriteComponent": {
         "0": {
@@ -17,11 +19,25 @@
         "1": {
           "path": "assets/textures/dvd.png",
           "width": 200,
-          "height": 82,
-          "frames": 1,
-          "framerate": 1
+          "height": 82
+        },
+        "2": {
+          "path": "assets/textures/explosion.png",
+          "width": 64,
+          "height": 64,
+          "dwidth": 200,
+          "dheight": 82,
+          "frames": 23,
+          "framerate": 24
         }
       }
+    },
+    "values": {
+      "x": 200,
+      "y": 200,
+      "rot": 0,
+      "vflip": false,
+      "hflip": false
     }
   }
 }

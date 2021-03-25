@@ -6,4 +6,5 @@ build/*
 !build/assets/
 venv/
 
-cmake-build-debug/CMakeFiles/
+cmake-build-debug/
+CMakeLists.txt

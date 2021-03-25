@@ -1,5 +1,15 @@
 {
   "objects": {
-    "dvd":    "assets/objects/dvd.json"
+    "dvd": {
+      "self": "assets/objects/dvd.json",
+      "children": {
+        "childDvd": {
+          "self": "assets/objects/dvd.json"
+        }
+      }
+    },
+    "dvdNoChildren": {
+      "self": "assets/objects/dvd.json"
+    }
   }
 }
