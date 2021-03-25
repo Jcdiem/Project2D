@@ -12,7 +12,7 @@
 
 class ScriptComponent : public Component{
 public:
-    ScriptComponent(const std::string& path) {
+     explicit ScriptComponent(const std::string& path) {
         this->path = path;
 
         std::ifstream t(path);
@@ -33,11 +33,12 @@ public:
             parent = EntityWrapper(entity->getParent());
         }
 
+        for(Entity* child : *entity->getChildren()) {
+            children.emplace_back(child);
+        }
+
         sol::usertype<EntityWrapper> entity_data =
                 lua.gLu()->new_usertype<EntityWrapper>("entity", sol::no_constructor);
-
-//        entity_data["EW"] = &DataComponent::windowWidth; //Should be global variable instead
-//        entity_data["EH"] = &DataComponent::windowHeight; //^^
 
         //Data Variables
         entity_data["x"] = sol::property(&EntityWrapper::getX, &EntityWrapper::setX);
@@ -67,6 +68,8 @@ public:
         if(entity->getParent()) {
             lua.newVar<EntityWrapper>("parent", parent);
         }
+
+        lua.newVar("children", children);
 
         lua.initScript(script);
     }

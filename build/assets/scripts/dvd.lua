@@ -14,7 +14,7 @@ function init()
 
 -- This function call may not work as it __may__ be overwritten by some internal calls
 -- (in the init function, it works elsewhere)
---    resetRotPos()
+--    self:resetRotPos()
 
     xStep = 0
     yStep = 0
@@ -24,7 +24,7 @@ function main()
     xStep = xStep * 0.99
     yStep = yStep * 0.99
 
-
+    print(children:size())
 
     if not (parent == nil) then
         self.rotX = parent.x - self.realX
