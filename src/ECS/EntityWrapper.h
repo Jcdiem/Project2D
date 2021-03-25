@@ -28,6 +28,7 @@ public:
     void setRotY(float rotationY);
     void setHFlip(bool b);
     void setVFlip(bool b);
+    void setHidden(bool b);
 
     //Getters
     float getX();
@@ -41,6 +42,7 @@ public:
     float getRotY();
     bool getHFlip();
     bool getVFlip();
+    bool getHidden();
 
     //SpriteComponent helpers
     void resetRotPos();
@@ -51,7 +53,17 @@ public:
     bool isPressed(std::string action);
     void refreshBindings();
 
+    //General Entity Helpers
+    void kill();
+    EntityWrapper getParent();
+    void setParent(EntityWrapper entity);
+    std::vector<EntityWrapper> getChildren();
+    void addChild(EntityWrapper entity);
+    Entity* getPtr();
+    Manager* getMan();
+
 private:
+    Entity* entity;
     DataComponent* dataPtr;
     SpriteComponent* spritePtr;
     InputManager inputManager;

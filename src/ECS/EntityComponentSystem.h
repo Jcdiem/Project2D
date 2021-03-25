@@ -70,6 +70,10 @@ public:
         return active;
     }
     void destroy(){
+        for(Entity* child : children) {
+            child->destroy();
+        }
+
         active = false;
     }
 
@@ -217,6 +221,17 @@ public:
 
     [[nodiscard]] int getWH() const {
         return windowH;
+    }
+
+    std::vector<Entity*> search(std::string name) {
+        std::vector<Entity*> result;
+
+        for(auto& entity : entityList) {
+            if(entity->getName() == name) {
+                result.push_back(entity.get());
+            }
+        }
+        return result;
     }
 
 private:

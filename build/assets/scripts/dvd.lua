@@ -24,11 +24,17 @@ function main()
     xStep = xStep * 0.99
     yStep = yStep * 0.99
 
-    print(children:size())
+    search("dvdNoChildren")[1]:resetRotPos()
+
+    if not (children[1] == nil) then
+        children[1]:kill();
+    end
 
     if not (parent == nil) then
         self.rotX = parent.x - self.realX
         self.rotY = parent.y - self.realY
+        --parent:kill()
+        --Killing a parent also kills the children (maybe this can be changed later?)
     end
     if parent == nil then
         if(self:isPressed("move_up"))

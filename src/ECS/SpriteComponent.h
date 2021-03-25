@@ -93,7 +93,9 @@ public:
 
         srcRect.x = curFrame * curAnim->width;
 
-        TextureHandler::Draw(curAnim->texture, srcRect, destRect, data->rot, rotPoint, flipStatus);
+        if(!data->hidden) {
+            TextureHandler::Draw(curAnim->texture, srcRect, destRect, data->rot, rotPoint, flipStatus);
+        }
     }
 private:
     void restartTimers() {

@@ -4,12 +4,6 @@
 
 //Where entity data is stored, IE: Position Data, but any component can store things here if they want :)
 struct DataComponent : public Component {
-//    engineSettings
-    int windowWidth;
-    int windowHeight;
-//    engineSettings
-
-//    positionData
     float x;
     float realX; //Based on position of parents and self, do not write!
     float y;
@@ -21,7 +15,7 @@ struct DataComponent : public Component {
     float rot;
     bool vflip;
     bool hflip;
-//    positionData
+    bool hidden;
 };
 
 #endif //PROJECT2D_ENTITYDATA_H

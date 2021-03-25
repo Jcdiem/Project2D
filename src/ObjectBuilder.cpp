@@ -95,9 +95,6 @@ Entity* ObjectBuilder::objFromJson(Manager* man, std::string path, std::string n
     curObj.addComponent<DataComponent>();
     DataComponent* eData = &curObj.getComponent<DataComponent>();
 
-    eData->windowWidth = man->getWW();
-    eData->windowHeight = man->getWH();
-
     for(auto kvPair = values.begin(); kvPair != values.end(); ++kvPair) {
         if(kvPair.key() == "x") {
             eData->x = kvPair.value().get<float>();

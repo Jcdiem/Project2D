@@ -5,14 +5,16 @@
 #include <string>
 #include <fstream>
 #include <streambuf>
+#include <utility>
 
 #include "EntityComponentSystem.h"
 #include "EntityWrapper.h"
 #include "LuaEngine.h"
+#include "Components.h"
 
-class ScriptComponent : public Component{
+class ScriptComponent : public Component {
 public:
-     explicit ScriptComponent(const std::string& path) {
+    explicit ScriptComponent(const std::string &path) {
         this->path = path;
 
         std::ifstream t(path);
@@ -29,13 +31,6 @@ public:
 
     void init() override {
         self = EntityWrapper(entity);
-        if(entity->getParent()) {
-            parent = EntityWrapper(entity->getParent());
-        }
-
-        for(Entity* child : *entity->getChildren()) {
-            children.emplace_back(child);
-        }
 
         sol::usertype<EntityWrapper> entity_data =
                 lua.gLu()->new_usertype<EntityWrapper>("entity", sol::no_constructor);
@@ -52,6 +47,7 @@ public:
         entity_data["rotY"] = sol::property(&EntityWrapper::getRotY, &EntityWrapper::setRotY);
         entity_data["vflip"] = sol::property(&EntityWrapper::getVFlip, &EntityWrapper::setVFlip);
         entity_data["hflip"] = sol::property(&EntityWrapper::getHFlip, &EntityWrapper::setHFlip);
+        entity_data["hidden"] = sol::property(&EntityWrapper::getHidden, &EntityWrapper::setHidden);
 
         //Methods
         entity_data["resetRotPos"] = &EntityWrapper::resetRotPos;
@@ -59,28 +55,49 @@ public:
         entity_data["addBinding"] = &EntityWrapper::addBinding;
         entity_data["isPressed"] = &EntityWrapper::isPressed;
         entity_data["refreshBindings"] = &EntityWrapper::refreshBindings;
+        entity_data["kill"] = &EntityWrapper::kill;
+        entity_data["getParent"] = &EntityWrapper::getParent;
+        entity_data["setParent"] = &EntityWrapper::setParent;
+        entity_data["getChildren"] = &EntityWrapper::getChildren;
+        entity_data["addChild"] = &EntityWrapper::addChild;
 
-        lua.newVar("EW", entity->getComponent<DataComponent>().windowWidth);
-        lua.newVar("EH", entity->getComponent<DataComponent>().windowHeight);
+        lua.newVar("EW", self.getMan()->getWW());
+        lua.newVar("EH", self.getMan()->getWH());
 
         lua.newVar<EntityWrapper>("self", self);
 
-        if(entity->getParent()) {
-            lua.newVar<EntityWrapper>("parent", parent);
+        if (entity->getParent()) {
+            lua.newVar<EntityWrapper>("parent", self.getParent());
         }
 
-        lua.newVar("children", children);
+        lua.newVar("children", self.getChildren());
+
+        lua.gLu()->set_function("search", &ScriptComponent::search, this);
 
         lua.initScript(script);
     }
 
     void update() override {
+        //Update family before running script
+        if (entity->getParent()) {
+            lua.newVar<EntityWrapper>("parent", self.getParent());
+        }
+        lua.newVar("children", self.getChildren());
+
         lua.runScript();
     }
+
+    std::vector<EntityWrapper> search(std::string name) {
+        std::vector<EntityWrapper> result;
+        for(Entity* entity : self.getMan()->search(std::move(name))) {
+            result.emplace_back(entity);
+        }
+        return result;
+    }
+
 private:
     EntityWrapper self;
     EntityWrapper parent;
-    std::vector<EntityWrapper> children;
 
     std::string path;
 

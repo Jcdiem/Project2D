@@ -5,11 +5,13 @@
 EntityWrapper::EntityWrapper() = default;
 
 EntityWrapper::EntityWrapper(Entity* entity) {
+    this->entity = entity;
     dataPtr = &entity->getComponent<DataComponent>();
     spritePtr = &entity->getComponent<SpriteComponent>();
 }
 
 void EntityWrapper::setEntity(Entity* entity) {
+    this->entity = entity;
     dataPtr = &entity->getComponent<DataComponent>();
     spritePtr = &entity->getComponent<SpriteComponent>();
 }
@@ -77,6 +79,12 @@ void EntityWrapper::setHFlip(bool b) {
 void EntityWrapper::setVFlip(bool b) {
     if(dataPtr) {
         dataPtr->vflip = b;
+    }
+}
+
+void EntityWrapper::setHidden(bool b) {
+    if(dataPtr) {
+        dataPtr->hidden = b;
     }
 }
 
@@ -157,6 +165,13 @@ bool EntityWrapper::getVFlip() {
     return false;
 }
 
+bool EntityWrapper::getHidden() {
+    if(dataPtr) {
+        return dataPtr->hidden;
+    }
+    return false;
+}
+
 void EntityWrapper::resetRotPos() {
     if(dataPtr) {
         dataPtr->rotX = dataPtr->w / float(2);
@@ -180,4 +195,37 @@ bool EntityWrapper::isPressed(std::string action) {
 
 void EntityWrapper::refreshBindings() {
     inputManager.refreshBindings();
+}
+
+void EntityWrapper::kill() {
+    entity->destroy();
+}
+
+EntityWrapper EntityWrapper::getParent() {
+    return EntityWrapper(entity->getParent());
+}
+
+void EntityWrapper::setParent(EntityWrapper entity) {
+    this->entity->setParent(entity.getPtr());
+}
+
+std::vector<EntityWrapper> EntityWrapper::getChildren() {
+    std::vector<EntityWrapper> entVec;
+    for(Entity* child : *entity->getChildren()) {
+        entVec.emplace_back(child);
+    }
+
+    return entVec;
+}
+
+void EntityWrapper::addChild(EntityWrapper entity) {
+    this->entity->addChild(entity.getPtr());
+}
+
+Entity* EntityWrapper::getPtr() {
+    return entity;
+}
+
+Manager *EntityWrapper::getMan() {
+    return entity->manager;
 }
