@@ -24,10 +24,7 @@ public:
     void que(type* entity) {
         if(int(queue.size()) < maxQue || maxQue == -1) {
             queue.push(entity);
-
-            if(locked) {
-                empty.notify_all();
-            }
+            empty.notify_all();
         } else {
             std::cout << "Thread que is too long, are you lagging? dropping items... (" << maxQue << ")" << std::endl;
         }
@@ -37,20 +34,18 @@ private:
     void taskRunner() {
         while(run) {
             if(queue.empty()) {
-                locked = true;
                 std::unique_lock<std::mutex> lck(mtx);
                 empty.wait(lck);
+            } else {
+                queue.front()->update();
+                queue.pop();
             }
-
-            queue.front()->update();
-            queue.pop();
         }
     }
 
     int maxQue;
 
     bool run = true;
-    bool locked = false;
 
     std::mutex mtx;
     std::condition_variable empty;

@@ -24,11 +24,11 @@ function main()
     xStep = xStep * 0.99
     yStep = yStep * 0.99
 
-    search("dvdNoChildren")[1]:resetRotPos()
+    --search("dvdNoChildren")[1]:resetRotPos()
 
-    if not (children[1] == nil) then
-        children[1]:kill();
-    end
+    --if not (children[1] == nil) then
+    --    children[1]:kill();
+    --end
 
     if not (parent == nil) then
         self.rotX = parent.x - self.realX
