@@ -1,6 +1,12 @@
 #include "Engine.h"
 
-void renderThread(Engine* engine, bool debug, int framerate) {
+struct threadData {
+    Engine* engine;
+    bool debug;
+    int framerate;
+};
+
+int renderThread(void* data) {
     //This function implements nearly identical logic to the engine thread, but this one doesnt try to "Catch Up" if if lags behind
 
     //issues with the current implementation:
@@ -8,6 +14,9 @@ void renderThread(Engine* engine, bool debug, int framerate) {
     //  Possible fix is locking this thread while the engine works. See thread wait? \/\/\/
     //  https://en.cppreference.com/w/cpp/thread/condition_variable/wait
 
+    Engine* engine = ((threadData*)data)->engine;
+    bool debug = ((threadData*)data)->debug;
+    int framerate = ((threadData*)data)->framerate;
 
     int frameTime;
 
@@ -35,6 +44,8 @@ void renderThread(Engine* engine, bool debug, int framerate) {
             std::cout << "Uh oh, render thread can't keep up! About " << float(frameTime) / frameDelay << " frames behind..." << std::endl;
         }
     }
+
+    return 0;
 }
 
 void exitListener(Engine* engine) {
@@ -190,7 +201,13 @@ int main(int argc, char* argv[]) {
 
         engine->init(&getValue<std::string>(configFile, "Title")[0], SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, fullscreen, resizable, threads);
 
-        std::thread renderer(renderThread, engine, debug, FPS);
+        threadData* data = new threadData;
+        data->engine = engine;
+        data->debug = debug;
+        data->framerate = FPS;
+
+        SDL_Thread* renderer = SDL_CreateThread(renderThread, "renderer", data);
+
         std::thread exiter(exitListener, engine);
 
         while(engine->running()) {
@@ -240,7 +257,7 @@ int main(int argc, char* argv[]) {
             }
         }
 
-        renderer.join();
+        SDL_WaitThread(renderer, nullptr);
         exiter.join();
 
         engine->clean();
