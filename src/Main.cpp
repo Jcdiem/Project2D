@@ -215,7 +215,7 @@ int main(int argc, char* argv[]) {
 
 
             //! MAIN LOOP CALLS
-//            engine->render(); Rendering on separate thread
+            engine->handleEvents();
             engine->update();
             //! MAIN LOOP CALLS
 
