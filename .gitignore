@@ -8,3 +8,5 @@ venv/
 
 cmake-build-debug/
 CMakeLists.txt
+
+P2D.kdev4
