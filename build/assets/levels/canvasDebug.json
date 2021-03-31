@@ -1,0 +1,17 @@
+{
+  "objects": {
+    "dvd": {
+      "self": "assets/objects/dvd.json"
+    }
+  },
+  "canvas": {
+    "block01": {
+      "texture": "assets/textures/10xConcreteTile.png",
+      "height": 10,
+      "width": 10,
+      "layer": "background",
+      "x": 20,
+      "y": 20
+    }
+  }
+}

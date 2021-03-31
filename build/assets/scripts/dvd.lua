@@ -94,5 +94,5 @@ function main()
         end
     end
 
-    self.rot = self.rot + 1
+--    d
 end

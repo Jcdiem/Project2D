@@ -14,6 +14,7 @@ namespace ObjectBuilder {
     //Used to generate objects and levels
     std::vector<std::string> genLevelList();
     void genObjs(Manager* man, std::string levelPath);
+    void genCanvas(Manager *man, std::string levelPath);
     Entity* recurseChildren(Manager* man, auto root, Entity* parent);
     Entity* objFromJson(Manager* man, std::string path, std::string name, Entity* parent);
 
