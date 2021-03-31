@@ -1,51 +1,59 @@
 #include "Engine.h"
 
-struct threadData {
-    Engine* engine;
-    bool debug;
-    int framerate;
-};
+void updateThread(Engine* engine, int TPS, bool debug) {
+    const int tickDelay = 1000000000 / TPS; //expected frame time in ns
+    int tickTime;
+    int timeLost = 0;
 
-int renderThread(void* data) {
-    //This function implements nearly identical logic to the engine thread, but this one doesnt try to "Catch Up" if if lags behind
-
-    //issues with the current implementation:
-    //  Objects being updated while drawing causes buggy graphics, race condition?
-    //  Possible fix is locking this thread while the engine works. See thread wait? \/\/\/
-    //  https://en.cppreference.com/w/cpp/thread/condition_variable/wait
-
-    Engine* engine = ((threadData*)data)->engine;
-    bool debug = ((threadData*)data)->debug;
-    int framerate = ((threadData*)data)->framerate;
-
-    int frameTime;
-
-    const int frameDelay = 1000000000 / framerate; //expected frame time in ns
     if (debug) {
-        std::cout << "Goal frame-time: " << frameDelay / 1000000.0 << "ms"<< std::endl;
+        std::cout << "Goal tick-time: " << tickDelay / 1000000.0 << "ms"<< std::endl;
     }
 
     while(engine->running()) {
-        auto frameStart = std::chrono::steady_clock::now();
-        engine->render();
-        auto frameEnd = std::chrono::steady_clock::now();
+        auto tickStart = std::chrono::steady_clock::now();
 
-        frameTime = std::chrono::duration_cast<std::chrono::nanoseconds>(frameEnd-frameStart).count();
+        //! MAIN LOOP CALLS
+        engine->handleEvents();
+        engine->update();
+        //! MAIN LOOP CALLS
 
-        if(frameDelay > frameTime && frameTime != 0){
+        auto tickEnd = std::chrono::steady_clock::now();
+        tickTime = std::chrono::duration_cast<std::chrono::nanoseconds>(tickEnd-tickStart).count();
+//          Frame debugging
+        if(debug) {
+            std::cout << "Time for tick was: " << tickTime / 1000000.0 << "ms" << std::endl;
+        }
+
+        if(tickDelay > tickTime && tickTime != 0){
             using namespace std::chrono_literals;
-            int sleepTime = frameDelay - frameTime;
-            if(debug) {
-                std::cout << "Sleep time        = " << sleepTime / 1000000.0 << "ms" << std::endl;
-                std::cout << "Total time        = " << sleepTime + frameTime << "ms, (Should be same as goal frametime)" << std::endl;
+            if(timeLost == 0) {
+                int sleepTime = tickDelay - tickTime;
+                if(debug) {
+                    std::cout << "Sleep time        = " << sleepTime / 1000000.0 << "ms" << std::endl;
+                    std::cout << "Total time        = " << sleepTime + tickTime << "ms, (Should be same as goal ticktime)" << std::endl;
+                }
+                std::this_thread::sleep_for(1ns * (sleepTime));
+            } else {
+                int timeSaved = tickDelay - tickTime;
+                timeLost -= timeSaved;
+                if(debug) {
+                    std::cout << timeSaved / 1000000.0 << "ms saved" << std::endl;
+                    std::cout << "Currently making up lost time! " << timeLost / 1000000.0 << "ms to make up!" << std::endl;
+                }
+                if(timeLost < 0) {
+                    std::this_thread::sleep_for(-1ns * timeLost);
+                    timeLost = 0;
+                    if(debug) {
+                        std::cout << "No more time to make up!" << std::endl;
+                    }
+                }
             }
-            std::this_thread::sleep_for(1ns * (sleepTime));
         } else {
-            std::cout << "Uh oh, render thread can't keep up! About " << float(frameTime) / frameDelay << " frames behind..." << std::endl;
+            float lostTicks = float(tickTime) / tickDelay;
+            std::cout << "Uh oh, engine thread can't keep up! About " << lostTicks << " ticks behind..." << std::endl;
+            timeLost += (tickTime - tickDelay);
         }
     }
-
-    return 0;
 }
 
 void exitListener(Engine* engine) {
@@ -168,72 +176,19 @@ int main(int argc, char* argv[]) {
     //FLAGS DONE :)
 
     try {
-        const int tickDelay = 1000000000 / TPS; //expected frame time in ns
-        if (debug) {
-            std::cout << "Goal tick-time: " << tickDelay / 1000000.0 << "ms"<< std::endl;
-        }
-
-        int tickTime;
-        int timeLost = 0;
 
         Engine* engine = new Engine();
 
         engine->init(&getValue<std::string>(configFile, "Title")[0], SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, fullscreen, resizable, threads);
 
-        threadData* data = new threadData;
-        data->engine = engine;
-        data->debug = debug;
-
+        std::thread updater(updateThread, engine, TPS, debug);
         std::thread exiter(exitListener, engine);
 
         while(engine->running()) {
-            auto tickStart = std::chrono::steady_clock::now();
-
-
-            //! MAIN LOOP CALLS
-            engine->handleEvents();
-            engine->update();
             engine->render();
-            //! MAIN LOOP CALLS
-
-            auto tickEnd = std::chrono::steady_clock::now();
-            tickTime = std::chrono::duration_cast<std::chrono::nanoseconds>(tickEnd-tickStart).count();
-//          Frame debugging
-            if(debug) {
-                std::cout << "Time for tick was: " << tickTime / 1000000.0 << "ms" << std::endl;
-            }
-
-            if(tickDelay > tickTime && tickTime != 0){
-                using namespace std::chrono_literals;
-                if(timeLost == 0) {
-                    int sleepTime = tickDelay - tickTime;
-                    if(debug) {
-                        std::cout << "Sleep time        = " << sleepTime / 1000000.0 << "ms" << std::endl;
-                        std::cout << "Total time        = " << sleepTime + tickTime << "ms, (Should be same as goal ticktime)" << std::endl;
-                    }
-                    std::this_thread::sleep_for(1ns * (sleepTime));
-                } else {
-                    int timeSaved = tickDelay - tickTime;
-                    timeLost -= timeSaved;
-                    if(debug) {
-                        std::cout << timeSaved / 1000000.0 << "ms saved" << std::endl;
-                        std::cout << "Currently making up lost time! " << timeLost / 1000000.0 << "ms to make up!" << std::endl;
-                    }
-                    if(timeLost < 0) {
-                        std::this_thread::sleep_for(-1ns * timeLost);
-                        timeLost = 0;
-                        if(debug) {
-                            std::cout << "No more time to make up!" << std::endl;
-                        }
-                    }
-                }
-            } else {
-                float lostTicks = float(tickTime) / tickDelay;
-                std::cout << "Uh oh, engine thread can't keep up! About " << lostTicks << " ticks behind..." << std::endl;
-                timeLost += (tickTime - tickDelay);
-            }
         }
 
+        updater.join();
         exiter.join();
 
         engine->clean();

@@ -33,7 +33,7 @@ public:
     void clean();
     void quit();
 
-    bool running() {
+    bool running() const {
         return isRunning;
     }
 
