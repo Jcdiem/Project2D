@@ -23,3 +23,26 @@ If you run into any issues, please open an issue request.
 
 # Progress
 Follow our progress over at https://app.gitkraken.com/glo/board/XzQgMqsO6gARq5hb
+
+# Credits, Team, 'N Attributions
+
+## Credits
+<ul>
+  <li><a href="https://github.com/nlohmann/json">Nlohmann's Json Library for Modern C++</a>
+    <ul><li>This powers almost all of our Entity Component System</ul>
+  <li><a href="https://github.com/ThePhD/sol2">Sol2 for LUA</a>
+    <ul><li>The library that lets us use LUA easily</ul>
+</ul>
+
+
+## Attributions
+<ul>
+  <li><a href="https://www.youtube.com/channel/UCAM9ZPgEIdeHAsmG50wqL1g">Let's Make Games!</a>
+    <ul><li>Our go to content creator for working with SDL2 in game design. (HIGHLY RECCOMEND IF STARTING OUT)</ul>
+</ul>
+
+## Main Team
+<ul>
+  <li><a href="https://github.com/Jcdiem">Jon</a> - Main Developer
+  <li><a href="https://github.com/KodiX86">Kodi</a> - Another Main Developer
+</ul>
