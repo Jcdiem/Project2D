@@ -60,7 +60,9 @@ void Engine::init(const char *title, int xPos, int yPos, int width, int height,
         std::throw_with_nested(std::runtime_error("Level list generation failed."));
     }
 
-    gameCanvas = new CanvasSystem::Canvas();
+    using namespace CanvasSystem;
+    gameCanvas = new Canvas();
+
     gameCanvas->genCanvasFromLevel("assets/levels/canvasDebug.json");
 
     ObjectBuilder::genObjs(&manager, levelList[0]);

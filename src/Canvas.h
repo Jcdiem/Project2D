@@ -13,7 +13,7 @@ namespace CanvasSystem {
     class Canvas {
         //TODO: Implement a tiling method
     public:
-        Canvas();
+        Canvas(){}
 
 /** createCanvasItem
          * \brief Will paint a static rectangle with texture to the screen, for building scenes
