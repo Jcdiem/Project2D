@@ -76,7 +76,6 @@ int main(int argc, char* argv[]) {
     int width = 0;
     int height = 0;
     int TPS = 0;
-    int FPS = 0;
     int threads = 0;
     //FLAGS
 
@@ -101,14 +100,6 @@ int main(int argc, char* argv[]) {
                 height = std::stoi(argv[i]);
             } catch(...) {
                 printf("Unable to parse width, ignoring! Did you mean --help?");
-            }
-        } else if(strcmp(argv[i], "--fps") == 0 || strcmp(argv[i], "-fr") == 0) {
-            printf("Forcing FPS!\n");
-            i += 1;
-            try {
-                FPS = std::stoi(argv[i]);
-            } catch(...) {
-                printf("Unable to parse TPS, ignoring!");
             }
         } else if(strcmp(argv[i], "--tps") == 0 || strcmp(argv[i], "-t") == 0) {
             printf("Forcing TPS!\n");
@@ -170,21 +161,9 @@ int main(int argc, char* argv[]) {
         //! Different from FPS, this is the cycle speed of main loop, 120 cap is good,
         //! adjusting this number affects game speed
     }
-    if(FPS == 0) {
-        FPS = getValue<int>(configFile, "Framerate");
-        //! Target FPS
-        //! Different from TPS, this is the cycle speed of render loop,
-        //! should be no more than tps
 
-        //! Also manages input handling speed.
-    }
-    if(threads == 0) {
-        threads = getValue<int>(configFile, "ObjectThreads");
-    }
-
-    if(FPS > TPS) {
-        std::cout << "WARNING: A framerate higher than the tickspeed causes redundant frames to be rendered." << std::endl;
-    }
+    if(threads == 0) threads = getValue<int>(configFile, "ObjectThreads");
+    if(threads < 1) threads = 1;
 
     //FLAGS DONE :)
 
@@ -204,9 +183,6 @@ int main(int argc, char* argv[]) {
         threadData* data = new threadData;
         data->engine = engine;
         data->debug = debug;
-        data->framerate = FPS;
-
-        SDL_Thread* renderer = SDL_CreateThread(renderThread, "renderer", data);
 
         std::thread exiter(exitListener, engine);
 
@@ -217,6 +193,7 @@ int main(int argc, char* argv[]) {
             //! MAIN LOOP CALLS
             engine->handleEvents();
             engine->update();
+            engine->render();
             //! MAIN LOOP CALLS
 
             auto tickEnd = std::chrono::steady_clock::now();
@@ -257,7 +234,6 @@ int main(int argc, char* argv[]) {
             }
         }
 
-        SDL_WaitThread(renderer, nullptr);
         exiter.join();
 
         engine->clean();

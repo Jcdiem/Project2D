@@ -18,9 +18,6 @@ void Engine::init(const char *title, int xpos, int ypos, int width, int height, 
     if (resizable) {
         flags += SDL_WINDOW_RESIZABLE;
     }
-    if(threads > 1) {
-        multithread = true;
-    }
 
     this->threads = threads;
 
@@ -72,12 +69,7 @@ void Engine::handleEvents() {
 
 void Engine::update() {
     manager.refresh();
-
-    if(multithread) {
-        manager.multithreaded_update(threads);
-    } else {
-        manager.update();
-    }
+    manager.update(threads);
 }
 
 void Engine::render() {

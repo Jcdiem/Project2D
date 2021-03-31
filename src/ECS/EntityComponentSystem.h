@@ -143,7 +143,7 @@ private:
 
 class Manager{
 public:
-    void multithreaded_update(int maxThreads){
+    void update(int maxThreads){
         while(maxThreads < int(threads.size())) {
             threads.back()->halt();
             threads.pop_back();
@@ -166,10 +166,6 @@ public:
         for(; j < int(entityList.size()); j++) {
             threads[i]->que(entityList[j].get());
         }
-    }
-
-    void update(){
-        for (auto& entity : entityList) entity->update();
     }
 
     void draw(){

@@ -46,7 +46,6 @@ private:
     static Canvas *gameCanvas;
     static int* engineWidth;
     static int* engineHeight;
-    bool multithread;
     int threads;
 
     Manager manager;
