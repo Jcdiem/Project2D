@@ -1,32 +1,57 @@
-#include <libs/json/include/nlohmann/json.hpp>
-#include <fstream>
 #include "Canvas.h"
 
-int Canvas::paintToCanvas(int layer, std::string fileName, int sizeX, int sizeY, int posX, int posY, int offsetX, int offsetY){
-    layerArray[layer].push_back(new Canvas_LayerData(TextureHandler::loadTexture(fileName.c_str()), sizeX, sizeY, offsetY, offsetX));
-    this->canvasItemUID++; return this->canvasItemUID;
+int CanvasSystem::Canvas::createCanvasItem(int layer, std::string textureFileName, int texSizeX, int texSizeY, int posX, int posY,
+                                           int fillSizeX, int fillSizeY, bool ignoreOverlap, int offsetX, int offsetY){
+    layerArray[layer].push_back(new Canvas_LayerData(TextureHandler::loadTexture(textureFileName.c_str()), texSizeX, texSizeY, posX, posY, fillSizeX, fillSizeY, ignoreOverlap, offsetX, offsetY));
+    this->canvasItemUID++;
+    return this->canvasItemUID;
 
 }
 
-void Canvas::draw(){
+//Everything assumed to be a map
+void CanvasSystem::Canvas::draw(){
     for(std::vector<Canvas_LayerData*> layer : layerArray){
         for(Canvas_LayerData * canvasItem : layer){
-            TextureHandler::Draw(canvasItem->getTexturePtr(),
-                                 canvasItem->getSrcRect(),
-                                 canvasItem->getDestRect());
-//            printf("SDL Error: %s \n",SDL_GetError());
+            //Render texture map
+            if(canvasItem->getTextureMap() != nullptr){
+                TextureHandler::focusBigTexture(canvasItem->getTextureMap());
+                SDL_Rect fillRectDest;
+                fillRectDest.w = canvasItem->getSrcRect().w;
+                fillRectDest.h = canvasItem->getSrcRect().h;
+                fillRectDest.x = 0;
+                fillRectDest.y = 0;
+                //STARTING IN TOP RIGHT CORNER OF TILE-MAP WILL FILL COLUMNS RIGHT->LEFT
+
+                //Iterate over as many times as you can fit tile in x-axis, plus 1 (for good measure)
+                for(int i = 1 + (int)(canvasItem->getFillW()/canvasItem->getSrcRect().w); i > 0; i--){
+                    fillRectDest.x += canvasItem->getSrcRect().x;
+
+                    //Iterate over as many times as you can fit tile in y-axis, plus 1 (for good measure)
+                    for(int j = 1 + (int)(canvasItem->getFillH()/canvasItem->getSrcRect().y); j > 0; j--){
+                        fillRectDest.y += canvasItem->getSrcRect().y;
+                        TextureHandler::Draw(canvasItem->getTexturePtr(),canvasItem->getSrcRect(),fillRectDest);
+                    }
+                }
+            }
+            //Render simple object
+            else{
+                TextureHandler::Draw(canvasItem->getTexturePtr(),
+                                     canvasItem->getSrcRect(),
+                                     canvasItem->getDestRect());
+            }
+
         }
     }
 }
 
-void Canvas::genCanvasFromLevel(const char * path) {
+void CanvasSystem::Canvas::genCanvasFromLevel(const char * path) {
     nlohmann::json json;
     try {
         json = nlohmann::json::parse(std::fstream(path), nullptr, true, true)["canvas"];
         for (auto canvasItem = json.begin(); canvasItem != json.end(); ++canvasItem){
             auto canvasLayer = canvasItem.value()["layer"].get<std::string>();
             auto canvasTexture = canvasItem.value()["texture"].get<std::string>();
-            this->paintToCanvas(
+            this->createCanvasItem(
                     convertStringToLayer(canvasLayer), //Layer
                     canvasTexture, //Texture
                     canvasItem.value()["width"].get<int>(),
@@ -43,7 +68,7 @@ void Canvas::genCanvasFromLevel(const char * path) {
 
 }
 
-int Canvas::convertStringToLayer(std::string &input) {
+int CanvasSystem::Canvas::convertStringToLayer(std::string &input) {
     if(input == "front") return FRONT;
     else if(input == "background") return BACKGROUND;
     else if(input == "middle_front") return MIDDLE_FRONT;

@@ -12,6 +12,11 @@ public:
     static void Draw(SDL_Texture *texture, SDL_Rect src, SDL_Rect dest, double angle);
     static void Draw(SDL_Texture *texture, SDL_Rect src, SDL_Rect dest, double angle, SDL_RendererFlip flip);
     static void Draw(SDL_Texture *texture, SDL_Rect src, SDL_Rect dest, double angle, SDL_Point center, SDL_RendererFlip flip);
+
+    //tilemaps
+    static SDL_Texture *loadBigTexture(Uint32 pixelFormat, int width, int height);
+    static void focusBigTexture(SDL_Texture* bigTexture);
+    static void releaseRendererFocus();
 private:
     static SDL_Renderer* renderer;
 };

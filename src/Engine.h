@@ -23,7 +23,7 @@ public:
     ~Engine();
 
 
-    void init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen, bool resizable, int threads);
+    void init(const char* title, int xPos, int yPos, int width, int height, bool fullscreen, bool resizable, int threads);
 
     //void loadEntity(EntityType* entity);
 
@@ -43,7 +43,7 @@ private:
     bool isRunning{};
     SDL_Window *window{};
     static SDL_Renderer *renderer;
-    static Canvas *gameCanvas;
+    static CanvasSystem::Canvas *gameCanvas;
     static int* engineWidth;
     static int* engineHeight;
     int threads;

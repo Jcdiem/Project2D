@@ -19,6 +19,15 @@ SDL_Texture* TextureHandler::loadTexture(const char *filename) {
     return retTex;
 }
 
+//For use with texture maps
+SDL_Texture* TextureHandler::loadBigTexture(Uint32 pixelFormat, int width, int height){
+    return SDL_CreateTexture(renderer, pixelFormat, SDL_TEXTUREACCESS_TARGET, width, height);
+}
+void TextureHandler::focusBigTexture(SDL_Texture *bigTexture) {
+    SDL_SetRenderTarget(renderer, bigTexture);
+}
+void TextureHandler::releaseRendererFocus(){SDL_SetRenderTarget(renderer, nullptr);}
+
 void TextureHandler::Draw(SDL_Texture *texture, SDL_Rect src, SDL_Rect dest) {
     SDL_RenderCopy(renderer, texture, &src, &dest);
 }

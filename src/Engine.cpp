@@ -4,13 +4,14 @@ Engine::Engine() = default;
 
 Engine::~Engine() = default;
 
-//Globals (SHOULD ALL BE PRIVATE)
-Canvas *Engine::gameCanvas = nullptr;
+//Engine Globals (SHOULD ALL BE PRIVATE)
+CanvasSystem::Canvas *Engine::gameCanvas = nullptr;
 SDL_Renderer *Engine::renderer = nullptr;
 int *Engine::engineHeight = nullptr;
 int *Engine::engineWidth = nullptr;
 
-void Engine::init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen, bool resizable, int threads) {
+void Engine::init(const char *title, int xPos, int yPos, int width, int height,
+                  bool fullscreen, bool resizable, int threads) {
     int flags = 0;
     if (fullscreen) {
         flags += SDL_WINDOW_FULLSCREEN;
@@ -23,7 +24,7 @@ void Engine::init(const char *title, int xpos, int ypos, int width, int height, 
 
     if (SDL_Init(SDL_INIT_EVERYTHING) == 0) {
         std::cout << "SDL Initialised" << std::endl;
-        window = SDL_CreateWindow(title, xpos, ypos, width, height, flags);
+        window = SDL_CreateWindow(title, xPos, yPos, width, height, flags);
         if (window) {
             std::cout << "Window made properly" << std::endl;
         } else {
@@ -35,6 +36,9 @@ void Engine::init(const char *title, int xpos, int ypos, int width, int height, 
             SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
             TextureHandler::setRenderer(renderer);
             std::cout << "Renderer completed properly" << std::endl;
+            SDL_RendererInfo renderingInfo;
+            SDL_GetRendererInfo(renderer,&renderingInfo);
+            std::cout << "Rendering flags are: " << renderingInfo.flags << std::endl;
         } else {
             std::throw_with_nested(std::runtime_error(std::string("SDL_CreateRenderer failed: %s\n").append(SDL_GetError())));
         }
@@ -56,10 +60,11 @@ void Engine::init(const char *title, int xpos, int ypos, int width, int height, 
         std::throw_with_nested(std::runtime_error("Level list generation failed."));
     }
 
-    gameCanvas = new Canvas();
+    gameCanvas = new CanvasSystem::Canvas();
     gameCanvas->genCanvasFromLevel("assets/levels/canvasDebug.json");
 
     ObjectBuilder::genObjs(&manager, levelList[0]);
+
 }
 
 

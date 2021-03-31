@@ -6,12 +6,13 @@
   },
   "canvas": {
     "block01": {
-      "texture": "assets/textures/10xConcreteTile.png",
+      "texture": "assets/textures/tiles/10xConcreteTile.png",
       "height": 10,
       "width": 10,
       "layer": "background",
       "x": 20,
-      "y": 20
+      "y": 20,
+      "tiled": true
     }
   }
 }
