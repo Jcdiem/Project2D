@@ -1,19 +1,12 @@
 #pragma once
 #ifndef PROJECT2DTD_ENGINE_H
 #define PROJECT2DTD_ENGINE_H
-#include <SDL2/SDL.h>
+#include <SFML/Graphics.hpp>
 #include <chrono>
 #include <random>
 #include <iostream>
 #include <thread>
 #include <vector>
-
-#include "TextureHandler.h"
-#include "Canvas.h"
-#include "ObjectBuilder.h"
-
-#include "ECS/Components.h"
-#include "ECS/InputManager.h"
 
 class TextureHandler;
 
@@ -37,18 +30,14 @@ public:
         return isRunning;
     }
 
-    static SDL_Renderer *getRenderer();
-
 private:
     bool isRunning{};
-    SDL_Window *window{};
-    static SDL_Renderer *renderer;
-    static CanvasSystem::Canvas *gameCanvas;
+    sf::RenderWindow *window;
     static int* engineWidth;
     static int* engineHeight;
     int threads;
 
-    Manager manager;
+//    Manager manager;
     std::vector<std::string> levelList;
 };
 
