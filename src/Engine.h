@@ -16,7 +16,7 @@ public:
     ~Engine();
 
 
-    void init(const char* title, int xPos, int yPos, int width, int height, bool fullscreen, bool resizable, int threads);
+    void init(const char* title, int width, int height, bool fullscreen, bool resizable, int threads);
 
     //void loadEntity(EntityType* entity);
 
@@ -33,8 +33,7 @@ public:
 private:
     bool isRunning{};
     sf::RenderWindow *window;
-    static int* engineWidth;
-    static int* engineHeight;
+    std::vector<sf::Drawable*> drawQueue;
     int threads;
 
 //    Manager manager;

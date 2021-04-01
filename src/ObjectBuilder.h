@@ -6,17 +6,16 @@
 #include <fstream>
 #include <nlohmann/json.hpp>
 
-#include "TextureHandler.h"
-#include "ECS/Components.h"
-#include "ECS/AnimStruct.h"
+//#include "ECS/Components.h"
+//#include "ECS/AnimStruct.h"
 
 namespace ObjectBuilder {
     //Used to generate objects and levels
     std::vector<std::string> genLevelList();
-    void genObjs(Manager* man, std::string levelPath);
-    void genCanvas(Manager *man, std::string levelPath);
-    Entity* recurseChildren(Manager* man, auto root, Entity* parent);
-    Entity* objFromJson(Manager* man, std::string path, std::string name, Entity* parent);
+//    void genObjs(Manager* man, std::string levelPath);
+//    void genCanvas(Manager *man, std::string levelPath);
+//    Entity* recurseChildren(Manager* man, auto root, Entity* parent);
+//    Entity* objFromJson(Manager* man, std::string path, std::string name, Entity* parent);
 
     template<typename T>
     T getValue(const std::string& filePath, const std::string& value) {
