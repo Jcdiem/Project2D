@@ -1,7 +1,15 @@
 #include "Engine.h"
 #include "ObjectBuilder.h"
 
+#ifdef X11
+#include <X11/Xlib.h>
+#endif
+
 int main(int argc, char *argv[]) {
+#ifdef X11
+    XInitThreads();
+#endif
+
     //FLAGS
     bool fullscreen = false;
     int width = 0;
@@ -85,9 +93,16 @@ int main(int argc, char *argv[]) {
         //! adjusting this number affects game speed
     }
 
+    std::mutex running;
+    std::unique_lock<std::mutex> runlk(running);
+
     Engine engine = Engine(name , width, height, fullscreen, threads);
 
     engine.initSystem(engine_all, TPS); // Somethings amiss?
 
+    engine.getRunLock()->wait(runlk);
+
+    using namespace std::chrono_literals;
+    std::this_thread::sleep_for(10ns);
     return 0;
 }

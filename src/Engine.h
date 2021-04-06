@@ -25,15 +25,17 @@ public:
     void listen();
     void update();
     void render();
+    std::condition_variable* getRunLock();
     [[nodiscard]] bool running() const;
 
     void quit();
 
-    void clockRunner(void (Engine::*x)(), int tickrate);
+    void clockRunner(void (Engine::*system)(), int tickrate);
 private:
-    std::thread systems[2];
+    std::thread systems[3];
 
     bool isRunning;
+    std::condition_variable runLock;
 
     sf::Event event;
     sf::RenderWindow* window;

@@ -1,4 +1,3 @@
-#include <iostream>
 #include "Engine.h"
 
 Engine::Engine(const std::string& title, int width, int height, bool fullscreen, int threads) {
@@ -12,39 +11,41 @@ Engine::Engine(const std::string& title, int width, int height, bool fullscreen,
 }
 
 Engine::~Engine() { //Destructor used to destroy the sfml window and join any threads that need joining.
-    window->close();
-
     for(std::thread& system : systems) {
         system.join();
     }
+
+    window->close();
 }
 
 void Engine::initSystem(Systems system, int tickrate) {  //Used to init some or all engine systems, error handling may go here.
     switch(system) {
-        case event_listener: //Hijacks the current thread to run the listener function (via clock runner)
-            clockRunner(&Engine::listen, tickrate);
+        case event_listener: //Calls the clock runner function (as a new thread) with a function ptr to listen.
+            systems[0] = std::thread(&Engine::clockRunner, this, &Engine::listen, tickrate);
             break;
         case engine_update: //Calls the clock runner function (as a new thread) with a function ptr to update.
-            systems[0] = std::thread(&Engine::clockRunner, this, &Engine::update, tickrate);
+            systems[1] = std::thread(&Engine::clockRunner, this, &Engine::update, tickrate);
             break;
         case engine_render: //Calls the clock runner function (as a new thread) with a function ptr to render.
-            systems[1] = std::thread(&Engine::clockRunner, this, &Engine::render, tickrate);
+            systems[2] = std::thread(&Engine::clockRunner, this, &Engine::render, tickrate);
             break;
-        case engine_all: //Calls the clock runner function (as a new thread) with a function ptr to update and render, then hijacks the thread for the listener.
-            systems[0] = std::thread(&Engine::clockRunner, this, &Engine::update, tickrate);
-            systems[1] = std::thread(&Engine::clockRunner, this, &Engine::render, tickrate);
-            clockRunner(&Engine::listen, tickrate);
+        case engine_all: //Calls the clock runner function (as a new thread) with a function ptr to update and render,
+            systems[0] = std::thread(&Engine::clockRunner, this, &Engine::listen, tickrate);
+            systems[1] = std::thread(&Engine::clockRunner, this, &Engine::update, tickrate);
+            systems[2] = std::thread(&Engine::clockRunner, this, &Engine::render, tickrate);
             break;
     }
 }
 
 void Engine::listen() { //Used to handle various sfml events, currently only exits, but could be more!
-    switch (event.type) {
-        case sf::Event::Closed: //The issue lies here, it seems the program receives an exit event constantly for some reason?
-            quit();
-            break;
-        default:
-            break;
+    while(window->pollEvent(event)) {
+        switch (event.type) {
+            case sf::Event::Closed:
+                quit();
+                break;
+            default:
+                break;
+        }
     }
 }
 
@@ -65,8 +66,13 @@ bool Engine::running() const {
     return isRunning;
 }
 
+std::condition_variable *Engine::getRunLock() {
+    return &runLock;
+}
+
 void Engine::quit() { //Handles exit operations that need to be done before the destructor is called to finish the job.
     isRunning = false;
+    runLock.notify_all();
 }
 
 void Engine::clockRunner(void (Engine::*system)(), int tickrate) { //This function calls the Engine function supplied [tickrate] times per second, and attempts to account for lag.
