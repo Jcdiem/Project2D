@@ -10,7 +10,7 @@ Engine::Engine(const std::string& title, int width, int height, bool fullscreen,
     isRunning = true;
 }
 
-Engine::~Engine() { //Destructor used to destroy the sfml window and join any threads that need joining.
+Engine::~Engine() {
     for(std::thread& system : systems) {
         system.join();
     }
@@ -37,7 +37,7 @@ void Engine::initSystem(Systems system, int tickrate) {  //Used to init some or 
     }
 }
 
-void Engine::listen() { //Used to handle various sfml events, currently only exits, but could be more!
+void Engine::listen() {
     while(window->pollEvent(event)) {
         switch (event.type) {
             case sf::Event::Closed:
@@ -62,6 +62,7 @@ void Engine::render() {
     window->display();
 }
 
+
 bool Engine::running() const {
     return isRunning;
 }
@@ -70,12 +71,12 @@ std::condition_variable *Engine::getRunLock() {
     return &runLock;
 }
 
-void Engine::quit() { //Handles exit operations that need to be done before the destructor is called to finish the job.
+void Engine::quit() {
     isRunning = false;
     runLock.notify_all();
 }
 
-void Engine::clockRunner(void (Engine::*system)(), int tickrate) { //This function calls the Engine function supplied [tickrate] times per second, and attempts to account for lag.
+void Engine::clockRunner(void (Engine::*system)(), int tickrate) {
     const uint64_t tickDelay = 1000000000 / tickrate; //expected frame time in ns
     u_int64_t tickTime;
     uint64_t timeLost = 0;
