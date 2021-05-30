@@ -1,101 +1,109 @@
 #include "Engine.h"
 
-Engine::Engine() = default;
-
-Engine::~Engine() = default;
-
-//Globals (SHOULD ALL BE PRIVATE)
-Canvas *Engine::gameCanvas = nullptr;
-SDL_Renderer *Engine::renderer = nullptr;
-int *Engine::engineHeight = nullptr;
-int *Engine::engineWidth = nullptr;
-
-void Engine::init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen, bool resizable, int threads) {
-    int flags = 0;
-    if (fullscreen) {
-        flags += SDL_WINDOW_FULLSCREEN;
-    }
-    if (resizable) {
-        flags += SDL_WINDOW_RESIZABLE;
-    }
-
-    this->threads = threads;
-
-    if (SDL_Init(SDL_INIT_EVERYTHING) == 0) {
-        std::cout << "SDL Initialised" << std::endl;
-        window = SDL_CreateWindow(title, xpos, ypos, width, height, flags);
-        if (window) {
-            std::cout << "Window made properly" << std::endl;
-        } else {
-            std::throw_with_nested(std::runtime_error(std::string("SDL_CreateWindow failed: %s\n").append(SDL_GetError())));
-        }
-
-        renderer = SDL_CreateRenderer(window, -1, 0);
-        if (renderer) {
-            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-            TextureHandler::setRenderer(renderer);
-            std::cout << "Renderer completed properly" << std::endl;
-        } else {
-            std::throw_with_nested(std::runtime_error(std::string("SDL_CreateRenderer failed: %s\n").append(SDL_GetError())));
-        }
-
-        isRunning = true;
+Engine::Engine(const std::string& title, int width, int height, bool fullscreen, int threads) {
+    if(fullscreen) {
+        window = new sf::RenderWindow(sf::VideoMode(width,height),title, sf::Style::Fullscreen);
     } else {
-        std::throw_with_nested(std::runtime_error(std::string("SDL_Init failed: %s\n").append(SDL_GetError())));
+        window = new sf::RenderWindow(sf::VideoMode(width,height),title, sf::Style::Close);
     }
 
-    SDL_GetWindowSize(window, engineWidth, engineHeight);
-
-    manager.setWW(width);
-    manager.setWH(height);
-
-    try {
-        levelList = ObjectBuilder::genLevelList();
-    }
-    catch(...) {
-        std::throw_with_nested(std::runtime_error("Level list generation failed."));
-    }
-
-    //TODO: Get entities from file
-    gameCanvas = new Canvas();
-
-    ObjectBuilder::genObjs(&manager, levelList[0]);
+    isRunning = true;
 }
 
+Engine::~Engine() {
+    for(std::thread& system : systems) {
+        system.join();
+    }
 
-void Engine::handleEvents() {
-    SDL_PumpEvents();
+    window->close();
+}
+
+void Engine::initSystem(Systems system, int tickrate) {  //Used to init some or all engine systems, error handling may go here.
+    switch(system) {
+        case event_listener: //Calls the clock runner function (as a new thread) with a function ptr to listen.
+            systems[0] = std::thread(&Engine::clockRunner, this, &Engine::listen, tickrate);
+            break;
+        case engine_update: //Calls the clock runner function (as a new thread) with a function ptr to update.
+            systems[1] = std::thread(&Engine::clockRunner, this, &Engine::update, tickrate);
+            break;
+        case engine_render: //Calls the clock runner function (as a new thread) with a function ptr to render.
+            systems[2] = std::thread(&Engine::clockRunner, this, &Engine::render, tickrate);
+            break;
+        case engine_all: //Calls the clock runner function (as a new thread) with a function ptr to update and render,
+            systems[0] = std::thread(&Engine::clockRunner, this, &Engine::listen, tickrate);
+            systems[1] = std::thread(&Engine::clockRunner, this, &Engine::update, tickrate);
+            systems[2] = std::thread(&Engine::clockRunner, this, &Engine::render, tickrate);
+            break;
+    }
+}
+
+void Engine::listen() {
+    while(window->pollEvent(event)) {
+        switch (event.type) {
+            case sf::Event::Closed:
+                quit();
+                break;
+            default:
+                break;
+        }
+    }
 }
 
 void Engine::update() {
-    manager.refresh();
-    manager.update(threads);
+    //Manager calls
 }
 
 void Engine::render() {
-    SDL_RenderClear(renderer);
+    //Render calls
+    window->clear();
 
-    //WE ARE USING PAINTERS; FIRST ON LIST IS FIRST TO BE DRAWN, NEXT ON LIST IS DRAWN OVER TOP
-    // (Background first, foreground last)
-    gameCanvas->draw();
-    manager.draw();
+    //Render things here!
 
-
-    //End rendering
-    SDL_RenderPresent(renderer);
+    window->display();
 }
 
-void Engine::clean() {
-    SDL_DestroyWindow(window);
-    SDL_DestroyRenderer(renderer);
-    SDL_Quit();
-    printf("Shutdown complete");
+
+bool Engine::running() const {
+    return isRunning;
+}
+
+std::condition_variable *Engine::getRunLock() {
+    return &runLock;
 }
 
 void Engine::quit() {
     isRunning = false;
+    runLock.notify_all();
 }
 
-SDL_Renderer *Engine::getRenderer() {
-    return renderer;
+void Engine::clockRunner(void (Engine::*system)(), int tickrate) {
+    const uint64_t tickDelay = 1000000000 / tickrate; //expected frame time in ns
+    u_int64_t tickTime;
+    uint64_t timeLost = 0;
+
+    while(isRunning) {
+        auto tickStart = std::chrono::steady_clock::now();
+
+        (this->*system)();
+
+        auto tickEnd = std::chrono::steady_clock::now();
+        tickTime = std::chrono::duration_cast<std::chrono::nanoseconds>(tickEnd-tickStart).count();
+
+        if(tickDelay > tickTime && tickTime != 0){
+            using namespace std::chrono_literals;
+            if(timeLost == 0) {
+                uint64_t sleepTime = tickDelay - tickTime;
+                std::this_thread::sleep_for(1ns * (sleepTime));
+            } else {
+                uint64_t timeSaved = tickDelay - tickTime;
+                timeLost -= timeSaved;
+                if(timeLost < 0) {
+                    std::this_thread::sleep_for(-1ns * timeLost);
+                    timeLost = 0;
+                }
+            }
+        } else {
+            timeLost += (tickTime - tickDelay);
+        }
+    }
 }

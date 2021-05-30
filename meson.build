@@ -1,44 +1,40 @@
 project('P2D', 'cpp', default_options:['cpp_std=gnu++2a'])
 
+sources = ['src/Engine.cpp',
+           'src/Main.cpp']
+dependencies = []
+link_args = []
+
+xorg = dependency('x11', required: false)
+if xorg.found()
+    dependencies += xorg
+    add_project_arguments('-DX11', language : 'cpp')
+endif
+
 #Standard Deps
-sdl2 = dependency('SDL2')
-sdl2_image = dependency('SDL2_image')
-lua = dependency('lua')
+sfml = dependency('sfml-all')
+dependencies += sfml
+lua = dependency('luajit')
+dependencies += lua
 #Replace 'lua' with whatever flavor you prefer, IE: luajit, lua, lua53, lua52, lua51 and so on,
 #As long as sol2 supports it, it should work here.
 
 #Meson Built-ins
 thread = dependency('threads')
+dependencies += thread
 
 #Submodules
 nlohmann_json = include_directories('libs/json/include')
 json = declare_dependency(include_directories: nlohmann_json)
+dependencies += json
 
 phd_sol2 = include_directories('libs/sol2/include')
 sol2 = declare_dependency(include_directories: phd_sol2)
-
+dependencies += sol2
 
 executable(
 	'P2D',
-	sources:[
-	    'src/ECS/LuaEngine.cpp',
-	    'src/ECS/InputManager.cpp',
-	    'src/ECS/EntityWrapper.cpp',
-		'src/ObjectBuilder.cpp',
-		'src/TextureHandler.cpp',
-		'src/Canvas_LayerData.cpp',
-		'src/Canvas.cpp',
-		'src/Engine.cpp',
-		'src/Main.cpp'
-	],
-	dependencies:[
-		sdl2,
-		sdl2_image,
-		json,
-		lua,
-		sol2,
-		thread
-	],
-	link_args:[
-	]
+	sources: sources,
+	dependencies: dependencies,
+	link_args: link_args
 )
