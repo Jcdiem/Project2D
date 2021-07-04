@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 #include <fstream>
-#include <nlohmann/json.hpp>
+#include "../libs/json/include/nlohmann/json.hpp"
 
 //#include "ECS/Components.h"
 //#include "ECS/AnimStruct.h"

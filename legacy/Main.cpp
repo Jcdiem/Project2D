@@ -1,5 +1,5 @@
 #include "Engine.h"
-#include "ObjectBuilder.h"
+#include "legacy/ObjectBuilder.h"
 
 #ifdef X11
 #include <X11/Xlib.h>
@@ -74,7 +74,7 @@ int main(int argc, char *argv[]) {
     }
 
     using ObjectBuilder::getValue;
-    const std::string configFile = "assets/engineSettings.json";
+    const std::string configFile = "assets/conf.json";
 
     auto name = getValue<std::string>(configFile, "Title");
     if (width == 0) {
