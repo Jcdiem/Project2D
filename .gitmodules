@@ -1,6 +1,6 @@
 [submodule "json"]
 	path = libs/json
-	url = https://github.com/astoeckel/json.git
+	url = https://github.com/astoeckel/json
 [submodule "sol2"]
 	path = libs/sol2
 	url = https://github.com/ThePhD/sol2.git
