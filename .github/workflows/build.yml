@@ -15,7 +15,7 @@ jobs:
       - name: Install dependencies
         run: sudo apt-get install libsfml-dev libluajit-5.1-dev
       - name: Get submodules
-        run: git submodule update --init --recursive
+        run: git submodule update -C Project2D --init --recursive
         
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v1
