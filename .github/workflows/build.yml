@@ -12,6 +12,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Install dependencies
+        run: sudo apt-get install libsfml-dev liblua5.4-dev
+        
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v1
       - uses: BSFishy/meson-build@v1.0.3
