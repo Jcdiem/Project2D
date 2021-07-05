@@ -24,3 +24,16 @@ jobs:
         with:
           action: build
           directory: build
+          
+      - name: Compress build
+        run: tar -cvzf p2dlinux.tar.gz build/assets build/P2D README.md LICENSE
+        
+        
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: p2dlinux.tar.gz
+          prerelease: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
