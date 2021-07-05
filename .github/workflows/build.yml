@@ -32,6 +32,7 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
+          body: "Warning, this release is automatically built from the git repository every time something is pushed, expect bugs and glitches beyond your wildest nightmares..."
           tag_name: p2d-git-autorelease
           files: p2dlinux.tar.gz
           prerelease: true
