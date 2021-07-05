@@ -1,4 +1,4 @@
-#include "Engine.h"
+#include "../src/Engine.h"
 #include "legacy/ObjectBuilder.h"
 
 #ifdef X11

@@ -1,5 +1,18 @@
 #include "Engine.h"
 
+Engine::Engine() {
+    int xRes = Flagger::getFlag("xRes");
+    int yRes = Flagger::getFlag("yRes");
+
+    if(Flagger::getFlag("fullscreen")) {
+        window = new sf::RenderWindow(sf::VideoMode(xRes, yRes), "P2D", sf::Style::Fullscreen);
+    } else {
+        window = new sf::RenderWindow(sf::VideoMode(xRes, yRes), "P2D", sf::Style::Close);
+    }
+
+    isRunning = true;
+}
+
 Engine::Engine(const std::string& title, int width, int height, bool fullscreen, int threads) {
     if(fullscreen) {
         window = new sf::RenderWindow(sf::VideoMode(width,height),title, sf::Style::Fullscreen);
@@ -16,6 +29,7 @@ Engine::~Engine() {
     }
 
     window->close();
+    delete window;
 }
 
 void Engine::initSystem(Systems system, int tickrate) {  //Used to init some or all engine systems, error handling may go here.
@@ -26,13 +40,13 @@ void Engine::initSystem(Systems system, int tickrate) {  //Used to init some or 
         case engine_update: //Calls the clock runner function (as a new thread) with a function ptr to update.
             systems[1] = std::thread(&Engine::clockRunner, this, &Engine::update, tickrate);
             break;
-        case engine_render: //Calls the clock runner function (as a new thread) with a function ptr to render.
-            systems[2] = std::thread(&Engine::clockRunner, this, &Engine::render, tickrate);
+        case engine_render: //Calls the clock runner function, hijacking the current thread
+            Engine::clockRunner(&Engine::render, tickrate);
             break;
-        case engine_all: //Calls the clock runner function (as a new thread) with a function ptr to update and render,
+        case engine_all: //Initializes all systems and then hijacks current thread for rendering
             systems[0] = std::thread(&Engine::clockRunner, this, &Engine::listen, tickrate);
             systems[1] = std::thread(&Engine::clockRunner, this, &Engine::update, tickrate);
-            systems[2] = std::thread(&Engine::clockRunner, this, &Engine::render, tickrate);
+            Engine::clockRunner(&Engine::render, tickrate);
             break;
     }
 }
@@ -67,13 +81,8 @@ bool Engine::running() const {
     return isRunning;
 }
 
-std::condition_variable *Engine::getRunLock() {
-    return &runLock;
-}
-
 void Engine::quit() {
     isRunning = false;
-    runLock.notify_all();
 }
 
 void Engine::clockRunner(void (Engine::*system)(), int tickrate) {

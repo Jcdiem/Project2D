@@ -1,10 +1,10 @@
 project('P2D', 'cpp', default_options:['cpp_std=gnu++2a'])
 
-sources = ['src/engine.cpp',
-           'src/json.cpp',
-           'src/logger.cpp',
-           'src/flagger.cpp',
-           'src/main.cpp']
+sources = ['src/utils/Json.cpp',
+           'src/utils/Logger.cpp',
+           'src/utils/Flagger.cpp',
+           'src/Engine.cpp',
+           'src/Main.cpp']
 
 dependencies = []
 link_args = []

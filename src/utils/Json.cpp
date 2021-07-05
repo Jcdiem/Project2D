@@ -1,6 +1,6 @@
-#include "json.h"
+#include "Json.h"
 
-void json::initDefaultFlags(std::string filePath) {
+void Json::initDefaultFlags(std::string filePath) {
     nlohmann::json file = nlohmann::json::parse(std::fstream(filePath), nullptr, true, true);
 
     std::string settings[] = {"xRes",
@@ -9,7 +9,7 @@ void json::initDefaultFlags(std::string filePath) {
                               "fullscreen"};
 
     for(std::string setting : settings) {
-        flagger::newFlag(setting, getValue<int>(file, setting));
+        Flagger::newFlag(setting, getValue<int>(file, setting));
     }
 
     //HARDCODED FLAGS BELOW!!!

@@ -5,10 +5,10 @@
 #include <nlohmann/json.hpp>
 #include <fstream>
 
-#include "flagger.h"
-#include "logger.h"
+#include "Flagger.h"
+#include "Logger.h"
 
-namespace json {
+namespace Json {
     void initDefaultFlags(std::string filePath);
 
     //Various json helpers, based on the fist one here.
@@ -18,7 +18,7 @@ namespace json {
             nlohmann::json file = nlohmann::json::parse(std::fstream(filePath), nullptr, true, true);
             return file[value].get<Type>();
         } catch(std::exception &e) {
-            logger::print(level::ERROR, "JSON error: " + std::string(e.what()));
+            Logger::print(Level::ERROR, "JSON error: " + std::string(e.what()));
         }
     }
 
@@ -28,7 +28,7 @@ namespace json {
             nlohmann::json file = nlohmann::json::parse(filePath, nullptr, true, true);
             return file[value].get<Type>();
         } catch(std::exception &e) {
-            logger::print(level::ERROR, "JSON error: " + std::string(e.what()));
+            Logger::print(Level::ERROR, "JSON error: " + std::string(e.what()));
         }
     }
 
@@ -37,7 +37,7 @@ namespace json {
         try {
             return file[value].get<Type>();
         } catch(std::exception &e) {
-            logger::print(level::ERROR, "JSON error: " + std::string(e.what()));
+            Logger::print(Level::ERROR, "JSON error: " + std::string(e.what()));
         }
     }
 };

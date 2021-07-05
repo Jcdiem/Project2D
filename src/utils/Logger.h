@@ -7,15 +7,15 @@
 #include <string>
 
 //TODO: Automatically send all output to log files
-enum level {
+enum Level {
     INFO,
     WARN,
     ERROR
 };
 
-namespace logger {
+namespace Logger {
     template<class... Details>
-    void print(level lvl, Details... details)  {
+    void print(Level lvl, Details... details)  {
         switch(lvl){ //HERE BE MAGIC, see here: https://stackoverflow.com/a/49435122
             case INFO:
                 std::cout << "[INFO]:  ";
