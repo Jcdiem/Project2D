@@ -1,4 +1,4 @@
-name: C/C++ CI
+name: Auto-build and publish
 
 on:
   push:
@@ -32,7 +32,7 @@ jobs:
         uses: cb80/delrel@latest
         with:
           tag: autorelease
-          token: ${{ secrets.MY_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
         
       - name: Create new auto-release
