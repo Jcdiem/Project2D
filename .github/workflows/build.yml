@@ -28,8 +28,14 @@ jobs:
       - name: Compress build
         run: tar -cvzf p2dlinux.tar.gz build/assets build/P2D README.md LICENSE
         
+      - name: Remove previous auto-release
+        uses: cb80/delrel@latest
+        with:
+          tag: autorelease
+          token: ${{ secrets.MY_TOKEN }}
+
         
-      - name: Release
+      - name: Create new auto-release
         uses: softprops/action-gh-release@v1
         with:
           body: "Warning, this release is automatically built from the git repository every time something is pushed, expect bugs and glitches beyond your wildest nightmares..."
