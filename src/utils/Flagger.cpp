@@ -24,18 +24,18 @@ void Flagger::parse(int argc, char *argv[]) {
 
 int Flagger::getFlag(const std::string &flag) {
     try {
-        return flags[flag];
+        return flags.at(flag);
     } catch(std::exception& e) {
         Logger::print(Level::WARN, "Unset flag: ", flag);
         return 0;
     }
 }
 
-void Flagger::newFlag(const std::string& flag, int value) {
+void Flagger::setFlag(const std::string& flag, int value) {
     flags[flag] = value;
 }
 
-void Flagger::newFlag(const std::string &flag, bool value) {
+void Flagger::setFlag(const std::string &flag, bool value) {
     flags[flag] = int(value);
 }
 

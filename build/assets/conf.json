@@ -2,5 +2,6 @@
   "xRes": 1280,
   "yRes": 720,
   "framerate": 60,
-  "fullscreen": false
+  "fullscreen": false,
+  "vSync": true
 }

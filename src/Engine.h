@@ -5,14 +5,16 @@
 #include <SFML/Graphics.hpp>
 #include <thread>
 #include <chrono>
+#include <mutex>
+#include <condition_variable>
 
 #include "utils/Flagger.h"
 
 enum Systems {
-    event_listener,
-    engine_update,
-    engine_render,
-    engine_all,
+    render,
+    update,
+    listen,
+    all,
 };
 
 class Engine {
@@ -30,7 +32,7 @@ public:
      * @param fullscreen True/False for whether to load fullscreen
      * @param threads Number of threads to use for (whatever they're used for)
      */
-    Engine(const std::string& title, int width, int height, bool fullscreen, int threads);
+    Engine(const std::string& title, int width, int height, bool fullscreen, bool vsync, int threads);
 
     /*!
      * @brief Destructor used to destroy the sfml window and join any threads that need joining.
@@ -86,6 +88,11 @@ private:
      * @brief Bool for whether the application is meant to be running
      */
     bool isRunning;
+
+    /*!
+     * Lock used to stop thread from exiting before all threads are completed
+     */
+    std::condition_variable runLock;
 
     /*!
      * @brief Variable to hold the most recent SFML event

@@ -3,22 +3,27 @@
 Engine::Engine() {
     int xRes = Flagger::getFlag("xRes");
     int yRes = Flagger::getFlag("yRes");
+    bool vsync = Flagger::getFlag("vSync");
 
     if(Flagger::getFlag("fullscreen")) {
         window = new sf::RenderWindow(sf::VideoMode(xRes, yRes), "P2D", sf::Style::Fullscreen);
     } else {
-        window = new sf::RenderWindow(sf::VideoMode(xRes, yRes), "P2D", sf::Style::Close);
+        window = new sf::RenderWindow(sf::VideoMode(xRes, yRes), "P2D", sf::Style::Default);
     }
+
+    window->setVerticalSyncEnabled(vsync);
 
     isRunning = true;
 }
 
-Engine::Engine(const std::string& title, int width, int height, bool fullscreen, int threads) {
+Engine::Engine(const std::string& title, int width, int height, bool fullscreen, bool vsync, int threads) {
     if(fullscreen) {
         window = new sf::RenderWindow(sf::VideoMode(width,height),title, sf::Style::Fullscreen);
     } else {
         window = new sf::RenderWindow(sf::VideoMode(width,height),title, sf::Style::Close);
     }
+
+    window->setVerticalSyncEnabled(vsync);
 
     isRunning = true;
 }
@@ -29,24 +34,27 @@ Engine::~Engine() {
     }
 
     window->close();
+
     delete window;
+
+    runLock.notify_all();
 }
 
 void Engine::initSystem(Systems system, int tickrate) {  //Used to init some or all engine systems, error handling may go here.
     switch(system) {
-        case event_listener: //Calls the clock runner function (as a new thread) with a function ptr to listen.
-            systems[0] = std::thread(&Engine::clockRunner, this, &Engine::listen, tickrate);
+        case Systems::render: //Calls the clock runner function (as a new thread) with a function ptr to render.
+            systems[0] = std::thread(&Engine::clockRunner, this, &Engine::render, tickrate);
             break;
-        case engine_update: //Calls the clock runner function (as a new thread) with a function ptr to update.
+        case Systems::update: //Calls the clock runner function (as a new thread) with a function ptr to update.
             systems[1] = std::thread(&Engine::clockRunner, this, &Engine::update, tickrate);
             break;
-        case engine_render: //Calls the clock runner function, hijacking the current thread
-            Engine::clockRunner(&Engine::render, tickrate);
+        case Systems::listen: //Calls the clock runner function with a function ptr to listen (Hijacking the current thread).
+            Engine::clockRunner(&Engine::listen, tickrate);
             break;
-        case engine_all: //Initializes all systems and then hijacks current thread for rendering
-            systems[0] = std::thread(&Engine::clockRunner, this, &Engine::listen, tickrate);
+        case Systems::all: //Initializes all systems and then hijacks current thread for event listening
+            systems[0] = std::thread(&Engine::clockRunner, this, &Engine::render, tickrate);
             systems[1] = std::thread(&Engine::clockRunner, this, &Engine::update, tickrate);
-            Engine::clockRunner(&Engine::render, tickrate);
+            Engine::clockRunner(&Engine::listen, tickrate);
             break;
     }
 }
@@ -69,7 +77,7 @@ void Engine::update() {
 
 void Engine::render() {
     //Render calls
-    window->clear();
+    window->clear(sf::Color::Black);
 
     //Render things here!
 
