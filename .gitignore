@@ -1,9 +1,9 @@
 .idea/
 
-libs/*
-
 build/*
+winbuild/*
 !build/assets/
+!winbuild/assets/
 venv/
 
 cmake-build-debug/

@@ -80,6 +80,9 @@ void Engine::render() {
     window->clear(sf::Color::Black);
 
     //Render things here!
+    Sprite x = Sprite("assets/textures/dvd.png", 100, 100);
+    x.setSize(400, 164);
+    window->draw(x);
 
     window->display();
 }
@@ -95,7 +98,7 @@ void Engine::quit() {
 
 void Engine::clockRunner(void (Engine::*system)(), int tickrate) {
     const uint64_t tickDelay = 1000000000 / tickrate; //expected frame time in ns
-    u_int64_t tickTime;
+    uint64_t tickTime;
     uint64_t timeLost = 0;
 
     while(isRunning) {

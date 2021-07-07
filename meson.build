@@ -19,7 +19,7 @@ endif
 #Standard Deps
 sfml = dependency('sfml-all')
 dependencies += sfml
-lua = dependency('luajit')
+lua = dependency('luajit') #<----
 dependencies += lua
 #Replace 'lua' with whatever flavor you prefer, IE: luajit, lua, lua53, lua52, lua51 and so on,
 #As long as sol2 supports it, it should work here.

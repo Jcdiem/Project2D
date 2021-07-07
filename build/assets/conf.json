@@ -3,5 +3,6 @@
   "yRes": 720,
   "framerate": 60,
   "fullscreen": false,
-  "vSync": true
+  "vSync": true,
+  "spriteSmoothing": true
 }
