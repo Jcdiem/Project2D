@@ -3,7 +3,7 @@
 Sprite::Sprite(const std::string& path, int dwidth, int dheight) {
     if(!texture.loadFromFile(path)) {
         texture.create(128, 128);
-        texture.update(embeddedSprites::nullsprite);
+        texture.update(EmbeddedSprites::nullsprite);
         Logger::print(Level::ERROR, "Failed to load image at ", path);
     }
 
@@ -20,7 +20,7 @@ Sprite::Sprite(const std::string& path, int dwidth, int dheight) {
 Sprite::Sprite(const std::string& path) {
     if(!texture.loadFromFile(path)) {
         texture.create(128, 128);
-        texture.update(embeddedSprites::nullsprite);
+        texture.update(EmbeddedSprites::nullsprite);
         Logger::print(Level::ERROR, "Failed to load image at ", path);
     }
 

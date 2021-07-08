@@ -1,8 +1,8 @@
 project('P2D', 'cpp', default_options:['cpp_std=gnu++2a'])
 
 sources = ['src/utils/Json.cpp',
-           'src/utils/Logger.cpp',
            'src/utils/Flagger.cpp',
+           'src/utils/draw/Atlas.cpp',
            'src/utils/draw/Sprite.cpp',
            'src/Engine.cpp',
            'src/Main.cpp']

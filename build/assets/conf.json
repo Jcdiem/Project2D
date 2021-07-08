@@ -4,5 +4,6 @@
   "framerate": 60,
   "fullscreen": false,
   "vSync": true,
-  "spriteSmoothing": true
+  "spriteSmoothing": true,
+  "regenAtlas": true
 }

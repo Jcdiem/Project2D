@@ -41,7 +41,7 @@ void Flagger::setFlag(const std::string &flag, bool value) {
 
 void Flagger::printFlags() {
     for(const auto& flag : flags) {
-        Logger::print(Level::INFO, flag.first, " : ", flag.second);
+        Logger::print(Level::INFO, "FLAG: ", flag.first, " : ", flag.second);
     }
 }
 

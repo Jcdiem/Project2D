@@ -6,8 +6,9 @@
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
+#include <map>
 
-#include "embeddedSprites.h"
+#include "EmbeddedSprites.h"
 #include "../Logger.h"
 #include "../Flagger.h"
 
@@ -17,6 +18,7 @@ public:
     Sprite(const std::string& path);
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
     void setSize(int dwidth, int dheight);
+
 private:
     unsigned int width;
     unsigned int height;

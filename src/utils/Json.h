@@ -4,12 +4,16 @@
 
 #include <nlohmann/json.hpp>
 #include <fstream>
+#include <map>
 
 #include "Flagger.h"
 #include "Logger.h"
 
 namespace Json {
-    void initDefaultFlags(std::string filePath);
+    void initDefaultFlags(const std::string& filePath);
+
+    std::map<std::string, int> jsonToMap(const std::string& path);
+    void mapToJson(const std::map<std::string, int>& map, const std::string& path);
 
     //Various json helpers, based on the fist one here.
     template <typename Type>

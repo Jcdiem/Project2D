@@ -18,16 +18,16 @@ namespace Logger {
     void print(Level lvl, Details... details)  {
         switch(lvl){ //HERE BE MAGIC, see here: https://stackoverflow.com/a/49435122
             case INFO:
-                std::cout << "[INFO]:  ";
-                (std:: cout << ... << details) << std::endl;
+                std::cout << "[INFO]: ";
+                (std::cout << ... << details) << std::endl;
                 break;
             case WARN:
-                std::clog << "[WARN]:  ";
-                (std:: clog << ... << details) << std::endl;
+                std::clog << "[WARN]: ";
+                (std::clog << ... << details) << std::endl;
                 break;
             case ERROR:
                 std::cerr << "[ERROR]: ";
-                (std:: cerr << ... << details) << std::endl;
+                (std::cerr << ... << details) << std::endl;
                 break;
         }
     }
