@@ -5,6 +5,10 @@ build/*
 winbuild/*
 !build/assets/
 !winbuild/assets/
+build/assets/textures/atlas.json
+build/assets/textures/atlas.png
+winbuild/assets/textures/atlas.json
+winbuild/assets/textures/atlas.png
 venv/
 
 cmake-build-debug/
