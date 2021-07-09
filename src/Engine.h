@@ -18,6 +18,7 @@ enum Systems {
     update,
     listen,
     all,
+    bundled,
 };
 
 class Engine {
@@ -63,6 +64,11 @@ public:
      * @brief Call the rendering of all objects that need to be displayed
      */
     void render();
+
+    /*!
+     * @brief Call each of the system functions seen above in this order (Listen, Update, Render)
+     */
+    void bundledSystems();
 
     /*!
      * Used to create while(running) loops
