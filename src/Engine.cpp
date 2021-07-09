@@ -30,7 +30,7 @@ Engine::Engine(const std::string& title, int width, int height, bool fullscreen,
 
 Engine::~Engine() {
     for(std::thread& system : systems) {
-        system.join();
+        if(system.joinable()) system.join();
     }
 
     window->close();
@@ -53,6 +53,9 @@ void Engine::initSystem(Systems system, int tickrate) {  //Used to init some or 
             systems[0] = std::thread(&Engine::clockRunner, this, &Engine::render, tickrate);
             systems[1] = std::thread(&Engine::clockRunner, this, &Engine::update, tickrate);
             Engine::clockRunner(&Engine::listen, tickrate);
+            break;
+        case Systems::bundled:
+            Engine::clockRunner(&Engine::bundledSystems, tickrate);
             break;
     }
 }
@@ -85,6 +88,11 @@ void Engine::render() {
     window->display();
 }
 
+void Engine::bundledSystems() {
+    listen();
+    update();
+    render();
+}
 
 bool Engine::running() const {
     return isRunning;
