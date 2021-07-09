@@ -10,9 +10,6 @@ void Json::initDefaultFlags(const std::string& path) {
             Logger::print(Level::ERROR, "Option in conf.json \"", setting, "\" holds invalid type, ", e.what());
         }
     }
-
-    //HARDCODED FLAGS BELOW!!!
-    //None for now, things like threads and such would go here
 }
 
 std::map<std::string, int> Json::jsonToMap(const std::string &path) {
