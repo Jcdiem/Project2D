@@ -1,27 +1,16 @@
 #include "Sprite.h"
 
-Sprite::Sprite(const std::string& path, int dwidth, int dheight) {
-    if(!texture.loadFromFile(path)) {
-        texture.create(128, 128);
-        texture.update(EmbeddedSprites::nullsprite);
-        Logger::print(Level::ERROR, "Failed to load image at ", path);
-    }
+Sprite::Sprite(const std::string& atlasName, const std::string& spriteName, int dwidth, int dheight) {
+    AtlasTex atlasTex = AtlasIndex::getTex(atlasName, spriteName);
 
-    texture.setSmooth(Flagger::getFlag("spriteSmoothing"));
-
-    width = texture.getSize().x;
-    height = texture.getSize().y;
-
-    sprite.setScale(float(dwidth) / width, float(dheight) / height);
-
-    sprite.setTexture(texture);
+    sprite.setTexture(atlasTex.texture);
 }
 
-Sprite::Sprite(const std::string& path) {
-    if(!texture.loadFromFile(path)) {
+Sprite::Sprite(const std::string& atlas, const std::string& sprite) {
+    if(!texture.loadFromFile(atlas)) {
         texture.create(128, 128);
         texture.update(EmbeddedSprites::nullsprite);
-        Logger::print(Level::ERROR, "Failed to load image at ", path);
+        Logger::print(Level::ERROR, "Failed to load image at ", atlas);
     }
 
     texture.setSmooth(Flagger::getFlag("spriteSmoothing"));
@@ -29,7 +18,7 @@ Sprite::Sprite(const std::string& path) {
     width = texture.getSize().x;
     height = texture.getSize().y;
 
-    sprite.setTexture(texture);
+    this->sprite.setTexture(texture);
 }
 
 void Sprite::draw(sf::RenderTarget &target, sf::RenderStates states) const {

@@ -36,8 +36,6 @@ Engine::~Engine() {
     window->close();
 
     delete window;
-
-    runLock.notify_all();
 }
 
 void Engine::initSystem(Systems system, int tickrate) {  //Used to init some or all engine systems, error handling may go here.
@@ -65,7 +63,7 @@ void Engine::listen() {
             case sf::Event::Closed:
                 quit();
                 break;
-            default:
+            default: //TODO: Handle resize events.
                 break;
         }
     }
@@ -80,8 +78,8 @@ void Engine::render() {
     window->clear(sf::Color::Black);
 
     //Render things here!
-    Sprite x = Sprite("assets/textures/dvd.png", 100, 100);
-    x.setSize(400, 164);
+    Sprite x = Sprite("root", "dvd", 100, 100);
+//    Sprite x = Sprite("assets/textures/atlas.png", "xyz");
     window->draw(x);
 
     window->display();

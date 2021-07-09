@@ -9,6 +9,7 @@
 #include <condition_variable>
 
 #include "utils/Flagger.h"
+#include "utils/draw/Atlas.h"
 
 #include "utils/draw/Sprite.h" //TEMP
 
@@ -90,11 +91,6 @@ private:
      * @brief Bool for whether the application is meant to be running
      */
     bool isRunning;
-
-    /*!
-     * Lock used to stop thread from exiting before all threads are completed
-     */
-    std::condition_variable runLock;
 
     /*!
      * @brief Variable to hold the most recent SFML event

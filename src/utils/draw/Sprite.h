@@ -8,21 +8,22 @@
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <map>
 
-#include "EmbeddedSprites.h"
+#include "Atlas.h"
 #include "../Logger.h"
 #include "../Flagger.h"
 
 class Sprite : public sf::Drawable {
 public:
-    Sprite(const std::string& path, int dwidth, int dheight);
-    Sprite(const std::string& path);
-    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+    Sprite(const std::string& atlas, const std::string& sprite, int dwidth, int dheight);
+    Sprite(const std::string& atlas, const std::string& sprite);
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
     void setSize(int dwidth, int dheight);
 
 private:
     unsigned int width;
     unsigned int height;
 
+    TextureLoc tLoc;
     sf::Texture texture;
     sf::Sprite sprite;
 };

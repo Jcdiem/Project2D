@@ -5,5 +5,5 @@
   "fullscreen": false,
   "vSync": true,
   "spriteSmoothing": true,
-  "regenAtlas": true
+  "regenAtlas": false
 }

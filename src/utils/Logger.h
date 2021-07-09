@@ -14,7 +14,7 @@ enum Level {
 };
 
 namespace Logger {
-    template<class... Details>
+    template<typename... Details>
     void print(Level lvl, Details... details)  {
         switch(lvl){ //HERE BE MAGIC, see here: https://stackoverflow.com/a/49435122
             case INFO:
