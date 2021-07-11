@@ -1,7 +1,7 @@
 #include "Engine.h"
 #include "src/utils/Flagger.h"
 #include "src/utils/Json.h"
-#include "utils/draw/Atlas.h"
+#include "utils/draw/AtlasIndex.h"
 
 #ifdef X11
 #include <X11/Xlib.h>

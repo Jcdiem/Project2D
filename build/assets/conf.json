@@ -6,5 +6,5 @@
   "vSync": true,
   "spriteSmoothing": true,
   "regenAtlas": false,
-  "threaded": false
+  "threaded": true
 }

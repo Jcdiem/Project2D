@@ -15,43 +15,21 @@
 #include "../Json.h"
 
 #define uintTrio unsigned int, unsigned int, unsigned int
-typedef std::tuple<uintTrio> TextureLoc;
 
-struct AtlasTex {
-    sf::Texture& texture;
-    TextureLoc location;
-};
-
-class AtlasIndex {
+class Atlas {
 public:
-    AtlasIndex() = delete;
-    ~AtlasIndex() = delete;
+    explicit Atlas(const std::filesystem::path& path) : Atlas(path, true) {};
+    Atlas(const std::filesystem::path& path, bool recursive);
 
-    static void stitchAtlases();
-    static AtlasTex getTex(const std::string& atlasName, const std::string& texName);
+    sf::Texture& getAtlasTex();
 
-    class Atlas {
-    public:
-        explicit Atlas(const std::filesystem::path& path) : Atlas(path, true) {};
-        Atlas(const std::filesystem::path& path, bool recursive);
-
-        sf::Texture& getAtlasTex();
-
-        //Tuple is formatted as follows, 0: offset, 1: width, 2: height
-        std::map<std::string, TextureLoc> offsets;
-
-    private:
-        sf::Image atlasImg;
-        sf::Texture atlasTex;
-    };
+    //Tuple is formatted as follows, 0: offset, 1: width, 2: height
+    std::map<std::string, std::tuple<uintTrio>> offsets;
 
 private:
-    static std::map<std::string, Atlas> atlasIndex;
-    static sf::Image missingImg;
-    static sf::Texture missingTex;
+    sf::Image atlasImg;
+    sf::Texture atlasTex;
 };
-
-
 
 
 #endif //BUILD_ATLAS_H

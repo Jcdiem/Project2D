@@ -8,7 +8,7 @@
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <map>
 
-#include "Atlas.h"
+#include "AtlasIndex.h"
 #include "../Logger.h"
 #include "../Flagger.h"
 
@@ -23,7 +23,7 @@ private:
     unsigned int width;
     unsigned int height;
 
-    TextureLoc tLoc;
+    std::tuple<uintTrio> texLoc;
     sf::Texture texture;
     sf::Sprite sprite;
 };

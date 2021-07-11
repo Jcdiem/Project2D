@@ -9,7 +9,6 @@
 #include <condition_variable>
 
 #include "utils/Flagger.h"
-#include "utils/draw/Atlas.h"
 
 #include "utils/draw/Sprite.h" //TEMP
 
