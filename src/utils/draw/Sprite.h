@@ -14,8 +14,9 @@
 
 class Sprite : public sf::Drawable {
 public:
-    Sprite(const std::string& atlas, const std::string& sprite, int dwidth, int dheight);
-    Sprite(const std::string& atlas, const std::string& sprite);
+    Sprite(const std::string& atlasName, const std::string& spriteName, int dwidth, int dheight);
+    Sprite(const std::string& atlasName, const std::string& spriteName);
+
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
     void setSize(int dwidth, int dheight);
 
@@ -24,7 +25,10 @@ private:
     unsigned int height;
 
     std::tuple<uintTrio> texLoc;
+    sf::Vector2f spriteScalar;
+
     sf::Texture texture;
+    sf::IntRect textRect;
     sf::Sprite sprite;
 };
 

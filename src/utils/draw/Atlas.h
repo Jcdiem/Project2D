@@ -16,17 +16,20 @@
 
 #define uintTrio unsigned int, unsigned int, unsigned int
 
+class AtlasIndex;
+
 class Atlas {
-public:
+private:
+    friend class AtlasIndex;
+
     explicit Atlas(const std::filesystem::path& path) : Atlas(path, true) {};
     Atlas(const std::filesystem::path& path, bool recursive);
 
     sf::Texture& getAtlasTex();
 
-    //Tuple is formatted as follows, 0: offset, 1: width, 2: height
+    //Tuple is formatted as follows, 0: vertical offset, 1: width, 2: height
     std::map<std::string, std::tuple<uintTrio>> offsets;
 
-private:
     sf::Image atlasImg;
     sf::Texture atlasTex;
 };

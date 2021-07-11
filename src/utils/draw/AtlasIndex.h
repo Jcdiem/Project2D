@@ -5,11 +5,11 @@
 #include "Atlas.h"
 
 struct AtlasTex {
-    sf::Texture& texture;
+    sf::Texture* texture;
     std::tuple<uintTrio> location;
 };
 
-class AtlasIndex {
+class AtlasIndex{
 public:
     AtlasIndex() = delete;
     ~AtlasIndex() = delete;

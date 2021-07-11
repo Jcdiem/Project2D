@@ -81,8 +81,7 @@ void Engine::render() {
     window->clear(sf::Color::Black);
 
     //Render things here!
-    Sprite x = Sprite("root", "dvd", 100, 100);
-//    Sprite x = Sprite("assets/textures/atlas.png", "xyz");
+    Sprite x = Sprite("root", "dvd", 1280, 720);
     window->draw(x);
 
     window->display();

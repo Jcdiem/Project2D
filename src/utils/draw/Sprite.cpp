@@ -2,23 +2,35 @@
 
 Sprite::Sprite(const std::string& atlasName, const std::string& spriteName, int dwidth, int dheight) {
     AtlasTex atlasTex = AtlasIndex::getTex(atlasName, spriteName);
+    texture = *atlasTex.texture;
+    texLoc = atlasTex.location;
 
-    sprite.setTexture(atlasTex.texture);
+    textRect.top = std::get<0>(texLoc);
+    textRect.left = 0;
+    textRect.width = std::get<1>(texLoc);
+    textRect.height = std::get<2>(texLoc);
+
+    spriteScalar.x = float(dwidth) / textRect.width;
+    spriteScalar.y = float(dheight) / textRect.height;
+
+    sprite.setTexture(texture);
+    sprite.setTextureRect(textRect);
+    sprite.setScale(spriteScalar);
 }
 
-Sprite::Sprite(const std::string& atlas, const std::string& sprite) {
-    if(!texture.loadFromFile(atlas)) {
-        texture.create(128, 128);
-        texture.update(EmbeddedSprites::nullsprite);
-        Logger::print(Level::ERROR, "Failed to load image at ", atlas);
-    }
+Sprite::Sprite(const std::string& atlasName, const std::string& spriteName) {
+    AtlasTex atlasTex = AtlasIndex::getTex(atlasName, spriteName);
+    texture = *atlasTex.texture;
+    texLoc = atlasTex.location;
 
-    texture.setSmooth(Flagger::getFlag("spriteSmoothing"));
+    textRect.top = std::get<0>(texLoc);
+    textRect.left = 0;
+    textRect.width = std::get<1>(texLoc);
+    textRect.height = std::get<2>(texLoc);
 
-    width = texture.getSize().x;
-    height = texture.getSize().y;
-
-    this->sprite.setTexture(texture);
+    sprite.setTexture(texture);
+    sprite.setTextureRect(textRect);
+    sprite.setScale(spriteScalar);
 }
 
 void Sprite::draw(sf::RenderTarget &target, sf::RenderStates states) const {
