@@ -5,7 +5,7 @@
 #include "Atlas.h"
 
 struct AtlasTex {
-    sf::Texture* texture;
+    sf::Texture texture;
     std::tuple<uintTrio> location;
 };
 

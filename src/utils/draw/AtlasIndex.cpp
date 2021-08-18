@@ -30,7 +30,7 @@ AtlasTex AtlasIndex::getTex(const std::string &atlasName, const std::string &tex
         try {
             std::tuple<uintTrio> imgLoc = atlas.offsets.at(texName);
 
-            return {new sf::Texture(atlas.getAtlasTex()), imgLoc};
+            return {sf::Texture(atlas.getAtlasTex()), imgLoc};
 
         } catch(std::exception& e) {
             Logger::print(Level::ERROR, "Texture \"", texName, "\" not found in atlas \"", atlasName);
@@ -39,5 +39,5 @@ AtlasTex AtlasIndex::getTex(const std::string &atlasName, const std::string &tex
         Logger::print(Level::ERROR, "Atlas \"", atlasName, "\" not found");
     }
 
-    return {new sf::Texture(missingTex), {0, 128, 128}};
+    return {sf::Texture(missingTex), {0, 128, 128}};
 }

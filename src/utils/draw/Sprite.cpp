@@ -2,7 +2,7 @@
 
 Sprite::Sprite(const std::string& atlasName, const std::string& spriteName, int dwidth, int dheight) {
     AtlasTex atlasTex = AtlasIndex::getTex(atlasName, spriteName);
-    texture = *atlasTex.texture;
+    texture = atlasTex.texture;
     texLoc = atlasTex.location;
 
     textRect.top = std::get<0>(texLoc);
@@ -20,7 +20,7 @@ Sprite::Sprite(const std::string& atlasName, const std::string& spriteName, int 
 
 Sprite::Sprite(const std::string& atlasName, const std::string& spriteName) {
     AtlasTex atlasTex = AtlasIndex::getTex(atlasName, spriteName);
-    texture = *atlasTex.texture;
+    texture = atlasTex.texture;
     texLoc = atlasTex.location;
 
     textRect.top = std::get<0>(texLoc);
