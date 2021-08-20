@@ -70,12 +70,6 @@ public:
     void bundledSystems();
 
     /*!
-     * Used to create while(running) loops
-     * @return Whether or not the application is currently running
-     */
-    [[nodiscard]] bool running() const;
-
-    /*!
      * @brief Handles exit operations that need to be done before the destructor
      */
     void quit();

@@ -6,5 +6,5 @@
   "vSync": true,
   "spriteSmoothing": true,
   "regenAtlas": false,
-  "threaded": true
+  "threaded": true //Disable for added compatibility, causes a severe hit in performance if disabled.
 }

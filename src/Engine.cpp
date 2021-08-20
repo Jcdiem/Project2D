@@ -93,10 +93,6 @@ void Engine::bundledSystems() {
     render();
 }
 
-bool Engine::running() const {
-    return isRunning;
-}
-
 void Engine::quit() {
     isRunning = false;
 }

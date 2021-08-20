@@ -1,6 +1,17 @@
 #include "Json.h"
 
 void Json::initDefaultFlags(const std::string& path) {
+    Flagger::setFlag("xRes", 1280);
+    Flagger::setFlag("yRes", 720);
+    Flagger::setFlag("framerate", 60);
+    Flagger::setFlag("fullscreen",  false);
+    Flagger::setFlag("vSync", true);
+    Flagger::setFlag("spriteSmoothing", true);
+    Flagger::setFlag("regenAtlas", false);
+    Flagger::setFlag("threaded", false);
+
+    //Default values for some flags.
+
     nlohmann::json file = nlohmann::json::parse(std::fstream(path), nullptr, true, true);
 
     for(auto& [setting, value] : file.items()) {

@@ -16,17 +16,6 @@ int Flagger::parseString(std::string number) {
 }
 
 void Flagger::parse(int argc, char *argv[]) {
-    flags["xRes"] = 1280;
-    flags["yRes"] = 720;
-    flags["framerate"] = 60;
-    flags["fullscreen"] = false;
-    flags["vSync"] = true;
-    flags["spriteSmoothing"] = true;
-    flags["regenAtlas"] = false;
-    flags["threaded"] = false;
-
-    //Default values for some flags.
-
     for(int i = 2; i < argc; i += 2) { //First arg is always the executable name, so we skip it.
         flags[argv[i - 1] + 1] = parseString(argv[i]);
         //Addition here removes first character :)

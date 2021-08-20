@@ -21,8 +21,8 @@ public:
     void setSize(int dwidth, int dheight);
 
 private:
-    unsigned int width;
-    unsigned int height;
+    float width;
+    float height;
 
     std::tuple<uintTrio> texLoc;
     sf::Vector2f spriteScalar;
