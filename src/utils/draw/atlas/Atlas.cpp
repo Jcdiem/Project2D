@@ -1,6 +1,6 @@
 #include "Atlas.h"
 
-Atlas::Atlas(const std::filesystem::path &path, bool recursive) {
+Atlas::Atlas(const std::filesystem::path &path) {
     if(std::filesystem::exists(path.string() + "/atlas.png")) {
         if(!Flagger::getFlag("regenAtlas")) {
             try {
@@ -23,27 +23,32 @@ Atlas::Atlas(const std::filesystem::path &path, bool recursive) {
         //We already have an atlas, but we want/need a new one /:
     }
 
-    auto fs_iter = std::filesystem::recursive_directory_iterator(path);
     std::vector<std::pair<sf::Image, std::string>> images;
+    std::vector<std::filesystem::path> subdirs;
 
-
-    for(const auto& file : fs_iter) {
-        if(!recursive) fs_iter.disable_recursion_pending();
-
-        if(!file.is_directory() && file.path().filename() != "atlas.json") {
-            std::string ext = file.path().extension();
+    for(const auto& item : std::filesystem::directory_iterator(path)) {
+        if(item.is_directory()) {
+            subdirs.push_back(item);
+        } else {
+            std::string ext = item.path().extension();
             //The supported image formats are bmp, png, tga, jpg, gif, psd, hdr and pic.
             if(ext == ".bmp" || ext == ".png" || ext == ".tga" ||
-            ext == ".jpg" || ext == ".jpeg"|| ext == ".gif" ||
-            ext == ".psd" || ext == ".hdr" || ext == ".pic") {
+               ext == ".jpg" || ext == ".jpeg"|| ext == ".gif" ||
+               ext == ".psd" || ext == ".hdr" || ext == ".pic") {
                 images.emplace_back();
-                if(!images.back().first.loadFromFile(file.path())) {
-                    Logger::print(Level::ERROR, "Failed to load image, consider remaking your atlas next launch: ", file.path());
+                if(!images.back().first.loadFromFile(item.path())) {
+                    Logger::print(Level::ERROR, "Failed to load image, consider remaking your atlas next launch: ", item.path());
                     images.pop_back();
                     break;
                 }
-                images.back().second = file.path().stem();
+                images.back().second = item.path().stem();
             }
+        }
+    }
+
+    for(std::filesystem::path dir : subdirs) {
+        if(!std::filesystem::is_empty(dir)) {
+            children.insert_or_assign(dir.filename(), Atlas(dir));
         }
     }
 
@@ -72,8 +77,4 @@ Atlas::Atlas(const std::filesystem::path &path, bool recursive) {
     atlasTex.loadFromImage(atlasImg);
     atlasTex.generateMipmap();
     atlasTex.setSmooth(Flagger::getFlag("spriteSmoothing"));
-}
-
-sf::Texture &Atlas::getAtlasTex() {
-    return atlasTex;
 }

@@ -1,7 +1,7 @@
 #include "Engine.h"
 #include "src/utils/Flagger.h"
 #include "src/utils/Json.h"
-#include "utils/draw/AtlasIndex.h"
+#include "utils/draw/atlas/AtlasMan.h"
 
 #ifdef X11
 #include <X11/Xlib.h>
@@ -14,7 +14,7 @@ int main(int argc, char *argv[]) {
     Json::initDefaultFlags("assets/conf.json");
     Flagger::parse(argc, argv);
     Flagger::printFlags();
-    AtlasIndex::stitchAtlases();
+    AtlasMan::stitchAtlases();
 
     Engine engine;
 
