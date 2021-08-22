@@ -66,7 +66,12 @@ void Engine::listen() {
             case sf::Event::Closed:
                 quit();
                 break;
-            default: //TODO: Handle resize events.
+            case sf::Event::Resized:
+                Flagger::setFlag("xRes", event.size.width);
+                Flagger::setFlag("yRes", event.size.height);
+                window->setView(sf::View(sf::FloatRect(0, 0, event.size.width, event.size.height)));
+                break;
+            default:
                 break;
         }
     }

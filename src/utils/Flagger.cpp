@@ -35,10 +35,6 @@ void Flagger::setFlag(const std::string& flag, int value) {
     flags[flag] = value;
 }
 
-void Flagger::setFlag(const std::string &flag, bool value) {
-    flags[flag] = int(value);
-}
-
 void Flagger::printFlags() {
     for(const auto& flag : flags) {
         Logger::print(Level::INFO, "FLAG: ", flag.first, " : ", flag.second);
