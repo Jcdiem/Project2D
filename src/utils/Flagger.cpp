@@ -33,11 +33,6 @@ int Flagger::getFlag(const std::string &flag) {
 
 void Flagger::setFlag(const std::string& flag, int value) {
     flags[flag] = value;
-}
-
-void Flagger::printFlags() {
-    for(const auto& flag : flags) {
-        Logger::print(Level::INFO, "FLAG: ", flag.first, " : ", flag.second);
-    }
+    Logger::print(Level::INFO, "Flag Updated: ", flag, " : ", value);
 }
 

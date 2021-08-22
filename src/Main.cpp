@@ -11,9 +11,8 @@ int main(int argc, char *argv[]) {
 #ifdef X11
     XInitThreads();
 #endif
-    Json::initDefaultFlags("assets/conf.json");
+    Json::fetchFlags("assets/conf.json");
     Flagger::parse(argc, argv);
-    Flagger::printFlags();
     AtlasMan::stitchAtlases();
 
     Engine engine;

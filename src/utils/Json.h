@@ -10,7 +10,7 @@
 #include "Logger.h"
 
 namespace Json {
-    void initDefaultFlags(const std::string& filePath);
+    void fetchFlags(const std::string& filePath);
 
     std::map<std::string, int> jsonToMap(const std::string& path);
     void mapToJson(const std::map<std::string, int>& map, const std::string& path);

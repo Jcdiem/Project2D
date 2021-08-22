@@ -15,7 +15,6 @@ public:
     static void parse(int argc, char *argv[]);
     static int getFlag(const std::string& flag);
     static void setFlag(const std::string& flag, int value);
-    static void printFlags();
 
 private:
     static int parseString(std::string number);

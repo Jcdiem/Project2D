@@ -33,9 +33,8 @@ public:
      * @param width Width in pixels of the window
      * @param height Height in pixels of the window
      * @param fullscreen True/False for whether to load fullscreen
-     * @param threads Number of threads to use for (whatever they're used for)
      */
-    Engine(const std::string& title, int width, int height, bool fullscreen, bool vsync, int threads);
+    Engine(const std::string& title, int width, int height, bool fullscreen, bool vsync);
 
     /*!
      * @brief Destructor used to destroy the sfml window and join any threads that need joining.

@@ -16,7 +16,7 @@ Engine::Engine() {
     isRunning = true;
 }
 
-Engine::Engine(const std::string& title, int width, int height, bool fullscreen, bool vsync, int threads) {
+Engine::Engine(const std::string& title, int width, int height, bool fullscreen, bool vsync) {
     if(fullscreen) {
         window = new sf::RenderWindow(sf::VideoMode(width,height),title, sf::Style::Fullscreen);
     } else {

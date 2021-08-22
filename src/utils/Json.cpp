@@ -1,6 +1,6 @@
 #include "Json.h"
 
-void Json::initDefaultFlags(const std::string& path) {
+void Json::fetchFlags(const std::string& path) {
     Flagger::setFlag("xRes", 1280);
     Flagger::setFlag("yRes", 720);
     Flagger::setFlag("framerate", 60);
