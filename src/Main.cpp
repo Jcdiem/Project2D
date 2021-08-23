@@ -21,10 +21,10 @@ int main(int argc, char *argv[]) {
     //without any one of these...
     if(Flagger::getFlag("threaded")) {
         engine.initSystem(Systems::render, Flagger::getFlag("framerate"));
-        engine.initSystem(Systems::update, 120);
-        engine.initSystem(Systems::listen, 120);
+        engine.initSystem(Systems::update, Flagger::getFlag("tickrate"));
+        engine.initSystem(Systems::listen, Flagger::getFlag("tickrate"));
     } else {
-        engine.initSystem(Systems::bundled, 120);
+        engine.initSystem(Systems::bundled, Flagger::getFlag("tickrate"));
     }
 
 

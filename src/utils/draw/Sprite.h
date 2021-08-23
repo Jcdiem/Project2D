@@ -15,7 +15,7 @@
 class Sprite : public sf::Drawable {
 public:
     template<typename... Specifiers>
-    Sprite(int dwidth, int dheight, Specifiers... specifiers) {
+    Sprite(int x, int y, int dwidth, int dheight, Specifiers... specifiers) {
         AtlasTex atlasTex = AtlasMan::getTex(specifiers...);
         texture = atlasTex.texture;
         texLoc = atlasTex.location;
@@ -28,13 +28,14 @@ public:
         spriteScalar.x = float(dwidth) / textRect.width;
         spriteScalar.y = float(dheight) / textRect.height;
 
+        sprite.move(x, y);
         sprite.setTexture(texture);
         sprite.setTextureRect(textRect);
         sprite.setScale(spriteScalar);
     }
 
     template<typename... Specifiers>
-    Sprite(Specifiers... specifiers) {
+    Sprite(int x, int y, Specifiers... specifiers) {
         AtlasTex atlasTex = AtlasMan::getTex(specifiers...);
         texture = atlasTex.texture;
         texLoc = atlasTex.location;
@@ -47,6 +48,7 @@ public:
         spriteScalar.x = 1;
         spriteScalar.y = 1;
 
+        sprite.move(x, y);
         sprite.setTexture(texture);
         sprite.setTextureRect(textRect);
         sprite.setScale(spriteScalar);

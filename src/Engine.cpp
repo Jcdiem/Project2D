@@ -86,9 +86,9 @@ void Engine::render() {
     window->clear(sf::Color::Black);
 
     //Render things here!
-    Sprite x = Sprite(1280, 720, "dvd");
+    Sprite x = Sprite(0, 0, 1280, 720, "dvd");
     window->draw(x);
-    Sprite y = Sprite("tiles", "10xConcreteTile");
+    Sprite y = Sprite(35, 500, "tiles", "10xConcreteTile");
     window->draw(y);
 
     window->display();

@@ -2,9 +2,12 @@
   "xRes": 1280,
   "yRes": 720,
   "framerate": 60,
+  "tickrate": 120,
   "fullscreen": false,
   "vSync": true,
   "spriteSmoothing": true,
   "regenAtlas": true,
   "threaded": true //Disable for added compatibility, causes a severe hit in performance if disabled.
+                    //It also makes it impossible to detach the framerate from the engine,
+                    //so they are fixed at the "tickrate" value
 }

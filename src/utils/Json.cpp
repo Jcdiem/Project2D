@@ -4,6 +4,7 @@ void Json::fetchFlags(const std::string& path) {
     Flagger::setFlag("xRes", 1280);
     Flagger::setFlag("yRes", 720);
     Flagger::setFlag("framerate", 60);
+    Flagger::setFlag("tickrate", 120);
     Flagger::setFlag("fullscreen",  false);
     Flagger::setFlag("vSync", true);
     Flagger::setFlag("spriteSmoothing", true);

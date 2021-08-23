@@ -32,7 +32,7 @@ int Flagger::getFlag(const std::string &flag) {
 }
 
 void Flagger::setFlag(const std::string& flag, int value) {
+    Logger::print(Level::INFO, "Flag \"", flag, "\" updated : ", flags[flag], " -> ", value);
     flags[flag] = value;
-    Logger::print(Level::INFO, "Flag Updated: ", flag, " : ", value);
 }
 
