@@ -2,17 +2,16 @@
 #ifndef PROJECT2D_QUEUEINGTHREAD_H
 #define PROJECT2D_QUEUEINGTHREAD_H
 
-#include <iostream>
 #include <queue>
 #include <thread>
 #include <mutex>
 #include <condition_variable>
+#include "Logger.h"
 
-template<typename type>
 class QueueingThread {
 public:
     QueueingThread(int maxQue) {
-        thread = std::thread(&QueueingThread<type>::taskRunner, this);
+        thread = std::thread(&QueueingThread::taskRunner, this);
         this->maxQue = maxQue;
     }
 
@@ -21,12 +20,12 @@ public:
         thread.join();
     }
 
-    void que(type* entity) {
+    void que(void (*function)()) {
         if(int(queue.size()) < maxQue || maxQue == -1) {
-            queue.push(entity);
+            queue.push(function);
             empty.notify_all();
         } else {
-            std::cout << "Thread que is too long, are you lagging? dropping items... (" << maxQue << ")" << std::endl;
+            Logger::print(Level::WARN, "Thread que is too long, are you lagging? dropping items... (", maxQue, ")");
         }
     }
 
@@ -37,7 +36,7 @@ private:
                 std::unique_lock<std::mutex> lck(mtx);
                 empty.wait(lck);
             } else {
-                queue.front()->update();
+                queue.front()();
                 queue.pop();
             }
         }
@@ -51,7 +50,7 @@ private:
     std::condition_variable empty;
 
     std::thread thread;
-    std::queue<type*> queue;
+    std::queue<void (*)()> queue;
 };
 
 #endif //PROJECT2D_QUEUEINGTHREAD_H
