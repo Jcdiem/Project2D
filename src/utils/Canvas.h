@@ -20,7 +20,7 @@ public:
      * @param spriteListToAdd A list containing sprites aligned to the screen to be drawn
      * @param layer The layer to draw the sprites on (0 is back, 5 is front)
      */
-    void fillCanvasLayer(std::list<Sprite> spriteListToAdd, long unsigned int layer);
+    void fillCanvasLayer(std::list<Sprite> spriteListToAdd, int layer);
 
 private:
     std::list<Sprite> mainCanvas [5]; //Add 5 layers behind/back

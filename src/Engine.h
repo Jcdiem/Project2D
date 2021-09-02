@@ -100,6 +100,11 @@ private:
      * @brief The application window itself
      */
     sf::RenderWindow* window;
+
+    /*!
+     * @brief The canvas used for rendering
+     */
+     Canvas canvas = Canvas();
 };
 
 #endif //PROJECT2DTD_ENGINE_H

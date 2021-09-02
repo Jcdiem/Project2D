@@ -58,6 +58,10 @@ void Engine::initSystem(Systems system, int tickrate) {  //Used to init some or 
             Engine::clockRunner(&Engine::bundledSystems, tickrate);
             break;
     }
+
+    //TODO: Remove debug canvas
+    std::list<Sprite> spriteDebugList = {Sprite(0, 0, 1280, 720, "dvd"), Sprite(35, 500, "tiles", "10xConcreteTile")};
+    canvas.fillCanvasLayer(spriteDebugList,0);
 }
 
 void Engine::listen() {
@@ -86,10 +90,7 @@ void Engine::render() {
     window->clear(sf::Color::Black);
 
     //Render things here!
-    Sprite x = Sprite(0, 0, 1280, 720, "dvd");
-    window->draw(x);
-    Sprite y = Sprite(35, 500, "tiles", "10xConcreteTile");
-    window->draw(y);
+    canvas.drawCanvas(window);
 
     window->display();
 }

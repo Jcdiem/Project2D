@@ -8,7 +8,7 @@ void Canvas::drawCanvas(sf::RenderWindow *window){
     }
 }
 
-void Canvas::fillCanvasLayer(std::list<Sprite> spriteListToAdd, long unsigned int layer){
-    if (layer >= mainCanvas->size() || layer < 0) throw std::invalid_argument("Incorrect layer number given");
+void Canvas::fillCanvasLayer(std::list<Sprite> spriteListToAdd, int layer){
+    if (layer >= sizeof(mainCanvas) || layer < 0) throw std::invalid_argument("Incorrect layer number given");
     for (Sprite toAdd : spriteListToAdd) mainCanvas[layer].push_back(toAdd);
 }
