@@ -1,6 +1,7 @@
 #include "draw/Sprite.h"
 #include <stdexcept>
 #include <list>
+#include <SFML/Graphics/RenderWindow.hpp>
 
 #ifndef BUILD_CANVAS_H
 #define BUILD_CANVAS_H
@@ -8,8 +9,6 @@
 
 class Canvas {
 public:
-    Canvas();
-
     /*!
      * @brief Will draw the canvas members to the screen
      * @param window The RenderWindow to draw to
@@ -21,10 +20,7 @@ public:
      * @param spriteListToAdd A list containing sprites aligned to the screen to be drawn
      * @param layer The layer to draw the sprites on (0 is back, 5 is front)
      */
-    void fillCanvasLayer(std::list<Sprite> spriteListToAdd, int layer){
-        if (layer >= mainCanvas->size() || layer < 0) throw std::invalid_argument("Incorrect layer number given");
-        for (Sprite toAdd : spriteListToAdd) mainCanvas[layer].push_back(toAdd);
-    }
+    void fillCanvasLayer(std::list<Sprite> spriteListToAdd, long unsigned int layer);
 
 private:
     std::list<Sprite> mainCanvas [5]; //Add 5 layers behind/back
