@@ -11,6 +11,7 @@
 #include "utils/Flagger.h"
 
 #include "utils/draw/Sprite.h" //TEMP
+#include "utils/Canvas.cpp"
 
 enum Systems {
     render,
