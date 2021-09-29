@@ -11,6 +11,8 @@ Engine::Engine() {
         window = new sf::RenderWindow(sf::VideoMode(xRes, yRes), "P2D", sf::Style::Default);
     }
 
+    window->setActive(false);
+
     window->setVerticalSyncEnabled(vsync);
 
     isRunning = true;
@@ -22,6 +24,8 @@ Engine::Engine(const std::string& title, int width, int height, bool fullscreen,
     } else {
         window = new sf::RenderWindow(sf::VideoMode(width,height),title, sf::Style::Close);
     }
+
+    window->setActive(false);
 
     window->setVerticalSyncEnabled(vsync);
 
@@ -49,10 +53,10 @@ void Engine::initSystem(Systems system, int tickrate) {  //Used to init some or 
         case Systems::listen: //Calls the clock runner function with a function ptr to listen (Hijacking the current thread).
             Engine::clockRunner(&Engine::listen, tickrate);
             break;
-        case Systems::all: //Initializes all systems and then hijacks current thread for event listening
-            systems[0] = std::thread(&Engine::clockRunner, this, &Engine::render, tickrate);
+        case Systems::all: //Initializes all systems and then hijacks current thread for --event listening-- rendering
+            systems[0] = std::thread(&Engine::clockRunner, this, &Engine::listen, tickrate);
             systems[1] = std::thread(&Engine::clockRunner, this, &Engine::update, tickrate);
-            Engine::clockRunner(&Engine::listen, tickrate);
+            Engine::clockRunner(&Engine::stupidTest, tickrate);
             break;
         case Systems::bundled:
             Engine::clockRunner(&Engine::bundledSystems, tickrate);
@@ -60,7 +64,7 @@ void Engine::initSystem(Systems system, int tickrate) {  //Used to init some or 
     }
 
     //TODO: Remove debug canvas
-    std::list<Sprite> spriteDebugList = {Sprite(0, 0, 1280, 720, "dvd"), Sprite(35, 500, "tiles", "10xConcreteTile")};
+    std::list<Sprite> spriteDebugList = {Sprite(0, 0, 1280, 7, "dvd"), Sprite(35, 500, "tiles", "10xConcreteTile")};
     canvas.fillCanvasLayer(spriteDebugList,0);
 }
 
@@ -86,18 +90,30 @@ void Engine::update() {
 }
 
 void Engine::render() {
+
+    window->setActive(true);
     //Render calls
     window->clear(sf::Color::Black);
 
     //Render things here!
     canvas.drawCanvas(window);
 
+    Sprite lmao = Sprite(0, 0, 1280, 7, "dvd");
+
+    window->draw(lmao);
+
     window->display();
+
+    window->setActive(false);
 }
 
 void Engine::bundledSystems() {
     listen();
     update();
+    render();
+}
+
+void Engine::stupidTest() {
     render();
 }
 

@@ -23,6 +23,8 @@ enum Systems {
 
 class Engine {
 public:
+    void stupidTest();
+
     /*!
      * @brief Constructor for the game engine, that uses flags from utils/flagger
      */
