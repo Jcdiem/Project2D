@@ -56,7 +56,7 @@ void Engine::initSystem(Systems system, int tickrate) {  //Used to init some or 
         case Systems::all: //Initializes all systems and then hijacks current thread for --event listening-- rendering
             systems[0] = std::thread(&Engine::clockRunner, this, &Engine::listen, tickrate);
             systems[1] = std::thread(&Engine::clockRunner, this, &Engine::update, tickrate);
-            Engine::clockRunner(&Engine::stupidTest, tickrate);
+            Engine::clockRunner(&Engine::render, tickrate);
             break;
         case Systems::bundled:
             Engine::clockRunner(&Engine::bundledSystems, tickrate);
@@ -64,7 +64,7 @@ void Engine::initSystem(Systems system, int tickrate) {  //Used to init some or 
     }
 
     //TODO: Remove debug canvas
-    std::list<Sprite> spriteDebugList = {Sprite(0, 0, 1280, 7, "dvd"), Sprite(35, 500, "tiles", "10xConcreteTile")};
+    spriteDebugList = {Sprite(0, 0, 1280, 7, "dvd"), Sprite(35, 500, "tiles", "10xConcreteTile")};
     canvas.fillCanvasLayer(spriteDebugList,0);
 }
 
@@ -90,17 +90,13 @@ void Engine::update() {
 }
 
 void Engine::render() {
-
     window->setActive(true);
+
     //Render calls
     window->clear(sf::Color::Black);
 
     //Render things here!
-    canvas.drawCanvas(window);
-
-    Sprite lmao = Sprite(0, 0, 1280, 7, "dvd");
-
-    window->draw(lmao);
+//    window->draw(canvas);
 
     window->display();
 
@@ -110,10 +106,6 @@ void Engine::render() {
 void Engine::bundledSystems() {
     listen();
     update();
-    render();
-}
-
-void Engine::stupidTest() {
     render();
 }
 

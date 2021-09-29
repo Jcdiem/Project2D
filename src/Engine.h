@@ -23,8 +23,6 @@ enum Systems {
 
 class Engine {
 public:
-    void stupidTest();
-
     /*!
      * @brief Constructor for the game engine, that uses flags from utils/flagger
      */
@@ -107,6 +105,11 @@ private:
      * @brief The canvas used for rendering
      */
      Canvas canvas = Canvas();
+
+    /*!
+     * @brief Just a temporary variable to hold some sprites drawn thru canvas.
+     */
+    std::list<Sprite> spriteDebugList;
 };
 
 #endif //PROJECT2DTD_ENGINE_H

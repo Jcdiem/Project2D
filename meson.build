@@ -17,7 +17,7 @@ link_args = []
 xorg = dependency('x11', required: false)
 if xorg.found()
     dependencies += xorg
-    add_project_arguments('-DX11', language : 'cpp')
+    add_project_arguments('-DX11', language: 'cpp')
 endif
 
 #Standard Deps
