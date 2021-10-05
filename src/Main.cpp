@@ -12,7 +12,7 @@ int main(int argc, char *argv[]) {
     XInitThreads();
     Logger::print(Level::INFO, "X11 was used for this build.");
 #else
-    Logger::print(Level::INFO, "X11 was NOT used for this build.");
+    Logger::print(Level::WARN, "X11 was NOT used for this build, this is likely to cause the engine to fail.");
 #endif
     Json::fetchFlags("assets/conf.json");
     Flagger::parse(argc, argv);
