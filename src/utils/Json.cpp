@@ -9,7 +9,7 @@ void Json::fetchFlags(const std::string& path) {
     Flagger::setFlag("vSync", true);
     Flagger::setFlag("spriteSmoothing", true);
     Flagger::setFlag("regenAtlas", false);
-    Flagger::setFlag("threaded", false);
+    Flagger::setFlag("compatMode", 0);
 
     //Default values for some flags.
 

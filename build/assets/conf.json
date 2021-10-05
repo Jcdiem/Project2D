@@ -7,7 +7,5 @@
   "vSync": true,
   "spriteSmoothing": true,
   "regenAtlas": true,
-  "threaded": true //Disable for added compatibility, causes a severe hit in performance if disabled.
-                    //It also makes it impossible to detach the framerate from the engine,
-                    //so they are fixed at the "tickrate" value
+  "compatMode": 0 //The higher the number, the slower, but more stable the system used for individual components. (1-3)
 }

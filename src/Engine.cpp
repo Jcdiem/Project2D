@@ -43,23 +43,38 @@ Engine::~Engine() {
 }
 
 void Engine::initSystem(Systems system, int tickrate) {  //Used to init some or all engine systems, error handling may go here.
+    int framerate = Flagger::getFlag("framerate");
+    //Only used by "all" system type
+
     switch(system) {
         case Systems::render: //Calls the clock runner function (as a new thread) with a function ptr to render.
+            Logger::print(Level::INFO, "Rendering at tickrate of ", tickrate);
             systems[0] = std::thread(&Engine::clockRunner, this, &Engine::render, tickrate);
             break;
         case Systems::update: //Calls the clock runner function (as a new thread) with a function ptr to update.
+            Logger::print(Level::INFO, "Updating at tickrate of ", tickrate);
             systems[1] = std::thread(&Engine::clockRunner, this, &Engine::update, tickrate);
             break;
         case Systems::listen: //Calls the clock runner function with a function ptr to listen (Hijacking the current thread).
-            Engine::clockRunner(&Engine::listen, tickrate);
+            Logger::print(Level::INFO, "Event listening at tickrate of ", tickrate);
+            systems[2] = std::thread(&Engine::clockRunner, this, &Engine::listen, tickrate);
             break;
         case Systems::all: //Initializes all systems and then hijacks current thread for --event listening-- rendering
-            systems[0] = std::thread(&Engine::clockRunner, this, &Engine::listen, tickrate);
+            Logger::print(Level::INFO, "Updating at tickrate of ", tickrate);
             systems[1] = std::thread(&Engine::clockRunner, this, &Engine::update, tickrate);
-            Engine::clockRunner(&Engine::render, tickrate);
+            Logger::print(Level::INFO, "Event listening at tickrate of ", tickrate);
+            systems[2] = std::thread(&Engine::clockRunner, this, &Engine::listen, tickrate);
+
+            Logger::print(Level::INFO, "Rendering at tickrate of ", framerate);
+            Engine::clockRunner(&Engine::render, framerate);
+            break;
+        case Systems::rlSpecial:
+            Logger::print(Level::INFO, "Rendering and event listening mixed system at tickrate of ", tickrate);
+            Engine::clockRunner(&Engine::renderListenBundle, tickrate);
             break;
         case Systems::bundled:
-            Engine::clockRunner(&Engine::bundledSystems, tickrate);
+            Logger::print(Level::INFO, "Running fully mixed systems at tickrate of ", tickrate);
+            Engine::clockRunner(&Engine::fullBundle, tickrate);
             break;
     }
 
@@ -98,15 +113,20 @@ void Engine::render() {
     //Render things here!
 //    window->draw(canvas);
 
-    window->display();
+//    window->display();
 
     window->setActive(false);
 }
 
-void Engine::bundledSystems() {
+void Engine::fullBundle() {
     listen();
     update();
     render();
+}
+
+void Engine::renderListenBundle() {
+    render();
+    listen();
 }
 
 void Engine::quit() {

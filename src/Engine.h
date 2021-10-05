@@ -19,6 +19,8 @@ enum Systems {
     listen,
     all,
     bundled,
+    rlSpecial, //Special system type used for strange compatibility mode.
+               //Puts rendering and event listening on the same thread, does not initialize any other systems.
 };
 
 class Engine {
@@ -67,7 +69,12 @@ public:
     /*!
      * @brief Call each of the system functions seen above in this order (Listen, Update, Render)
      */
-    void bundledSystems();
+    void fullBundle();
+
+    /*!
+     * @brief Call both the render and listen functions in the same thread, similarly to compatibility mode 3
+     */
+    void renderListenBundle();
 
     /*!
      * @brief Handles exit operations that need to be done before the destructor
@@ -82,9 +89,9 @@ public:
     void clockRunner(void (Engine::*system)(), int tickrate);
 private:
     /*!
-     * @brief Threads for each system (-1)
+     * @brief Threads for each system
      */
-    std::thread systems[2];
+    std::thread systems[3];
 
     /*!
      * @brief Bool for whether the application is meant to be running
