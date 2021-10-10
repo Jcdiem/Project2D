@@ -107,13 +107,10 @@ void Engine::update() {
 void Engine::render() {
     window->setActive(true);
 
-    //Render calls
     window->clear(sf::Color::Black);
+    window->display();
 
     //Render things here!
-//    window->draw(canvas);
-
-//    window->display();
 
     window->setActive(false);
 }
