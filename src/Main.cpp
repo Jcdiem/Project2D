@@ -30,11 +30,11 @@ int main(int argc, char *argv[]) {
             engine.initSystem(Systems::listen, Flagger::getFlag("tickrate"));
             break;
         case 1 :
-            Logger::print(Level::WARN, "Render hijack engine enabled. (1)");
+            Logger::print(Level::INFO, "Render hijack engine enabled. (1)");
             engine.initSystem(Systems::all, Flagger::getFlag("tickrate"));
             break;
         case 2 :
-            Logger::print(Level::WARN, "Partially bundled engine enabled. (2)");
+            Logger::print(Level::INFO, "Partially bundled engine enabled. (2)");
             engine.initSystem(Systems::update, Flagger::getFlag("tickrate"));
             engine.initSystem(Systems::rlSpecial, Flagger::getFlag("tickrate"));
             break;

@@ -78,8 +78,8 @@ void Engine::initSystem(Systems system, int tickrate) {  //Used to init some or 
             break;
     }
 
-    //TODO: Remove debug canvas
-    spriteDebugList = {Sprite(0, 0, 1280, 7, "dvd"), Sprite(35, 500, "tiles", "10xConcreteTile")};
+    //TODO: Remove debug canvas + fix issues with canvas too :)
+    spriteDebugList = {Sprite(0, 0, 1280, 720, "dvd"), Sprite(35, 500, "tiles", "10xConcreteTile")};
     canvas.fillCanvasLayer(spriteDebugList,0);
 }
 
@@ -109,8 +109,7 @@ void Engine::render() {
 
     window->clear(sf::Color::Black);
     window->display();
-
-    //Render things here!
+    window->draw(canvas);
 
     window->setActive(false);
 }
