@@ -77,10 +77,6 @@ void Engine::initSystem(Systems system, int tickrate) {  //Used to init some or 
             Engine::clockRunner(&Engine::fullBundle, tickrate);
             break;
     }
-
-    //TODO: Remove debug canvas + fix issues with canvas too :)
-    spriteDebugList = {Sprite(0, 0, 1280, 720, "dvd"), Sprite(35, 500, "tiles", "10xConcreteTile")};
-    canvas.fillCanvasLayer(spriteDebugList,0);
 }
 
 void Engine::listen() {
@@ -108,8 +104,8 @@ void Engine::render() {
     window->setActive(true);
 
     window->clear(sf::Color::Black);
+    window->draw(Sprite(0, 0, 1280, 720, "dvd"));
     window->display();
-    window->draw(canvas);
 
     window->setActive(false);
 }
