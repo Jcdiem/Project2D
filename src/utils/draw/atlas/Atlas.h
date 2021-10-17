@@ -20,7 +20,7 @@ class AtlasIndex;
 
 struct AtlasTex {
     bool found;
-    sf::Texture texture;
+    sf::Texture* texture;
     std::tuple<uintTrio> location;
 };
 
@@ -36,10 +36,14 @@ private:
     }
     
     AtlasTex find(const std::string& spriteName) {
+        if(spriteName == "atlas") {
+            return {true, &internalAtlasTex, {0, internalAtlasTex.getSize().x, internalAtlasTex.getSize().y}};
+        }
+
         try {
             std::tuple<uintTrio> imgLoc = offsets.at(spriteName);
 
-            return {true, sf::Texture(atlasTex), imgLoc};
+            return {true, &internalAtlasTex, imgLoc};
 
         } catch(std::exception& e) {
             return {false};
@@ -52,7 +56,7 @@ private:
     std::map<std::string, std::tuple<uintTrio>> offsets;
 
     sf::Image atlasImg;
-    sf::Texture atlasTex;
+    sf::Texture internalAtlasTex;
 };
 
 

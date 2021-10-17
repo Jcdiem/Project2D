@@ -4,12 +4,12 @@ Atlas::Atlas(const std::filesystem::path &path) {
     if(std::filesystem::exists(path.string() + "/atlas.png")) {
         if(!Flagger::getFlag("regenAtlas")) {
             try {
-                if(!atlasTex.loadFromFile(path.string() + "/atlas.png")) {
+                if(!internalAtlasTex.loadFromFile(path.string() + "/atlas.png")) {
                     throw std::exception();
                 }
 
-                atlasTex.generateMipmap();
-                atlasTex.setSmooth(Flagger::getFlag("spriteSmoothing"));
+                internalAtlasTex.generateMipmap();
+                internalAtlasTex.setSmooth(Flagger::getFlag("spriteSmoothing"));
 
                 offsets = Json::jsonToMap<uintTrio>(path.string() + "/atlas.json");
                 return; //We already have an atlas, and we want to keep it :)
@@ -74,7 +74,7 @@ Atlas::Atlas(const std::filesystem::path &path) {
     Json::mapToJson(offsets, path.string() + "/atlas.json");
     atlasImg.saveToFile(path.string() + "/atlas.png");
 
-    atlasTex.loadFromImage(atlasImg);
-    atlasTex.generateMipmap();
-    atlasTex.setSmooth(Flagger::getFlag("spriteSmoothing"));
+    internalAtlasTex.loadFromImage(atlasImg);
+    internalAtlasTex.generateMipmap();
+    internalAtlasTex.setSmooth(Flagger::getFlag("spriteSmoothing"));
 }

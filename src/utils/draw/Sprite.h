@@ -20,17 +20,17 @@ public:
         texture = atlasTex.texture;
         texLoc = atlasTex.location;
 
-        textRect.top = std::get<0>(texLoc);
-        textRect.left = 0;
-        textRect.width = std::get<1>(texLoc);
-        textRect.height = std::get<2>(texLoc);
+        texRect.top = std::get<0>(texLoc);
+        texRect.left = 0;
+        texRect.width = std::get<1>(texLoc);
+        texRect.height = std::get<2>(texLoc);
 
-        spriteScalar.x = float(dwidth) / textRect.width;
-        spriteScalar.y = float(dheight) / textRect.height;
+        spriteScalar.x = float(dwidth) / texRect.width;
+        spriteScalar.y = float(dheight) / texRect.height;
 
         sprite.move(x, y);
-        sprite.setTexture(texture);
-        sprite.setTextureRect(textRect);
+        sprite.setTexture(*texture);
+        sprite.setTextureRect(texRect);
         sprite.setScale(spriteScalar);
     }
 
@@ -40,32 +40,31 @@ public:
         texture = atlasTex.texture;
         texLoc = atlasTex.location;
 
-        textRect.top = std::get<0>(texLoc);
-        textRect.left = 0;
-        textRect.width = std::get<1>(texLoc);
-        textRect.height = std::get<2>(texLoc);
+        texRect.top = std::get<0>(texLoc);
+        texRect.left = 0;
+        texRect.width = std::get<1>(texLoc);
+        texRect.height = std::get<2>(texLoc);
 
         spriteScalar.x = 1;
         spriteScalar.y = 1;
 
         sprite.move(x, y);
-        sprite.setTexture(texture);
-        sprite.setTextureRect(textRect);
+        sprite.setTexture(*texture);
+        sprite.setTextureRect(texRect);
         sprite.setScale(spriteScalar);
     }
 
+    Sprite();
+
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-    void setSize(int dwidth, int dheight);
+    void setSize(float dwidth, float dheight);
 
 private:
-    float width;
-    float height;
-
     std::tuple<uintTrio> texLoc;
     sf::Vector2f spriteScalar;
 
-    sf::Texture texture;
-    sf::IntRect textRect;
+    sf::Texture* texture;
+    sf::IntRect texRect;
     sf::Sprite sprite;
 };
 

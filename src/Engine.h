@@ -37,7 +37,7 @@ public:
      * @param height Height in pixels of the window
      * @param fullscreen True/False for whether to load fullscreen
      */
-    Engine(const std::string& title, int width, int height, bool fullscreen, bool vsync);
+    Engine(const std::string& title, int width, int height, bool fullscreen);
 
     /*!
      * @brief Destructor used to destroy the sfml window and join any threads that need joining.
@@ -89,6 +89,11 @@ public:
     void clockRunner(void (Engine::*system)(), int tickrate);
 private:
     /*!
+     * Things done by both constructors, put into one location for easy editing.
+     */
+    void postInit();
+
+    /*!
      * @brief Threads for each system
      */
     std::thread systems[3];
@@ -111,12 +116,7 @@ private:
     /*!
      * @brief The canvas used for rendering
      */
-     Canvas canvas = Canvas();
-
-    /*!
-     * @brief Just a temporary variable to hold some sprites drawn thru canvas.
-     */
-    std::list<Sprite> spriteDebugList;
+     Canvas canvas;
 };
 
 #endif //PROJECT2DTD_ENGINE_H

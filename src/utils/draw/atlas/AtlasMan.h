@@ -16,7 +16,7 @@ public:
         if(tex.found) {
             return tex;
         } else {
-            return {false, sf::Texture(missingTex), {0, 128, 128}};
+            return {false, &missingTex, {0, 128, 128}};
         }
     }
 

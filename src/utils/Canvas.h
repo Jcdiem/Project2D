@@ -1,7 +1,9 @@
 #include "draw/Sprite.h"
 #include "Logger.h"
-#include <stdexcept>
-#include <list>
+
+#include <map>
+#include <vector>
+
 #include <SFML/Graphics/RenderWindow.hpp>
 
 #ifndef BUILD_CANVAS_H
@@ -12,19 +14,28 @@ class Canvas : public sf::Drawable {
 public:
     /*!
      * @brief Standard inheritable function used by sfml to allow for nice syntax on drawn objects
+     *        Objects are drawn from lowest layer to highest layer,
+     *        meaning an object with a larger layer number gets drawn on top.
      * @param You shouldn't need to worry about it :D
      */
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
     /*!
      * @brief Fill a layer of the canvas with items to print
-     * @param spriteListToAdd A list containing sprites aligned to the screen to be drawn
-     * @param layer The layer to draw the sprites on (0 is back, 5 is front)
+     * @param layer, The layer to be drawn on, can be any number as long as it's an int
+     * @param sprite, A drawable object, according to sfml, inherits from sf::Drawable
      */
-    void fillCanvasLayer(const std::list<Sprite>& spriteListToAdd, int layer);
+    void addSprite(int layer, sf::Drawable* sprite);
+
+    /*!
+     * @brief Fill a layer of the canvas with items to print
+     * @param layer, The layer to be drawn on, can be any number as long as it's an int
+     * @param sprite, A drawable object, according to sfml, inherits from sf::Drawable
+     */
+    void addSprite(int layer, Sprite* sprite);
 
 private:
-    std::vector<Sprite*> canvasLayers[5];
+    std::map<int, std::vector<sf::Drawable*>> layers;
 };
 
 

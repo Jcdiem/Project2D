@@ -4,7 +4,6 @@
   "framerate": 60,
   "tickrate": 120,
   "fullscreen": false,
-  "vSync": true,
   "spriteSmoothing": true,
   "regenAtlas": true,
   "compatMode": 0 //The higher the number, the slower, but more stable the system used for individual components. (0-3)

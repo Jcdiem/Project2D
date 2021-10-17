@@ -3,7 +3,6 @@
 Engine::Engine() {
     int xRes = Flagger::getFlag("xRes");
     int yRes = Flagger::getFlag("yRes");
-    bool vsync = Flagger::getFlag("vSync");
 
     if(Flagger::getFlag("fullscreen")) {
         window = new sf::RenderWindow(sf::VideoMode(xRes, yRes), "P2D", sf::Style::Fullscreen);
@@ -11,25 +10,17 @@ Engine::Engine() {
         window = new sf::RenderWindow(sf::VideoMode(xRes, yRes), "P2D", sf::Style::Default);
     }
 
-    window->setActive(false);
-
-    window->setVerticalSyncEnabled(vsync);
-
-    isRunning = true;
+    postInit();
 }
 
-Engine::Engine(const std::string& title, int width, int height, bool fullscreen, bool vsync) {
+Engine::Engine(const std::string& title, int width, int height, bool fullscreen) {
     if(fullscreen) {
         window = new sf::RenderWindow(sf::VideoMode(width,height),title, sf::Style::Fullscreen);
     } else {
         window = new sf::RenderWindow(sf::VideoMode(width,height),title, sf::Style::Close);
     }
 
-    window->setActive(false);
-
-    window->setVerticalSyncEnabled(vsync);
-
-    isRunning = true;
+    postInit();
 }
 
 Engine::~Engine() {
@@ -102,11 +93,11 @@ void Engine::update() {
 
 void Engine::render() {
     window->setActive(true);
-
     window->clear(sf::Color::Black);
-    window->draw(Sprite(0, 0, 1280, 720, "dvd"));
-    window->display();
 
+    window->draw(canvas);
+
+    window->display();
     window->setActive(false);
 }
 
@@ -155,4 +146,16 @@ void Engine::clockRunner(void (Engine::*system)(), int tickrate) {
             timeLost += (tickTime - tickDelay);
         }
     }
+}
+
+void Engine::postInit() {
+    window->setActive(false);
+    window->setVerticalSyncEnabled(false);
+    isRunning = true;
+
+    //Really terrible code for an example, in a real situation, you would just give the function a pointer and it will
+    //happily chug away :D
+    canvas.addSprite(1, new Sprite(0, 0, 1280, 720, "dvd"));
+    canvas.addSprite(-88, new Sprite(0, 0, 1280, 720, "atlas"));
+    canvas.addSprite(0, new Sprite());
 }
