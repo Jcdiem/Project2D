@@ -22,7 +22,7 @@ void Flagger::parse(int argc, char *argv[]) {
     }
 }
 
-int Flagger::getFlag(const std::string &flag) {
+int Flagger::find(const std::string &flag) {
     try {
         return flags.at(flag);
     } catch(std::exception& e) {
@@ -31,8 +31,11 @@ int Flagger::getFlag(const std::string &flag) {
     }
 }
 
-void Flagger::setFlag(const std::string& flag, int value) {
-    Logger::print(Level::INFO, "Flag \"", flag, "\" updated : ", flags[flag], " -> ", value);
+void Flagger::set(const std::string& flag, int value) {
     flags[flag] = value;
+}
+
+std::map<std::string, int> *Flagger::getInternal() {
+    return &flags;
 }
 

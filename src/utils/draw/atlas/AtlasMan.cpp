@@ -12,5 +12,5 @@ void AtlasMan::stitchAtlases() {
     missingImg.create(128, 128, EmbeddedSprites::nullsprite);
     missingTex.loadFromImage(missingImg);
     missingTex.setRepeated(true);
-    missingTex.setSmooth(Flagger::getFlag("spriteSmoothing"));
+    missingTex.setSmooth(Flagger::find("spriteSmoothing"));
 }

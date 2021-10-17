@@ -3,6 +3,7 @@ project('P2D', 'cpp', default_options:['cpp_std=gnu++2a']) #Use the most recent 
 sources = ['src/utils/Json.cpp',
            'src/utils/Flagger.cpp',
            'src/utils/Canvas.cpp',
+           'src/utils/LuaProcessor.cpp',
            'src/utils/entity/Entity.cpp',
            'src/utils/entity/SpriteComponent.cpp',
            'src/utils/draw/atlas/Atlas.cpp',
@@ -23,9 +24,9 @@ endif
 #Standard Deps
 sfml = dependency('sfml-all')
 dependencies += sfml
-lua = dependency('luajit') #<----
+lua = dependency('lua') #<----
 dependencies += lua
-#Replace 'lua' with whatever flavor you prefer, IE: luajit, lua, lua53, lua52, lua51 and so on,
+#Replace 'lua' with whatever flavor you prefer, IE: luajit, lua/lua54, lua53, lua52, lua51 and so on,
 #As long as sol2 supports it, it should work here.
 
 #Meson Built-ins

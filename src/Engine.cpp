@@ -1,10 +1,10 @@
 #include "Engine.h"
 
 Engine::Engine() {
-    int xRes = Flagger::getFlag("xRes");
-    int yRes = Flagger::getFlag("yRes");
+    int xRes = Flagger::find("xRes");
+    int yRes = Flagger::find("yRes");
 
-    if(Flagger::getFlag("fullscreen")) {
+    if(Flagger::find("fullscreen")) {
         window = new sf::RenderWindow(sf::VideoMode(xRes, yRes), "P2D", sf::Style::Fullscreen);
     } else {
         window = new sf::RenderWindow(sf::VideoMode(xRes, yRes), "P2D", sf::Style::Default);
@@ -28,13 +28,14 @@ Engine::~Engine() {
         if(system.joinable()) system.join();
     }
 
-    window->close();
+    LuaProcessor::destroy();
 
+    window->close();
     delete window;
 }
 
 void Engine::initSystem(Systems system, int tickrate) {  //Used to init some or all engine systems, error handling may go here.
-    int framerate = Flagger::getFlag("framerate");
+    int framerate = Flagger::find("framerate");
     //Only used by "all" system type
 
     switch(system) {
@@ -77,8 +78,8 @@ void Engine::listen() {
                 quit();
                 break;
             case sf::Event::Resized:
-                Flagger::setFlag("xRes", event.size.width);
-                Flagger::setFlag("yRes", event.size.height);
+                Flagger::set("xRes", event.size.width);
+                Flagger::set("yRes", event.size.height);
                 window->setView(sf::View(sf::FloatRect(0, 0, event.size.width, event.size.height)));
                 break;
             default:
@@ -149,6 +150,8 @@ void Engine::clockRunner(void (Engine::*system)(), int tickrate) {
 }
 
 void Engine::postInit() {
+    LuaProcessor::initialize();
+
     window->setActive(false);
     window->setVerticalSyncEnabled(false);
     isRunning = true;

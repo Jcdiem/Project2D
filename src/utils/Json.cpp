@@ -1,14 +1,14 @@
 #include "Json.h"
 
 void Json::fetchFlags(const std::string& path) {
-    Flagger::setFlag("xRes", 1280);
-    Flagger::setFlag("yRes", 720);
-    Flagger::setFlag("framerate", 60);
-    Flagger::setFlag("tickrate", 120);
-    Flagger::setFlag("fullscreen",  false);
-    Flagger::setFlag("spriteSmoothing", true);
-    Flagger::setFlag("regenAtlas", false);
-    Flagger::setFlag("compatMode", 0);
+    Flagger::set("xRes", 1280);
+    Flagger::set("yRes", 720);
+    Flagger::set("framerate", 60);
+    Flagger::set("tickrate", 120);
+    Flagger::set("fullscreen", false);
+    Flagger::set("spriteSmoothing", true);
+    Flagger::set("regenAtlas", false);
+    Flagger::set("compatMode", 0);
 
     //Default values for some flags.
 
@@ -16,9 +16,9 @@ void Json::fetchFlags(const std::string& path) {
 
     for(auto& [setting, value] : file.items()) {
         try {
-            Flagger::setFlag(setting, int(value));
+            Flagger::set(setting, int(value));
         } catch(std::exception& e) {
-            Logger::print(Level::ERROR, "Option in conf.json \"", setting, "\" holds invalid type, ", e.what());
+            Logger::print(Level::ERROR, "Option in conf.lua \"", setting, "\" holds invalid type, ", e.what());
         }
     }
 }
