@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - name: Install dependencies
-        run: sudo apt-get update && sudo apt-get install libsfml-dev libluajit-5.1-dev liblua5.3-0
+        run: sudo apt-get update && sudo apt-get install libsfml-dev libluajit-5.1-2
         
       - uses: actions/checkout@v2
         with:
