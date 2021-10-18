@@ -21,8 +21,6 @@ Follow our progress over at https://app.gitkraken.com/glo/board/XzQgMqsO6gARq5hb
 
 ## Credits
 <ul>
-  <li><a href="https://github.com/nlohmann/json">Nlohmann's Json Library for Modern C++</a>
-    <ul><li>This powers almost all of our Entity Component System</ul>
   <li><a href="https://github.com/ThePhD/sol2">Sol2 for LUA</a>
     <ul><li>The library that lets us use LUA easily</ul>
 </ul>
