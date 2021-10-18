@@ -1,19 +1,16 @@
 #include "LuaProcessor.h"
 
 void LuaProcessor::initialize() {
-    systemControl = initState();
+    initState(&systemControl);
+    initState(&dirtyRunner);
 
-    (*systemControl)["flags"] = Flagger::getInternal();
+    systemControl["flags"] = Flagger::getInternal();
 }
 
 void LuaProcessor::destroy() {
-    delete systemControl;
-
-    for(auto object : objectStates) {
-        auto state = object.second;
+    for(auto &object : objectStates) {
         auto script = objectScripts[object.first];
 
-        delete state;
         delete script;
     }
 }
@@ -47,6 +44,5 @@ void LuaProcessor::fetchFlags(std::string filePath) {
     Flagger::set("regenAtlas", false);
     Flagger::set("compatMode", 0);
 
-    auto result = systemControl->script_file(filePath);
-
+    auto result = systemControl.script_file(filePath);
 }

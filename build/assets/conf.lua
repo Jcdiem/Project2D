@@ -5,4 +5,4 @@ flags.tickrate        = 120
 flags.fullscreen      = 0
 flags.spriteSmoothing = 0
 flags.regenAtlas      = 0
-compatMode            = 2
+flags.compatMode      = 2

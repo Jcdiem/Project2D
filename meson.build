@@ -1,16 +1,16 @@
 project('P2D', 'cpp', default_options:['cpp_std=gnu++2a']) #Use the most recent C++ standard aka 2a
 
-sources = ['src/utils/Json.cpp',
+sources = ['src/Engine.cpp',
+           'src/Main.cpp',
            'src/utils/Flagger.cpp',
            'src/utils/Canvas.cpp',
            'src/utils/LuaProcessor.cpp',
            'src/utils/entity/Entity.cpp',
            'src/utils/entity/SpriteComponent.cpp',
-           'src/utils/draw/atlas/Atlas.cpp',
-           'src/utils/draw/atlas/AtlasMan.cpp',
            'src/utils/draw/Sprite.cpp',
-           'src/Engine.cpp',
-           'src/Main.cpp']
+           'src/utils/draw/atlas/Atlas.cpp',
+           'src/utils/draw/atlas/AtlasMan.cpp'
+]
 
 dependencies = []
 link_args = []
@@ -34,10 +34,6 @@ thread = dependency('threads')
 dependencies += thread
 
 #Submodules
-nlohmann_json = include_directories('libs/json/include')
-json = declare_dependency(include_directories: nlohmann_json)
-dependencies += json
-
 phd_sol2 = include_directories('libs/sol2/include')
 sol2 = declare_dependency(include_directories: phd_sol2)
 dependencies += sol2
