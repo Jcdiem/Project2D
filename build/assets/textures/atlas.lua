@@ -1,0 +1,1 @@
+atlas._dvd={0,200,82,};atlas._dvd24frame={82,4800,82,};atlas._dvdAnim={164,401,82,};atlas._dvdbe={246,200,82,};atlas._explosion={328,1024,64,};atlas._mapTex0={392,32,32,};atlas._mapTex1={424,32,32,};atlas._mapTex2={456,32,32,};atlas._rainbowExplode={488,736,32,};

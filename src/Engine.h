@@ -8,6 +8,7 @@
 #include <mutex>
 #include <condition_variable>
 
+#include "utils/LuaProcessor.h"
 #include "utils/Flagger.h"
 
 #include "utils/draw/Sprite.h" //TEMP

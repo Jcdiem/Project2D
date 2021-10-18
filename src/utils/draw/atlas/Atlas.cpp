@@ -2,24 +2,27 @@
 
 Atlas::Atlas(const std::filesystem::path &path) {
     if(std::filesystem::exists(path.string() + "/atlas.png")) {
-        if(!Flagger::getFlag("regenAtlas")) {
+        if(!Flagger::find("regenAtlas")) {
             try {
                 if(!internalAtlasTex.loadFromFile(path.string() + "/atlas.png")) {
                     throw std::exception();
                 }
 
                 internalAtlasTex.generateMipmap();
-                internalAtlasTex.setSmooth(Flagger::getFlag("spriteSmoothing"));
+                internalAtlasTex.setSmooth(Flagger::find("spriteSmoothing"));
 
-                offsets = Json::jsonToMap<uintTrio>(path.string() + "/atlas.json");
+                offsets = LuaProcessor::luaConfToMap<unsigned int, 3>(path.string() + "/atlas.lua", "atlas");
+
                 return; //We already have an atlas, and we want to keep it :)
             } catch(std::exception& e) {
                 Logger::print(Level::WARN, "Something is wrong with one of the cached atlases!");
             }
+        } else {
+            Logger::print(Level::WARN, "Forcibly rebuilding atlases...");
         }
 
         std::filesystem::remove(path.string() + "/atlas.png");
-        std::filesystem::remove(path.string() + "/atlas.json");
+        std::filesystem::remove(path.string() + "/atlas.lua");
         //We already have an atlas, but we want/need a new one /:
     }
 
@@ -41,7 +44,7 @@ Atlas::Atlas(const std::filesystem::path &path) {
                     images.pop_back();
                     break;
                 }
-                images.back().second = item.path().stem();
+                images.back().second = "_" + item.path().stem().string();
             }
         }
     }
@@ -71,10 +74,10 @@ Atlas::Atlas(const std::filesystem::path &path) {
         curOffset += image.first.getSize().y;
     }
 
-    Json::mapToJson(offsets, path.string() + "/atlas.json");
+    LuaProcessor::mapToLuaConf(offsets, path.string() + "/atlas.lua", "atlas");
     atlasImg.saveToFile(path.string() + "/atlas.png");
 
     internalAtlasTex.loadFromImage(atlasImg);
     internalAtlasTex.generateMipmap();
-    internalAtlasTex.setSmooth(Flagger::getFlag("spriteSmoothing"));
+    internalAtlasTex.setSmooth(Flagger::find("spriteSmoothing"));
 }

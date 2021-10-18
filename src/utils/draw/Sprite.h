@@ -60,7 +60,7 @@ public:
     void setSize(float dwidth, float dheight);
 
 private:
-    std::tuple<uintTrio> texLoc;
+    std::array<unsigned int, 3> texLoc;
     sf::Vector2f spriteScalar;
 
     sf::Texture* texture;

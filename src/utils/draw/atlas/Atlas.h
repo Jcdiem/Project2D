@@ -12,16 +12,14 @@
 #include "EmbeddedSprites.h"
 #include "src/utils/Logger.h"
 #include "src/utils/Flagger.h"
-#include "src/utils/Json.h"
-
-#define uintTrio unsigned int, unsigned int, unsigned int
+#include "src/utils/LuaProcessor.h"
 
 class AtlasIndex;
 
 struct AtlasTex {
     bool found;
     sf::Texture* texture;
-    std::tuple<uintTrio> location;
+    std::array<unsigned int, 3> location;
 };
 
 class Atlas {
@@ -41,9 +39,8 @@ private:
         }
 
         try {
-            std::tuple<uintTrio> imgLoc = offsets.at(spriteName);
 
-            return {true, &internalAtlasTex, imgLoc};
+            return {true, &internalAtlasTex, offsets.at("_" + spriteName)};
 
         } catch(std::exception& e) {
             return {false};
@@ -53,7 +50,7 @@ private:
     std::map<std::string, Atlas> children;
 
     //Tuple is formatted as follows, 0: vertical offset, 1: width, 2: height
-    std::map<std::string, std::tuple<uintTrio>> offsets;
+    std::map<std::string, std::array<unsigned int, 3>> offsets;
 
     sf::Image atlasImg;
     sf::Texture internalAtlasTex;
