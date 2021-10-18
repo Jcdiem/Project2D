@@ -10,10 +10,6 @@ Engine::Engine() {
         window = new sf::RenderWindow(sf::VideoMode(xRes, yRes), "P2D", sf::Style::Default);
     }
 
-    Entity e;
-
-    e.addComponent<int>();
-
     postInit();
 }
 
