@@ -6,7 +6,8 @@
 
 class SpriteComponent : public Component {
 public:
-    SpriteComponent() = default;
+    explicit SpriteComponent(EntityData &data) : Component(data){}
+
     void init() override;
     void update() override;
     void draw() override;

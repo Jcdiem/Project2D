@@ -11,8 +11,11 @@ public:
     virtual void draw(){};
 
     virtual ~Component() = default;
-private:
-    EntityData* data;
+
+protected:
+    explicit Component(EntityData &data) : data(data){};
+
+    EntityData& data;
 };
 
 #endif //BUILD_COMPONENT_H

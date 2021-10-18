@@ -8,9 +8,9 @@
 
 class Entity {
 public:
-    template<class Comp>
+    template <class Comp, class = typename std::enable_if<std::is_base_of<Component, Comp>::value>::type>
     void addComponent() {
-        Comp comp = Comp();
+        Comp comp = Comp(data);
         comp.init();
 
         components.emplace_back(std::move(comp));

@@ -7,8 +7,4 @@
 #include "Component.h"
 #include "SpriteComponent.h"
 
-enum Components {
-    SpriteComponent,
-};
-
 #endif //BUILD_COMPONENTS_H

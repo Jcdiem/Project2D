@@ -13,6 +13,7 @@
 
 #include "utils/draw/Sprite.h" //TEMP
 #include "utils/Canvas.h"
+#include "utils/entity/Entity.h"
 
 enum Systems {
     render,
