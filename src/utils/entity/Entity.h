@@ -18,7 +18,14 @@ public:
 
     void update();
     void draw();
+    void kill();
+    void orphan();
+    void active(bool set);
+    [[nodiscard]] bool active() const;
 private:
+    bool orphaned;
+    bool dead;
+    bool activated;
     Entity* parent;
     std::vector<Entity*> children;
     std::vector<Component> components;

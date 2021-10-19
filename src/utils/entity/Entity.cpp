@@ -11,3 +11,24 @@ void Entity::draw() {
         component.draw();
     }
 }
+
+void Entity::kill() {
+    dead = true;
+    for(auto child : children) {
+        if(child) {
+            child->orphan();
+        }
+    }
+}
+
+void Entity::orphan() {
+    orphaned = true;
+}
+
+void Entity::active(bool set) {
+    activated = set;
+}
+
+bool Entity::active() const {
+    return activated;
+}

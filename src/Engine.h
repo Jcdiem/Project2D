@@ -21,7 +21,7 @@ enum Systems {
     listen,
     all,
     bundled,
-    rlSpecial, //Special system type used for strange compatibility mode.
+    rlSpecial, //Special system type used for a compatibility mode.
                //Puts rendering and event listening on the same thread, does not initialize any other systems.
 };
 

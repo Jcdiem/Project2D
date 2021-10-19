@@ -2,7 +2,7 @@
 #ifndef BUILD_COMPONENTS_H
 #define BUILD_COMPONENTS_H
 
-//Helper include and container for enum
+//Helper include for all Components in the correct order.
 
 #include "Component.h"
 #include "SpriteComponent.h"
