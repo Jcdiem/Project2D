@@ -1,6 +1,6 @@
 #pragma once
-#ifndef PROJECT2D_QUEUEINGTHREAD_H
-#define PROJECT2D_QUEUEINGTHREAD_H
+#ifndef BUILD_QUEUEINGTHREAD_H
+#define BUILD_QUEUEINGTHREAD_H
 
 #include <queue>
 #include <thread>
@@ -15,8 +15,13 @@ public:
         this->maxQue = maxQue;
     }
 
+    ~QueueingThread() {
+        halt();
+    }
+
     void halt() { //Shouldn't be needed? Default destructor should join the thread
         run = false;
+        empty.notify_all();
         thread.join();
     }
 
@@ -53,4 +58,4 @@ private:
     std::queue<void (*)()> queue;
 };
 
-#endif //PROJECT2D_QUEUEINGTHREAD_H
+#endif //BUILD_QUEUEINGTHREAD_H

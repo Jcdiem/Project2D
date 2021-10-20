@@ -1,7 +1,21 @@
 #include "Entity.h"
 
+Entity::Entity() {
+
+}
+
 void Entity::update() {
-    for(Component &component: components) {
+    if(!parent || parent->killedStatus()) { //Check if parent has died
+        orphaned = true;
+        parent = nullptr;
+    }
+
+    for(auto childIter = children.begin(); childIter != children.end(); childIter++) {
+        if(!(*childIter) || (*childIter)->killedStatus()) children.erase(childIter);
+        //Remove children that are null pointers or marked as dead.
+    }
+
+    for(Component &component: components) { //Run through and update all components!
         component.update();
     }
 }
@@ -21,14 +35,60 @@ void Entity::kill() {
     }
 }
 
+bool Entity::killedStatus() const {
+    return dead;
+}
+
 void Entity::orphan() {
     orphaned = true;
 }
 
-void Entity::active(bool set) {
-    activated = set;
+bool Entity::orphanedStatus() const {
+    return orphaned;
 }
 
-bool Entity::active() const {
-    return activated;
+void Entity::setActive(bool set) {
+    active = set;
+}
+
+bool Entity::activeStatus() const {
+    return active;
+}
+
+EntityData *Entity::getData() {
+    return &data;
+}
+
+void Entity::setParent(Entity* e) {
+    parent = e;
+
+    if(!parent || parent->killedStatus()) { //If you give me a pointer to null, or a dead parent, I become an orphan.
+        orphaned = true;
+    } else {
+        orphaned = false;
+
+        for(auto child : e->getChildren()) {
+            if(child == this) return; //Ensure we aren't already in the list of children before adding ourselves.
+        }
+
+        parent->addChild(this);
+    }
+}
+
+Entity* Entity::getParent() const {
+    return parent;
+}
+
+void Entity::addChild(Entity *e) {
+    if(e || !e->killedStatus()) {
+        children.push_back(e);
+
+        if(e->getParent() != this) { //Ensure we aren't already their parent to avoid infinite loops.
+            e->setParent(this);
+        }
+    }
+}
+
+std::vector<Entity*> Entity::getChildren() const {
+    return children;
 }

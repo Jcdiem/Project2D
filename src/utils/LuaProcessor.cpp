@@ -46,3 +46,9 @@ void LuaProcessor::fetchFlags(std::string filePath) {
 
     auto result = systemControl.script_file(filePath);
 }
+
+void LuaProcessor::generateEntity(Entity* e, const std::string& initScript) {
+    dirtyRunner["new_entity"] = e;
+
+    dirtyRunner.script(initScript);
+}

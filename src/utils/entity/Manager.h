@@ -1,16 +1,22 @@
+#pragma once
 #ifndef BUILD_MANAGER_H
 #define BUILD_MANAGER_H
 
 #include "Entity.h"
+#include "../LuaProcessor.h"
 #include "../QueueingThread.h"
 
 #include <vector>
+#include <map>
 
 namespace Manager {
     namespace {
         std::vector<Entity> entities;
-        QueueingThread thread = QueueingThread(255);
+        std::map<int, std::string> cachedInitScripts;
+        QueueingThread qthread = QueueingThread(255);
     }
+
+    void newEntity(int id);
 
     void cacheEntities();
 }

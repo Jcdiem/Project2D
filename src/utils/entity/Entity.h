@@ -8,8 +8,11 @@
 
 class Entity {
 public:
+    Entity();
+
     template <class Comp, class = typename std::enable_if<std::is_base_of<Component, Comp>::value>::type>
-    void addComponent() {
+    void addComponent() { //In order for lua to be able to add a new component,
+                          //you can do that at src/utils/LuaProcessor.cpp around line 26.
         Comp comp = Comp(data);
         comp.init();
 
@@ -18,14 +21,23 @@ public:
 
     void update();
     void draw();
+
     void kill();
     void orphan();
-    void active(bool set);
-    [[nodiscard]] bool active() const;
+    void setActive(bool set);
+    void setParent(Entity* e);
+    void addChild(Entity* e);
+
+    EntityData* getData();
+    [[nodiscard]] bool killedStatus() const;
+    [[nodiscard]] bool orphanedStatus() const;
+    [[nodiscard]] bool activeStatus() const;
+    [[nodiscard]] Entity* getParent() const;
+    [[nodiscard]] std::vector<Entity*> getChildren() const;
 private:
     bool orphaned;
     bool dead;
-    bool activated;
+    bool active;
     Entity* parent;
     std::vector<Entity*> children;
     std::vector<Component> components;

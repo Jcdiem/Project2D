@@ -10,20 +10,37 @@
 
 #include "Flagger.h"
 #include "Logger.h"
+#include "entity/Entity.h"
 
 namespace LuaProcessor {
-    namespace { //Private parts of the LuaProcessor kept here.
-        sol::state systemControl; //Used for scripts that need to affect the system.
-        sol::state dirtyRunner; //Used for one time scripts that shouldn't be run multiple times, or affect the system
-        std::map<unsigned int, sol::state> objectStates; //Used for instances of individual object, separate for each.
-        std::map<unsigned int, std::string*> objectScripts;
+    namespace { //Private parts of the LuaProcessor kept here. Compiler seems to also think they go unused, that's not true...
+        [[maybe_unused]] sol::state systemControl; //Used for scripts that need to affect the system.
+        [[maybe_unused]] sol::state dirtyRunner; //Used for one time scripts that shouldn't be run multiple times, or affect the system
+        [[maybe_unused]] std::map<unsigned int, sol::state> objectStates; //Used for instances of individual object, separate for each.
+        [[maybe_unused]] std::map<unsigned int, std::string*> objectScripts;
 
-        void initState(sol::state* state) {
+        [[maybe_unused]] void initState(sol::state* state) {
             //Basic lua libraries aren't included by default, if you want them you'll have to change that here!
             (*state).open_libraries(sol::lib::base);
+
+            state->new_usertype<Entity>("entity",
+                "kill", &Entity::kill,
+                "orphan", &Entity::orphan,
+                "setActive", &Entity::setActive,
+                "setParent", &Entity::setParent,
+                "addChild", &Entity::addChild,
+                "getData", &Entity::getData,
+                "killedStatus", &Entity::killedStatus,
+                "orphanedStatus", &Entity::orphanedStatus,
+                "activeStatus", &Entity::activeStatus,
+                "getParent", &Entity::getParent,
+                "getChildren", &Entity::getChildren,
+
+                "addSpriteComponent", &Entity::addComponent<SpriteComponent>
+            );
         }
 
-        sol::state initState() {
+        [[maybe_unused]] sol::state initState() {
             auto state = sol::state();
             //Basic lua libraries aren't included by default, if you want them you'll have to change that here!
             initState(&state);
@@ -69,6 +86,8 @@ namespace LuaProcessor {
 
         return result;
     }
+
+    void generateEntity(Entity* e, const std::string &initScript);
 }
 
 #endif //BUILD_LUAPROCESSOR_H

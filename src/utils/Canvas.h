@@ -1,3 +1,7 @@
+#pragma once
+#ifndef BUILD_CANVAS_H
+#define BUILD_CANVAS_H
+
 #include "draw/Sprite.h"
 #include "Logger.h"
 
@@ -5,9 +9,6 @@
 #include <vector>
 
 #include <SFML/Graphics/RenderWindow.hpp>
-
-#ifndef BUILD_CANVAS_H
-#define BUILD_CANVAS_H
 
 
 class Canvas : public sf::Drawable {
