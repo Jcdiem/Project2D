@@ -1,7 +1,10 @@
 #include "Entity.h"
 
 Entity::Entity() {
-
+    parent = nullptr;
+    orphaned = false;
+    dead = false;
+    active = true;
 }
 
 void Entity::update() {
@@ -62,7 +65,7 @@ EntityData *Entity::getData() {
 void Entity::setParent(Entity* e) {
     parent = e;
 
-    if(!parent || parent->killedStatus()) { //If you give me a pointer to null, or a dead parent, I become an orphan.
+    if(!parent) { //If you give me a dead parent, I become an orphan.
         orphaned = true;
     } else {
         orphaned = false;
@@ -80,7 +83,7 @@ Entity* Entity::getParent() const {
 }
 
 void Entity::addChild(Entity *e) {
-    if(e || !e->killedStatus()) {
+    if(e && !e->killedStatus()) {
         children.push_back(e);
 
         if(e->getParent() != this) { //Ensure we aren't already their parent to avoid infinite loops.
