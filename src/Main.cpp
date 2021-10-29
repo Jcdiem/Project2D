@@ -2,6 +2,7 @@
 #include "src/utils/Flagger.h"
 #include "utils/draw/atlas/AtlasMan.h"
 #include "utils/LuaProcessor.h"
+#include "utils/MicroLuaProcessor.h"
 
 #ifdef X11
 #include <X11/Xlib.h>
@@ -12,10 +13,11 @@ int main(int argc, char *argv[]) {
     XInitThreads();
     Logger::print(Level::INFO, "X11 was used for this build.");
 #else
-    Logger::print(Level::WARN, "X11 was NOT used for this build, this is likely to cause the engine to fail.");
+    Logger::print(Level::WARN, "X11 was NOT used for this build, this is likely to cause the engine to fail on some compatability settings");
 #endif
 
     LuaProcessor::initialize();
+    MicroLuaProcessor::initialize();
     LuaProcessor::fetchFlags("assets/conf.lua");
     Flagger::parse(argc, argv);
     AtlasMan::stitchAtlases();

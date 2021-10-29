@@ -3,7 +3,7 @@
 #define BUILD_MANAGER_H
 
 #include "Entity.h"
-#include "../LuaProcessor.h"
+#include "../MicroLuaProcessor.h"
 #include "../QueueingThread.h"
 
 #include <vector>
@@ -15,6 +15,8 @@ namespace Manager {
         std::map<int, std::string> cachedInitScripts;
         QueueingThread qthread = QueueingThread(255);
     }
+
+    void initialize();
 
     void newEntity(int id);
 

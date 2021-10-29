@@ -11,7 +11,7 @@ Atlas::Atlas(const std::filesystem::path &path) {
                 internalAtlasTex.generateMipmap();
                 internalAtlasTex.setSmooth(Flagger::find("spriteSmoothing"));
 
-                offsets = LuaProcessor::luaConfToMap<unsigned int, 3>(path.string() + "/atlas.lua", "atlas");
+                offsets = MicroLuaProcessor::luaConfToMap<unsigned int, 3>(path.string() + "/atlas.lua", "atlas");
 
                 return; //We already have an atlas, and we want to keep it :)
             } catch(std::exception& e) {
@@ -74,7 +74,7 @@ Atlas::Atlas(const std::filesystem::path &path) {
         curOffset += image.first.getSize().y;
     }
 
-    LuaProcessor::mapToLuaConf(offsets, path.string() + "/atlas.lua", "atlas");
+    MicroLuaProcessor::mapToLuaConf(offsets, path.string() + "/atlas.lua", "atlas");
     atlasImg.saveToFile(path.string() + "/atlas.png");
 
     internalAtlasTex.loadFromImage(atlasImg);

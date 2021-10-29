@@ -12,7 +12,7 @@
 #include "EmbeddedSprites.h"
 #include "src/utils/Logger.h"
 #include "src/utils/Flagger.h"
-#include "src/utils/LuaProcessor.h"
+#include "src/utils/MicroLuaProcessor.h"
 
 class AtlasIndex;
 

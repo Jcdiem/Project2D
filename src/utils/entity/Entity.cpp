@@ -1,12 +1,5 @@
 #include "Entity.h"
 
-Entity::Entity() {
-    parent = nullptr;
-    orphaned = false;
-    dead = false;
-    active = true;
-}
-
 void Entity::update() {
     if(!parent || parent->killedStatus()) { //Check if parent has died
         orphaned = true;

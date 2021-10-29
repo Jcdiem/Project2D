@@ -2,7 +2,6 @@
 
 void LuaProcessor::initialize() {
     initState(&systemControl);
-    initState(&dirtyRunner);
 
     systemControl["flags"] = Flagger::getInternal();
 }
@@ -13,6 +12,49 @@ void LuaProcessor::destroy() {
 
         delete script;
     }
+}
+
+void LuaProcessor::fetchFlags(const std::string& filePath) {
+    Flagger::set("xRes", 1280);
+    Flagger::set("yRes", 720);
+    Flagger::set("framerate", 60);
+    Flagger::set("tickrate", 120);
+    Flagger::set("fullscreen", false);
+    Flagger::set("spriteSmoothing", true);
+    Flagger::set("regenAtlas", false);
+    Flagger::set("compatMode", 0);
+
+    auto result = systemControl.script_file(filePath);
+}
+
+void LuaProcessor::initState(sol::state *state) {
+    //Basic lua libraries aren't included by default, if you want them you'll have to change that here!
+    state->open_libraries(sol::lib::base);
+
+    state->set("newEntity", Manager::newEntity);
+
+    state->new_usertype<Entity>("entity",
+                                "kill", &Entity::kill,
+                                "orphan", &Entity::orphan,
+                                "setActive", &Entity::setActive,
+                                "setParent", &Entity::setParent,
+                                "addChild", &Entity::addChild,
+                                "getData", &Entity::getData,
+                                "killedStatus", &Entity::killedStatus,
+                                "orphanedStatus", &Entity::orphanedStatus,
+                                "activeStatus", &Entity::activeStatus,
+                                "getParent", &Entity::getParent,
+                                "getChildren", &Entity::getChildren,
+
+                                "addSpriteComponent", &Entity::addComponent<SpriteComponent>
+    );
+}
+
+sol::state LuaProcessor::initState()  {
+    auto state = sol::state();
+    initState(&state);
+
+    return state;
 }
 
 void LuaProcessor::uploadScript(unsigned int id, std::string *script) {
@@ -32,23 +74,4 @@ unsigned int LuaProcessor::newState() {
     objectScripts[new_id] = new std::string;
 
     return new_id;
-}
-
-void LuaProcessor::fetchFlags(std::string filePath) {
-    Flagger::set("xRes", 1280);
-    Flagger::set("yRes", 720);
-    Flagger::set("framerate", 60);
-    Flagger::set("tickrate", 120);
-    Flagger::set("fullscreen", false);
-    Flagger::set("spriteSmoothing", true);
-    Flagger::set("regenAtlas", false);
-    Flagger::set("compatMode", 0);
-
-    auto result = systemControl.script_file(filePath);
-}
-
-void LuaProcessor::generateEntity(Entity* e, const std::string& initScript) {
-    dirtyRunner["new_entity"] = e;
-
-    dirtyRunner.script(initScript);
 }
