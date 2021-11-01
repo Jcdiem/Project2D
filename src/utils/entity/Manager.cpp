@@ -1,6 +1,7 @@
 #include "Manager.h"
 
 void Manager::initialize() {
+    MicroLuaProcessor::registerFunction("newEntity", newEntity);
 }
 
 void Manager::newEntity(int id) {

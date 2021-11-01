@@ -1,9 +1,9 @@
 #include "LuaProcessor.h"
 
 void LuaProcessor::initialize() {
-    initState(&systemControl);
+    systemControl = initState(new sol::state);
 
-    systemControl["flags"] = Flagger::getInternal();
+    systemControl->set("flags", Flagger::getInternal());
 }
 
 void LuaProcessor::destroy() {
@@ -24,10 +24,10 @@ void LuaProcessor::fetchFlags(const std::string& filePath) {
     Flagger::set("regenAtlas", false);
     Flagger::set("compatMode", 0);
 
-    auto result = systemControl.script_file(filePath);
+    auto result = systemControl->script_file(filePath);
 }
 
-void LuaProcessor::initState(sol::state *state) {
+sol::state* LuaProcessor::initState(sol::state *state) {
     //Basic lua libraries aren't included by default, if you want them you'll have to change that here!
     state->open_libraries(sol::lib::base);
 
@@ -48,6 +48,8 @@ void LuaProcessor::initState(sol::state *state) {
 
                                 "addSpriteComponent", &Entity::addComponent<SpriteComponent>
     );
+
+    return state;
 }
 
 sol::state LuaProcessor::initState()  {

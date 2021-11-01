@@ -18,7 +18,7 @@
 
 namespace LuaProcessor {
     namespace { //Private parts of the LuaProcessor kept here. Compiler seems to also think they go unused, that's not true...
-        [[maybe_unused]] sol::state systemControl; //Used for scripts that need to affect the system.
+        [[maybe_unused]] sol::state* systemControl; //Used for scripts that need to affect the system.
         [[maybe_unused]] std::map<unsigned int, sol::state> objectStates; //Used for instances of individual object, separate for each.
         [[maybe_unused]] std::map<unsigned int, std::string*> objectScripts;
 
@@ -29,8 +29,13 @@ namespace LuaProcessor {
 
     void fetchFlags(const std::string& filePath);
 
-    void initState(sol::state* state);
+    sol::state* initState(sol::state* state);
     sol::state initState();
+
+    template <typename Return, typename ...Args> //Only registers the function with systemControl
+    void registerFunction(std::string funcName ,Return (*funcPtr)(Args...)) {
+        systemControl->set(funcName, funcPtr);
+    }
 
     unsigned int newState();
     void uploadScript(unsigned int id, std::string* script);

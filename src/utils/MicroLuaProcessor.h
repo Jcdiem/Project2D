@@ -55,6 +55,11 @@ namespace MicroLuaProcessor {
         return result;
     }
 
+    template <typename Return, typename ...Args>
+    void registerFunction(std::string funcName ,Return (*funcPtr)(Args...)) {
+        dirtyRunner.set(funcName, funcPtr);
+    }
+
     void generateEntity(Entity* e, const std::string &initScript);
 }
 
