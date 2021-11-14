@@ -5,14 +5,13 @@ A simple 2D game engine built with C++ and SDL2. The game engine currently using
 
 Currently the engine has basic funtionality for drawing objects to the background and adding entities with moving properties.
 
+# Clone Me!
+If you need to clone thsi repo, you need to get the submodules too! Otherwise compilation will fail.
+You can do that with this command:
+```git clone --recurse-submodules -j8```
+
 # Does this have any use to a non-dev?
 Nope! If you are interested in playing a game made on this engine, we will be linking our game repos here as examples. Currently, however, releases have a 'demo' of sorts for testing what stage we are at in the engine.
-
-# How to build and setup project for dev using engine
-I just would avoid doing that for now.
-
-
-If you run into any issues, please open an issue request.
 
 # Progress
 Follow our progress over at https://app.gitkraken.com/glo/board/XzQgMqsO6gARq5hb
