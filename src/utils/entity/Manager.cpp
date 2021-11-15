@@ -1,7 +1,7 @@
 #include "Manager.h"
 
 void Manager::initialize() {
-    MicroLuaProcessor::registerFunction("newEntity", newEntity);
+    LuaProcessor::registerFunction("newEntity", newEntity);
 }
 
 void Manager::newEntity(int id) {
@@ -10,7 +10,7 @@ void Manager::newEntity(int id) {
 
         auto newEntity = entities.emplace_back();
 
-        MicroLuaProcessor::generateEntity(&newEntity, initScript);
+        LuaProcessor::generateEntity(&newEntity, initScript);
     } catch (std::out_of_range& e) {
         Logger::print(ERROR, "Attempted to create entity of id ", id, " which does not exist.");
     }

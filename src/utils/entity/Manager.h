@@ -3,7 +3,7 @@
 #define BUILD_MANAGER_H
 
 #include "Entity.h"
-#include "../MicroLuaProcessor.h"
+#include "../LuaProcessor.h"
 #include "../QueueingThread.h"
 
 #include <vector>
