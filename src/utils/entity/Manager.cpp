@@ -4,14 +4,17 @@ void Manager::initialize() {
     LuaProcessor::registerFunction("newEntity", newEntity);
 }
 
-void Manager::newEntity(int id) {
+void Manager::newEntity(std::string id) {
     try {
-        std::string initScript = cachedInitScripts.at(id);
+        std::string* initScript = &cachedEntityScripts.at(id);
 
         auto newEntity = entities.emplace_back();
 
-        LuaProcessor::generateEntity(&newEntity, initScript);
+        unsigned int objID = LuaProcessor::generateEntity(&newEntity, initScript);
+        newEntity.getData()->type = id;
+        newEntity.getData()->objID = objID;
     } catch (std::out_of_range& e) {
-        Logger::print(ERROR, "Attempted to create entity of id ", id, " which does not exist.");
+        Logger::print(ERROR, "Attempted to create entity of id ", id,
+                      " which does not exist, or hasn't been cached yet...");
     }
 }

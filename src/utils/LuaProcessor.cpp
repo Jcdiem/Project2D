@@ -83,7 +83,16 @@ unsigned int LuaProcessor::newState() {
     return new_id;
 }
 
-void LuaProcessor::generateEntities(Entity *e, const std::string &initScript) {
-    dirtyRunner.script_file(initScript);
-    dirtyRunner["generate"](e);
+unsigned int LuaProcessor::generateEntity(Entity* e, std::string* initScript) {
+    auto e_id = newState();
+    sol::state* state = &objectStates[e_id];
+    std::string* script = objectScripts[e_id];
+    (*script) = *initScript;
+
+    state->script(*script);
+    state->get<sol::function>("init")();
+
+    state->set("self", e);
+
+    return e_id;
 }

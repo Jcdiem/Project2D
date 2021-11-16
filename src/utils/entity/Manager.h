@@ -12,13 +12,12 @@
 namespace Manager {
     namespace {
         std::vector<Entity> entities;
-        std::map<int, std::string> cachedInitScripts;
-        QueueingThread qthread = QueueingThread(255);
+        std::map<std::string, std::string> cachedEntityScripts;
     }
 
     void initialize();
 
-    void newEntity(int id);
+    void newEntity(std::string id);
 
     void cacheEntities();
 }

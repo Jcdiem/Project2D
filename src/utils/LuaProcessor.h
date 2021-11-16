@@ -94,7 +94,7 @@ namespace LuaProcessor {
         return result;
     }
 
-    void generateEntities(Entity* e, const std::string &initScript);
+    unsigned int generateEntity(Entity* e, std::string* initScript);
 }
 
 #endif //PROJECT2D_LUAPROCESSOR_H
