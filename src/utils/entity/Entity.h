@@ -1,6 +1,6 @@
 #pragma once
-#ifndef BUILD_ENTITY_H
-#define BUILD_ENTITY_H
+#ifndef PROJECT2D_ENTITY_H
+#define PROJECT2D_ENTITY_H
 
 #include <vector>
 #include "EntityData.h"
@@ -42,4 +42,4 @@ private:
     EntityData data;
 };
 
-#endif //BUILD_ENTITY_H
+#endif //PROJECT2D_ENTITY_H

@@ -1,0 +1,1 @@
+sys.levels.level0 = "assets/levels/debug.lua"

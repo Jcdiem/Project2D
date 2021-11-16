@@ -1,6 +1,6 @@
 #pragma once
-#ifndef BUILD_COMPONENT_H
-#define BUILD_COMPONENT_H
+#ifndef PROJECT2D_COMPONENT_H
+#define PROJECT2D_COMPONENT_H
 
 #include "EntityData.h"
 
@@ -18,4 +18,4 @@ protected:
     EntityData& data;
 };
 
-#endif //BUILD_COMPONENT_H
+#endif //PROJECT2D_COMPONENT_H

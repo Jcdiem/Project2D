@@ -1,8 +1,10 @@
-flags.xRes            = 1280
-flags.yRes            = 720
-flags.framerate       = 60
-flags.tickrate        = 120
-flags.fullscreen      = 0
-flags.spriteSmoothing = 0
-flags.regenAtlas      = 0
-flags.compatMode      = 2
+function conf()
+    sys.flags.xRes            = 1280
+    sys.flags.yRes            = 720
+    sys.flags.framerate       = 60
+    sys.flags.tickrate        = 120
+    sys.flags.fullscreen      = 0
+    sys.flags.spriteSmoothing = 0
+    sys.flags.regenAtlas      = 0
+    sys.flags.compatMode      = 2
+end

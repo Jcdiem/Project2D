@@ -1,6 +1,6 @@
 #pragma once
-#ifndef BUILD_QUEUEINGTHREAD_H
-#define BUILD_QUEUEINGTHREAD_H
+#ifndef PROJECT2D_QUEUEINGTHREAD_H
+#define PROJECT2D_QUEUEINGTHREAD_H
 
 #include <queue>
 #include <thread>
@@ -58,4 +58,4 @@ private:
     std::queue<void (*)()> queue;
 };
 
-#endif //BUILD_QUEUEINGTHREAD_H
+#endif //PROJECT2D_QUEUEINGTHREAD_H

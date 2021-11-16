@@ -1,6 +1,6 @@
 #pragma once
-#ifndef BUILD_ATLAS_H
-#define BUILD_ATLAS_H
+#ifndef PROJECT2D_ATLAS_H
+#define PROJECT2D_ATLAS_H
 
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/Sprite.hpp>
@@ -57,4 +57,4 @@ private:
 };
 
 
-#endif //BUILD_ATLAS_H
+#endif //PROJECT2D_ATLAS_H

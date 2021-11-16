@@ -1,6 +1,6 @@
 #pragma once
-#ifndef BUILD_MANAGER_H
-#define BUILD_MANAGER_H
+#ifndef PROJECT2D_MANAGER_H
+#define PROJECT2D_MANAGER_H
 
 #include "Entity.h"
 #include "../LuaProcessor.h"
@@ -24,4 +24,4 @@ namespace Manager {
 }
 
 
-#endif //BUILD_MANAGER_H
+#endif //PROJECT2D_MANAGER_H

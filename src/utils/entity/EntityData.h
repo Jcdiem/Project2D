@@ -1,8 +1,8 @@
 #pragma once
-#ifndef BUILD_ENTITYDATA_H
-#define BUILD_ENTITYDATA_H
+#ifndef PROJECT2D_ENTITYDATA_H
+#define PROJECT2D_ENTITYDATA_H
 
 struct EntityData {
 };
 
-#endif //BUILD_ENTITYDATA_H
+#endif //PROJECT2D_ENTITYDATA_H

@@ -3,9 +3,8 @@
 void LuaProcessor::initialize() {
     initState(&functionHolder);
     initState(&systemControl);
-    initState(&dirtyRunner);
-
-    systemControl.set("flags", Flagger::getInternal());
+//  initState(&dirtyRunner); Dirty Runner does not need to be initialized because that would give it access to
+//  Many functions that control a lot of the system.
 }
 
 void LuaProcessor::destroy() {
@@ -26,15 +25,18 @@ void LuaProcessor::fetchFlags(const std::string& filePath) {
     Flagger::set("regenAtlas", false);
     Flagger::set("compatMode", 0);
 
-    auto result = systemControl.script_file(filePath);
+    systemControl.script_file(filePath);
+    systemControl["conf"]();
 }
 
 sol::state* LuaProcessor::initState(sol::state *state) {
     //Basic lua libraries aren't included by default, if you want them you'll have to change that here!
     state->open_libraries(sol::lib::base);
 
-    state->set("newEntity", Manager::newEntity);
-    state->new_usertype<Entity>("entity",
+    auto systemNS = (*state)["sys"].get_or_create<sol::table>();
+
+    systemNS.new_usertype<Entity>("entity",
+                                "new", Manager::newEntity,
                                 "kill", &Entity::kill,
                                 "orphan", &Entity::orphan,
                                 "setActive", &Entity::setActive,
@@ -50,6 +52,12 @@ sol::state* LuaProcessor::initState(sol::state *state) {
                                 "addSpriteComponent", &Entity::addComponent<SpriteComponent>
                                 //Component adders must be added manually, that's done here!
     );
+
+    systemNS.set("flags", Flagger::getInternal());
+
+    for(auto func : functions) {
+        systemNS.set(func.name, func.function);
+    }
 
     return state;
 }
@@ -75,6 +83,7 @@ unsigned int LuaProcessor::newState() {
     return new_id;
 }
 
-void LuaProcessor::generateEntity(Entity *e, const std::string &initScript) {
-
+void LuaProcessor::generateEntities(Entity *e, const std::string &initScript) {
+    dirtyRunner.script_file(initScript);
+    dirtyRunner["generate"](e);
 }

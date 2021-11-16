@@ -1,6 +1,6 @@
 #pragma once
-#ifndef BUILD_FLAGGER_H
-#define BUILD_FLAGGER_H
+#ifndef PROJECT2D_FLAGGER_H
+#define PROJECT2D_FLAGGER_H
 
 #include <map>
 #include <string>
@@ -23,4 +23,4 @@ private:
 };
 
 
-#endif //BUILD_FLAGGER_H
+#endif //PROJECT2D_FLAGGER_H

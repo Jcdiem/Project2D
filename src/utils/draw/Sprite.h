@@ -1,6 +1,6 @@
 #pragma once
-#ifndef BUILD_SPRITE_H
-#define BUILD_SPRITE_H
+#ifndef PROJECT2D_SPRITE_H
+#define PROJECT2D_SPRITE_H
 
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Texture.hpp>
@@ -69,4 +69,4 @@ private:
 };
 
 
-#endif //BUILD_SPRITE_H
+#endif //PROJECT2D_SPRITE_H

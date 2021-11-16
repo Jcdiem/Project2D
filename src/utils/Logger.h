@@ -1,6 +1,6 @@
 #pragma once
-#ifndef BUILD_LOGGER_H
-#define BUILD_LOGGER_H
+#ifndef PROJECT2D_LOGGER_H
+#define PROJECT2D_LOGGER_H
 
 #include <iostream>
 #include <cstdarg>
@@ -34,4 +34,4 @@ namespace Logger {
 };
 
 
-#endif //BUILD_LOGGER_H
+#endif //PROJECT2D_LOGGER_H

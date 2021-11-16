@@ -1,6 +1,6 @@
 #pragma once
-#ifndef BUILD_CANVAS_H
-#define BUILD_CANVAS_H
+#ifndef PROJECT2D_CANVAS_H
+#define PROJECT2D_CANVAS_H
 
 #include "draw/Sprite.h"
 #include "Logger.h"
@@ -40,4 +40,4 @@ private:
 };
 
 
-#endif //BUILD_CANVAS_H
+#endif //PROJECT2D_CANVAS_H

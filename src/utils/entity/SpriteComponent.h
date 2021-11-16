@@ -1,6 +1,6 @@
 #pragma once
-#ifndef BUILD_SPRITECOMPONENT_H
-#define BUILD_SPRITECOMPONENT_H
+#ifndef PROJECT2D_SPRITECOMPONENT_H
+#define PROJECT2D_SPRITECOMPONENT_H
 
 #include "Component.h"
 
@@ -14,4 +14,4 @@ public:
 };
 
 
-#endif //BUILD_SPRITECOMPONENT_H
+#endif //PROJECT2D_SPRITECOMPONENT_H

@@ -1,6 +1,6 @@
 #pragma once
-#ifndef BUILD_ATLASMAN_H
-#define BUILD_ATLASMAN_H
+#ifndef PROJECT2D_ATLASMAN_H
+#define PROJECT2D_ATLASMAN_H
 
 #include <optional>
 #include <sstream>
@@ -28,4 +28,4 @@ private:
 };
 
 
-#endif //BUILD_ATLASMAN_H
+#endif //PROJECT2D_ATLASMAN_H

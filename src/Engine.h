@@ -1,6 +1,6 @@
 #pragma once
-#ifndef PROJECT2DTD_ENGINE_H
-#define PROJECT2DTD_ENGINE_H
+#ifndef PROJECT2D_ENGINE_H
+#define PROJECT2D_ENGINE_H
 
 #include <SFML/Graphics.hpp>
 #include <thread>
@@ -121,4 +121,4 @@ private:
      Canvas canvas;
 };
 
-#endif //PROJECT2DTD_ENGINE_H
+#endif //PROJECT2D_ENGINE_H

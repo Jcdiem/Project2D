@@ -1,6 +1,6 @@
 #pragma once
-#ifndef BUILD_EMBEDDEDSPRITES_H
-#define BUILD_EMBEDDEDSPRITES_H
+#ifndef PROJECT2D_EMBEDDEDSPRITES_H
+#define PROJECT2D_EMBEDDEDSPRITES_H
 
 #include <cstdint>
 #include <SFML/Graphics/Image.hpp>
@@ -145,4 +145,4 @@ public:
     };
 };
 
-#endif //BUILD_EMBEDDEDSPRITES_H
+#endif //PROJECT2D_EMBEDDEDSPRITES_H

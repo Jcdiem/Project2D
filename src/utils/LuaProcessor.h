@@ -1,6 +1,6 @@
 #pragma once
-#ifndef BUILD_LUAPROCESSOR_H
-#define BUILD_LUAPROCESSOR_H
+#ifndef PROJECT2D_LUAPROCESSOR_H
+#define PROJECT2D_LUAPROCESSOR_H
 
 #ifndef SOL_ALL_SAFETIES_ON
 #define SOL_ALL_SAFETIES_ON 1
@@ -23,10 +23,12 @@ namespace LuaProcessor {
             sol::function function;
         };
 
-        [[maybe_unused]] sol::state functionHolder;
+        [[maybe_unused]] sol::state functionHolder; //Holds a collection of pointers to functions used by many a thing!
         [[maybe_unused]] std::vector<ambiguous_function> functions;
 
         [[maybe_unused]] sol::state systemControl; //Used for scripts that need to affect the system.
+                                                   //Currently not refreshed between uses, maybe later it will be if
+                                                   //it's needed.
         [[maybe_unused]] sol::state dirtyRunner; //Used for things that shouldn't affect the system, namely fetching values.
 
         [[maybe_unused]] std::map<unsigned int, sol::state> objectStates; //Used for instances of individual object, separate for each.
@@ -51,10 +53,19 @@ namespace LuaProcessor {
         // a pointer to the function, but without a signature. Somehow sol2 is able to store the types ambiguously without losing them.
         // This is probably not the intended way to use this, and can definitely be done more efficiently, but it should
         // **JUST WORK** TODO: Make better implementation
+
+        auto sysCtlSysNS = systemControl["sys"].get_or_create<sol::table>();
+        sysCtlSysNS.set(funcName, funcPtr);
+
+        for(auto &statePair : objectStates) {
+            auto systemNS = (*&statePair.second)["sys"].get_or_create<sol::table>();
+
+            systemNS.set(funcName, funcPtr);
+        }
     }
 
     template <typename T, std::size_t S>
-    void mapToLuaConf(std::map<std::string, std::array<T, S>> map, const std::string& path, std::string name) {
+    void mapToLuaConf(std::map<std::string, std::array<T, S>> map, const std::string& path, const std::string& name) {
         std::string result;
 
         for(auto pair : map) {
@@ -73,7 +84,7 @@ namespace LuaProcessor {
     }
 
     template <typename T, std::size_t S>
-    std::map<std::string, std::array<T, S>> luaConfToMap(const std::string& path, std::string name) {
+    std::map<std::string, std::array<T, S>> luaConfToMap(const std::string& path, const std::string& name) {
         std::map<std::string, std::array<T, S>> result;
 
         dirtyRunner.set(name, &result);
@@ -83,7 +94,7 @@ namespace LuaProcessor {
         return result;
     }
 
-    void generateEntity(Entity* e, const std::string &initScript);
+    void generateEntities(Entity* e, const std::string &initScript);
 }
 
-#endif //BUILD_LUAPROCESSOR_H
+#endif //PROJECT2D_LUAPROCESSOR_H
