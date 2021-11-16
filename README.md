@@ -6,7 +6,7 @@ A simple 2D game engine built with C++ and SDL2. The game engine currently using
 Currently the engine has basic funtionality for drawing objects to the background and adding entities with moving properties.
 
 # Clone Me!
-If you need to clone thsi repo, you need to get the submodules too! Otherwise compilation will fail.
+If you need to clone the repo, you need to get the submodules too! Otherwise compilation will probably fail.
 You can do that with this command:
 
 ```git clone --recurse-submodules -j8 git://github.com/Jcdiem/Project2D.git```
