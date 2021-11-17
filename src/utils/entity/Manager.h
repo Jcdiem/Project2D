@@ -18,7 +18,6 @@ namespace Manager {
     void initialize();
 
     void newEntity(const std::string& type);
-    void newEntity(const std::string& type);
 
     void cacheEntities();
 }
