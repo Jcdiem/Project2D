@@ -6,9 +6,10 @@
 
 class Component {
 public:
-    virtual void init(){};
-    virtual void update(){};
-    virtual void draw(){};
+    virtual void init(){}; //Called once at the creation of the component.
+    virtual void update(){}; //Called every time the engine updates, determined by engine settings.
+    virtual void draw(){}; //Called every time the engine draws, determined by engine settings.
+    virtual void destroy(){}; //Called once at the destruction of the object.
 
     virtual ~Component() = default;
 

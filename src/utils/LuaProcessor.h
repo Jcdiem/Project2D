@@ -43,7 +43,7 @@ namespace LuaProcessor {
 
     sol::state* initState(sol::state* state);
 
-    unsigned int newState();
+    unsigned int newState(); //TODO: This needs a better implementation that won't leave lingering lua states.
     void uploadScript(unsigned int id, std::string* script);
 
     template <typename Return, typename ...Args>

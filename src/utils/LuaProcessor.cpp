@@ -63,7 +63,7 @@ sol::state* LuaProcessor::initState(sol::state *state) {
 }
 
 void LuaProcessor::uploadScript(unsigned int id, std::string *script) {
-    delete objectScripts[id];
+
     objectScripts[id] = script;
 }
 
@@ -78,7 +78,7 @@ unsigned int LuaProcessor::newState() {
     objectStates[new_id] = sol::state();
     initState(&objectStates[new_id]);
 
-    objectScripts[new_id] = new std::string;
+//    objectScripts[new_id];
 
     return new_id;
 }
@@ -86,10 +86,9 @@ unsigned int LuaProcessor::newState() {
 unsigned int LuaProcessor::generateEntity(Entity* e, std::string* initScript) {
     auto e_id = newState();
     sol::state* state = &objectStates[e_id];
-    std::string* script = objectScripts[e_id];
-    (*script) = *initScript;
+    objectScripts[e_id] = initScript;
 
-    state->script(*script);
+    state->script(*objectScripts[e_id]);
     state->get<sol::function>("init")();
 
     state->set("self", e);

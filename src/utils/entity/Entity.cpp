@@ -1,30 +1,47 @@
 #include "Entity.h"
 
+void Entity::removeComponent(unsigned int id) {
+    for(auto compIDPair : components) {
+        if(compIDPair.first == id) {
+            delete compIDPair.second;
+            return;
+        }
+    }
+}
+
 void Entity::update() {
-    if(!parent || parent->killedStatus()) { //Check if parent has died
-        orphaned = true;
-        parent = nullptr;
+    if(!data.active) {
+        return; //Don't update if the entity is marked as inactive.
     }
 
-    for(auto childIter = children.begin(); childIter != children.end(); childIter++) {
-        if(!(*childIter) || (*childIter)->killedStatus()) children.erase(childIter);
+    if(!data.parent || data.parent->killedStatus()) { //Check if parent has died
+        data.orphaned = true;
+        data.parent = nullptr;
+    }
+
+    for(auto childIter = data.children.begin(); childIter != data.children.end(); childIter++) {
+        if(!(*childIter) || (*childIter)->killedStatus()) data.children.erase(childIter);
         //Remove children that are null pointers or marked as dead.
     }
 
-    for(Component &component: components) { //Run through and update all components!
-        component.update();
+    for(auto &componentIDPair : components) { //Run through and update all components!
+        componentIDPair.second->update();
     }
 }
 
 void Entity::draw() {
-    for(Component &component: components) {
-        component.draw();
+    if(!data.active) {
+        return; //Don't do draw actions if the entity is marked as inactive.
+    }
+
+    for(auto componentIDPair : components) {
+        componentIDPair.second->draw();
     }
 }
 
 void Entity::kill() {
-    dead = true;
-    for(auto child : children) {
+    data.dead = true;
+    for(auto child : data.children) {
         if(child) {
             child->orphan();
         }
@@ -32,23 +49,23 @@ void Entity::kill() {
 }
 
 bool Entity::killedStatus() const {
-    return dead;
+    return data.dead;
 }
 
 void Entity::orphan() {
-    orphaned = true;
+    data.orphaned = true;
 }
 
 bool Entity::orphanedStatus() const {
-    return orphaned;
+    return data.orphaned;
 }
 
 void Entity::setActive(bool set) {
-    active = set;
+    data.active = set;
 }
 
 bool Entity::activeStatus() const {
-    return active;
+    return data.active;
 }
 
 EntityData *Entity::getData() {
@@ -56,28 +73,28 @@ EntityData *Entity::getData() {
 }
 
 void Entity::setParent(Entity* e) {
-    parent = e;
+    data.parent = e;
 
-    if(!parent) { //If you give me a dead parent, I become an orphan.
-        orphaned = true;
+    if(!data.parent) { //If you give me a dead parent, I become an orphan.
+        data.orphaned = true;
     } else {
-        orphaned = false;
+        data.orphaned = false;
 
         for(auto child : e->getChildren()) {
             if(child == this) return; //Ensure we aren't already in the list of children before adding ourselves.
         }
 
-        parent->addChild(this);
+        data.parent->addChild(this);
     }
 }
 
 Entity* Entity::getParent() const {
-    return parent;
+    return data.parent;
 }
 
 void Entity::addChild(Entity *e) {
     if(e && !e->killedStatus()) {
-        children.push_back(e);
+        data.children.push_back(e);
 
         if(e->getParent() != this) { //Ensure we aren't already their parent to avoid infinite loops.
             e->setParent(this);
@@ -86,5 +103,5 @@ void Entity::addChild(Entity *e) {
 }
 
 std::vector<Entity*> Entity::getChildren() const {
-    return children;
+    return data.children;
 }

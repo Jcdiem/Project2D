@@ -15,6 +15,7 @@ int main(int argc, char *argv[]) {
     Logger::print(Level::WARN, "X11 was NOT used for this build, this is likely to cause the engine to fail on some compatability settings on non windows builds.");
 #endif
 
+    Manager::initialize();
     LuaProcessor::initialize();
     LuaProcessor::fetchFlags("assets/conf.lua");
     Flagger::parse(argc, argv);
