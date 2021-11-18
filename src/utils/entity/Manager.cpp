@@ -30,7 +30,9 @@ void Manager::cacheEntities() {
             std::string ext = item.path().extension();
             std::string stem = item.path().stem();
 
-            if(ext == ".lua") {
+            if(item.file_size() > 128000000) {
+                Logger::print(ERROR, "Script larger than 128 MB (", item.path(), ") it will be ignored...");
+            } else if(ext == ".lua") {
                 std::ifstream t(objectDir);
                 std::stringstream buffer;
                 buffer << t.rdbuf();

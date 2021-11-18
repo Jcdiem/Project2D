@@ -161,4 +161,6 @@ void Engine::postInit() {
     canvas.addSprite(1, new Sprite(0, 0, 1280, 720, "dvd"));
     canvas.addSprite(-88, new Sprite(0, 0, 1280, 720, "atlas"));
     canvas.addSprite(0, new Sprite());
+
+    if(Flagger::find("quickExit") >= 1) quit();
 }

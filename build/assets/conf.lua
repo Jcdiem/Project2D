@@ -7,4 +7,5 @@ function conf()
     sys.flags.spriteSmoothing = 0
     sys.flags.regenAtlas      = 0
     sys.flags.compatMode      = 2
+    sys.flags.quickExit       = 1 --Debug Tool, causes the engine to immediately kill itself.
 end

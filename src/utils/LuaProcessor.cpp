@@ -24,6 +24,7 @@ void LuaProcessor::fetchFlags(const std::string& filePath) {
     Flagger::set("spriteSmoothing", true);
     Flagger::set("regenAtlas", false);
     Flagger::set("compatMode", 0);
+    Flagger::set("quickExit", 0);
 
     systemControl.script_file(filePath);
     systemControl["conf"]();
